@@ -1,5 +1,11 @@
 /**
- * Settings — glass cards, mint toggles, danger zone.
+ * settings.css — Settings page ONLY.
+ *
+ * Sections (all under .st-*):
+ *   .st                   page wrapper
+ *   .st-card*             setting cards
+ *   .st-toggle*           notification toggles
+ *   .st-danger*           delete account
  */
 
 .st {

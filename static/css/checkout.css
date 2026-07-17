@@ -1,5 +1,10 @@
 /**
- * Checkout — Zendrop-style two-column layout, Zentra Obsidian tone.
+ * checkout.css — Checkout page ONLY.
+ *
+ * Sections (all under .checkout*):
+ *   .checkout             page shell
+ *   .checkout-form*       left form column
+ *   .checkout-summary*    right order summary
  */
 
 .checkout {

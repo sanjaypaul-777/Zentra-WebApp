@@ -1,6 +1,10 @@
 /**
- * Product Finder + My Imports — UI shell only (backend later).
- * Uses Zentra Obsidian tokens from base.css / dashboard.css.
+ * catalog.css — Product Finder + My Imports ONLY.
+ *
+ * Sections (scoped under .catalog — does not style homepage/auth):
+ *   .catalog              page wrapper
+ *   .pf-* / finder blocks Product Finder filters + cards
+ *   .mi-* / import blocks My Imports edit / push
  */
 
 .catalog {

@@ -1,5 +1,9 @@
 /**
- * Contact page — extends auth Obsidian form language.
+ * contact.css — Contact page ONLY (uses auth.css for shared form shell).
+ *
+ * Sections:
+ *   .contact-page*        page tweaks
+ *   .contact-form*        form rows / fields
  */
 
 .contact-page .auth-inner {

@@ -1,6 +1,15 @@
 /**
- * Auth / checkout — Zentra Obsidian (same tone as Stitch marketing).
- * Tokens from base.css.
+ * auth.css — Login / Signup / Forgot / Password change ONLY.
+ *
+ * Sections (edit one block — does not affect homepage or dashboard):
+ *   .auth-page          page shell / background
+ *   .auth-glow*         background glows
+ *   .auth-inner         centered column
+ *   .auth-brand / logo  top brand mark
+ *   .auth-card          form card
+ *   .auth-submit        primary button
+ *   .auth-social*       social login row
+ *   .auth-footer*       bottom links
  */
 
 .material-symbols-outlined {

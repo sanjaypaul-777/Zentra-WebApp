@@ -1,6 +1,15 @@
 /**
- * Dashboard shell — sidebar + header + content.
- * Standard SaaS spacing / type scale.
+ * dashboard.css — Logged-in shell ONLY (sidebar / header / content frame).
+ * Page bodies (Finder, Imports, Overview widgets) live in their own CSS
+ * files under section prefixes — do not style them here.
+ *
+ * Sections:
+ *   .dash                 page grid shell
+ *   .dash-sidebar*        left nav
+ *   .dash-header*         top bar
+ *   .dash-main*           content area
+ *   .ov-*                 overview page blocks
+ *   .zentra-btn*          primary/secondary buttons (app pages)
  */
 
 .dash {
@@ -2158,5 +2167,142 @@
 
   .pro-upgrade__features {
     grid-template-columns: 1fr;
+  }
+}
+
+/* —— App buttons (dashboard / stores / settings / builder) —— */
+.zentra-btn {
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 52px;
+  width: fit-content;
+  padding: 0 2rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  box-sizing: border-box;
+  isolation: isolate;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.zentra-btn--primary {
+  color: var(--on-primary);
+  background: var(--primary-container);
+  border: 3px solid transparent;
+}
+
+.zentra-btn--secondary {
+  color: var(--on-surface);
+  background: transparent;
+  border: 3px solid var(--outline-variant);
+}
+
+.zentra-btn--primary,
+.zentra-btn--primary:hover,
+.zentra-btn--primary:focus,
+.zentra-btn--primary:active,
+.zentra-btn--primary:visited {
+  color: var(--on-primary);
+  background: var(--primary-container);
+  text-decoration: none;
+}
+
+.zentra-btn--secondary,
+.zentra-btn--secondary:hover,
+.zentra-btn--secondary:focus,
+.zentra-btn--secondary:active,
+.zentra-btn--secondary:visited {
+  color: var(--on-surface);
+  background: transparent;
+  text-decoration: none;
+}
+
+.zentra-btn--secondary:hover {
+  border-color: transparent;
+}
+
+.zentra-btn--primary::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(120deg, #ff00e5, #4edea3, #ff00e5, #4edea3);
+  background-size: 300% 300%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.zentra-btn--primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--primary-container);
+  pointer-events: none;
+}
+
+.zentra-btn--secondary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 3px;
+  background: linear-gradient(120deg, #ff00e5, #4edea3, #ff00e5, #4edea3);
+  background-size: 300% 300%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.zentra-btn .material-symbols-outlined {
+  font-size: 1.35rem;
+  color: inherit;
+}
+
+.zentra-btn--primary:hover::before,
+.zentra-btn--secondary:hover::before {
+  opacity: 1;
+  animation: zentra-btn-border 2.2s ease infinite;
+}
+
+@keyframes zentra-btn-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zentra-btn--primary:hover::before,
+  .zentra-btn--secondary:hover::before {
+    animation: none;
+    background: linear-gradient(120deg, #ff00e5, #4edea3);
+    background-size: 100% 100%;
   }
 }

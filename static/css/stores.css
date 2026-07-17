@@ -1,6 +1,11 @@
 /**
- * My Stores — connected Shopify shops list.
- * Glass cards, mint / magenta / red status pills (Zentra Obsidian).
+ * stores.css — My Stores + store detail ONLY.
+ *
+ * Sections (all under .ms-* — safe to edit without touching Finder):
+ *   .ms                   page wrapper
+ *   .ms-row*              store list row
+ *   .ms-menu*             overflow menu
+ *   .ms-empty*            empty state
  */
 
 .ms {
