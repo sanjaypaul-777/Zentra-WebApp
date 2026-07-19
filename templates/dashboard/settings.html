@@ -45,7 +45,7 @@
       <strong>{{ stores_count }}</strong>
       store{{ stores_count|pluralize }} connected.
     </p>
-    <a class="zentra-btn zentra-btn--secondary st-card__btn" href="{{ stores_url }}">
+    <a class="brandbox-btn brandbox-btn--secondary st-card__btn" href="{{ stores_url }}">
       View all stores →
     </a>
   </section>
@@ -67,7 +67,7 @@
     {% else %}
     <p class="st-card__body">You're on the Free plan.</p>
     <p class="st-card__nudge">Pro store owners launch 3x more stores on average.</p>
-    <a class="zentra-btn zentra-btn--primary st-card__btn" href="{{ upgrade_url }}">
+    <a class="brandbox-btn brandbox-btn--primary st-card__btn" href="{{ upgrade_url }}">
       Upgrade to Pro →
     </a>
     {% endif %}
@@ -190,10 +190,10 @@
   <section class="st-card st-card--danger" aria-labelledby="st-danger">
     <h2 id="st-danger" class="st-card__title">Danger zone</h2>
     <p class="st-card__body">
-      This permanently deletes your Zentra account. Your Shopify stores and their
+      This permanently deletes your BrandBox account. Your Shopify stores and their
       products are not affected.
     </p>
-    <button type="button" class="zentra-btn st-danger-btn" data-st-delete-open>
+    <button type="button" class="brandbox-btn st-danger-btn" data-st-delete-open>
       Delete my account
     </button>
   </section>
@@ -206,7 +206,7 @@
       aria-labelledby="st-delete-title"
       aria-modal="true"
     >
-      <h3 id="st-delete-title">Delete your Zentra account?</h3>
+      <h3 id="st-delete-title">Delete your BrandBox account?</h3>
       <p>
         Type <strong>{{ account_email }}</strong> to confirm. Your Shopify stores
         and their products are not affected.
@@ -225,10 +225,10 @@
           placeholder="{{ account_email }}"
         />
         <div class="st-confirm__actions">
-          <button type="button" class="zentra-btn zentra-btn--secondary" data-st-confirm-cancel>
+          <button type="button" class="brandbox-btn brandbox-btn--secondary" data-st-confirm-cancel>
             Cancel
           </button>
-          <button type="submit" class="zentra-btn st-danger-btn" data-st-confirm-submit disabled>
+          <button type="submit" class="brandbox-btn st-danger-btn" data-st-confirm-submit disabled>
             Delete my account
           </button>
         </div>

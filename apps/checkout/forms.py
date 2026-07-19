@@ -78,7 +78,7 @@ class CheckoutForm(forms.Form):
         strip=False,
         widget=forms.PasswordInput(
             attrs={
-                "placeholder": "Create a password for your Zentra account",
+                "placeholder": "Create a password for your BrandBox account",
                 "autocomplete": "new-password",
             }
         ),

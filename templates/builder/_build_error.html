@@ -12,12 +12,12 @@
       {% if retry_url %}
       <form method="post" action="{{ retry_url }}" class="build-retry-form">
         {% csrf_token %}
-        <button type="submit" class="zentra-btn zentra-btn--primary">Try again →</button>
+        <button type="submit" class="brandbox-btn brandbox-btn--primary">Try again →</button>
       </form>
       {% endif %}
       <a
-        class="zentra-btn zentra-btn--secondary"
-        href="mailto:{{ support_email|default:'hello@zentra.com' }}"
+        class="brandbox-btn brandbox-btn--secondary"
+        href="mailto:{{ support_email|default:'help@brandbox.co' }}"
       >
         Contact support
       </a>

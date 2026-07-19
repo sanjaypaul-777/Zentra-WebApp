@@ -1,6 +1,6 @@
 """
 Builder — start AI store build, progress UI, success.
-Progress is driven by Zentra Node /api/build/* (see services.py).
+Progress is driven by BrandBox Node /api/build/* (see services.py).
 """
 
 from django.conf import settings
@@ -25,7 +25,7 @@ from .services import (
 
 
 def _require_ready_shop(user, shop_raw: str | None) -> tuple[ShopConnection | None, str | None]:
-    from config.zentra_client import check_app_installed, sync_connection_install_flag
+    from config.brandbox_client import check_app_installed, sync_connection_install_flag
 
     # Staff preview bypasses live Shopify install checks
     if getattr(user, "is_staff", False) or getattr(user, "is_superuser", False):
@@ -40,14 +40,14 @@ def _require_ready_shop(user, shop_raw: str | None) -> tuple[ShopConnection | No
         connection = ShopConnection.active_for_user(user)
     if not connection or not connection.app_installed:
         if connection and not connection.app_installed:
-            return None, "Install the Zentra app on your store before building."
+            return None, "Install the BrandBox app on your store before building."
         return None, "Connect your Shopify store first."
 
     result = check_app_installed(connection.shop)
     installed = sync_connection_install_flag(connection, result)
 
     if not installed and not (settings.DEBUG and settings.ALLOW_INSTALL_BYPASS):
-        return None, "Install the Zentra app on your store before building."
+        return None, "Install the BrandBox app on your store before building."
     return connection, None
 
 
@@ -132,7 +132,7 @@ def building(request, job_id: int):
                 "build_error_headline": copy["headline"],
                 "build_error_body": copy["body"],
                 "retry_url": reverse("builder:retry", kwargs={"job_id": job.pk}),
-                "support_email": getattr(settings, "CONTACT_NOTIFY_EMAIL", "hello@zentra.com"),
+                "support_email": getattr(settings, "CONTACT_NOTIFY_EMAIL", "help@brandbox.co"),
             },
         )
 

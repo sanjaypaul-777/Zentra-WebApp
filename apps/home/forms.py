@@ -8,7 +8,7 @@ HONEYPOT_ATTRS = {
     "autocomplete": "off",
     "tabindex": "-1",
     "aria-hidden": "true",
-    "class": "zentra-honeypot__field",
+    "class": "brandbox-honeypot__field",
 }
 
 

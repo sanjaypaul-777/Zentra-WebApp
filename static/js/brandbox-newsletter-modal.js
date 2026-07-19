@@ -2,7 +2,7 @@
  * Newsletter thank-you modal — open on ?newsletter=thanks, close cleans URL.
  */
 (function () {
-  var modal = document.getElementById("zentra-newsletter-thanks");
+  var modal = document.getElementById("brandbox-newsletter-thanks");
   if (!modal) return;
 
   function closeModal() {
@@ -14,7 +14,7 @@
     }
   }
 
-  modal.querySelectorAll("[data-zentra-newsletter-close]").forEach(function (el) {
+  modal.querySelectorAll("[data-brandbox-newsletter-close]").forEach(function (el) {
     el.addEventListener("click", closeModal);
   });
 

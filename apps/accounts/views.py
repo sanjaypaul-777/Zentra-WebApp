@@ -21,13 +21,13 @@ SOCIAL_PROVIDERS = {
 }
 
 
-class ZentraLoginView(LoginView):
+class BrandBoxLoginView(LoginView):
     template_name = "accounts/login.html"
     redirect_authenticated_user = True
     authentication_form = AuthenticationForm
 
 
-class ZentraLogoutView(LogoutView):
+class BrandBoxLogoutView(LogoutView):
     next_page = reverse_lazy("home:index")
 
 
@@ -60,7 +60,7 @@ class ForgotView(View):
         return render(request, self.template_name, {"sent": True})
 
 
-class ZentraPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+class BrandBoxPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     template_name = "accounts/password_change.html"
     success_url = reverse_lazy("dashboard:settings")
 

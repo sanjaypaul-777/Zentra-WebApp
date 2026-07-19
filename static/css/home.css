@@ -2,14 +2,14 @@
  * home.css — Marketing homepage sections ONLY.
  *
  * Sections (prefix = block; change one without touching login/dashboard):
- *   .zentra-nav*           top nav
- *   .zentra-hero*          hero / typed text / countdown
- *   .zentra-how*           how-it-works
- *   .zentra-niches*        niches grid
- *   .zentra-pricing*       pricing
- *   .zentra-footer*        footer
- *   .zentra-newsletter*    newsletter modal
- *   .zentra-glass / glow*  shared homepage helpers
+ *   .brandbox-nav*           top nav
+ *   .brandbox-hero*          hero / typed text / countdown
+ *   .brandbox-how*           how-it-works
+ *   .brandbox-niches*        niches grid
+ *   .brandbox-pricing*       pricing
+ *   .brandbox-footer*        footer
+ *   .brandbox-newsletter*    newsletter modal
+ *   .brandbox-glass / glow*  shared homepage helpers
  */
 
 .material-symbols-outlined {
@@ -22,14 +22,14 @@
 }
 
 /* Brand mark (homepage nav + footer only) */
-.zentra-brand {
+.brandbox-brand {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
   line-height: 0;
 }
 
-.zentra-brand img {
+.brandbox-brand img {
   display: block;
   height: 2.35rem;
   width: auto;
@@ -37,35 +37,35 @@
   object-fit: contain;
 }
 
-.zentra-brand--nav img {
+.brandbox-brand--nav img {
   height: 2.5rem;
 }
 
-.zentra-brand--footer img {
+.brandbox-brand--footer img {
   height: 2.75rem;
   max-width: 12.5rem;
 }
 
-.zentra-glass {
+.brandbox-glass {
   background: var(--glass);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--hairline);
 }
 
-.zentra-glow-primary {
+.brandbox-glow-primary {
   filter: blur(100px);
   background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
   opacity: 0.15;
 }
 
-.zentra-glow-purple {
+.brandbox-glow-purple {
   filter: blur(100px);
   background: radial-gradient(circle, var(--vibrant-purple) 0%, transparent 70%);
   opacity: 0.15;
 }
 
-.zentra-text-gradient {
+.brandbox-text-gradient {
   background: linear-gradient(to right, var(--accent-pink), var(--vibrant-purple));
   -webkit-background-clip: text;
   background-clip: text;
@@ -73,17 +73,17 @@
 }
 
 /* Hero typed accent — fixed width so typewriter doesn't shift layout */
-.zentra-hero__accent {
+.brandbox-hero__accent {
   color: #4edea3;
 }
 
-.zentra-hero__countdown-time {
+.brandbox-hero__countdown-time {
   color: #ff00e5;
   font-weight: 700;
   text-transform: none;
 }
 
-.zentra-hero__typed {
+.brandbox-hero__typed {
   display: inline-block;
   position: relative;
   vertical-align: baseline;
@@ -94,7 +94,7 @@
   min-height: 1.3em;
 }
 
-.zentra-hero__typed-ghost {
+.brandbox-hero__typed-ghost {
   visibility: hidden;
   white-space: nowrap;
   pointer-events: none;
@@ -104,7 +104,7 @@
   padding-right: 0.28em;
 }
 
-.zentra-hero__typed-text {
+.brandbox-hero__typed-text {
   position: absolute;
   left: 0.04em;
   top: 0.12em;
@@ -126,7 +126,7 @@
 }
 
 /* Hero CTAs — primary / secondary; gradient border on hover only */
-.zentra-btn {
+.brandbox-btn {
   position: relative;
   z-index: 0;
   display: inline-flex;
@@ -146,45 +146,45 @@
   isolation: isolate;
 }
 
-.zentra-btn--primary {
+.brandbox-btn--primary {
   color: var(--on-primary);
   background: var(--primary-container);
   border: 3px solid transparent;
 }
 
 /* Same ghost/outline look everywhere (matches View Demo) */
-.zentra-btn--secondary {
+.brandbox-btn--secondary {
   color: var(--on-surface);
   background: transparent;
   border: 3px solid var(--outline-variant);
 }
 
-.zentra-btn--primary,
-.zentra-btn--primary:hover,
-.zentra-btn--primary:focus,
-.zentra-btn--primary:active,
-.zentra-btn--primary:visited {
+.brandbox-btn--primary,
+.brandbox-btn--primary:hover,
+.brandbox-btn--primary:focus,
+.brandbox-btn--primary:active,
+.brandbox-btn--primary:visited {
   color: var(--on-primary);
   background: var(--primary-container);
   text-decoration: none;
 }
 
-.zentra-btn--secondary,
-.zentra-btn--secondary:hover,
-.zentra-btn--secondary:focus,
-.zentra-btn--secondary:active,
-.zentra-btn--secondary:visited {
+.brandbox-btn--secondary,
+.brandbox-btn--secondary:hover,
+.brandbox-btn--secondary:focus,
+.brandbox-btn--secondary:active,
+.brandbox-btn--secondary:visited {
   color: var(--on-surface);
   background: transparent;
   text-decoration: none;
 }
 
-.zentra-btn--secondary:hover {
+.brandbox-btn--secondary:hover {
   border-color: transparent;
 }
 
 /* Primary: solid fill + outer gradient ring */
-.zentra-btn--primary::before {
+.brandbox-btn--primary::before {
   content: "";
   position: absolute;
   inset: -3px;
@@ -197,7 +197,7 @@
   transition: opacity 0.2s ease;
 }
 
-.zentra-btn--primary::after {
+.brandbox-btn--primary::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -208,7 +208,7 @@
 }
 
 /* Secondary: transparent fill; gradient is border-only via mask */
-.zentra-btn--secondary::before {
+.brandbox-btn--secondary::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -230,30 +230,30 @@
   mask-composite: exclude;
 }
 
-.zentra-btn .material-symbols-outlined {
+.brandbox-btn .material-symbols-outlined {
   font-size: 1.35rem;
   color: inherit;
 }
 
 /* Header-sized secondary (fits h-20 nav) — style matches View Demo */
-.zentra-btn--nav {
+.brandbox-btn--nav {
   height: 40px;
   padding: 0 1.5rem;
   font-size: 0.9375rem;
   border-width: 2px;
 }
 
-.zentra-btn--nav.zentra-btn--secondary::before {
+.brandbox-btn--nav.brandbox-btn--secondary::before {
   padding: 2px;
 }
 
-.zentra-btn--primary:hover::before,
-.zentra-btn--secondary:hover::before {
+.brandbox-btn--primary:hover::before,
+.brandbox-btn--secondary:hover::before {
   opacity: 1;
-  animation: zentra-btn-border 2.2s ease infinite;
+  animation: brandbox-btn-border 2.2s ease infinite;
 }
 
-@keyframes zentra-btn-border {
+@keyframes brandbox-btn-border {
   0% {
     background-position: 0% 50%;
   }
@@ -266,15 +266,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .zentra-btn--primary:hover::before,
-  .zentra-btn--secondary:hover::before {
+  .brandbox-btn--primary:hover::before,
+  .brandbox-btn--secondary:hover::before {
     animation: none;
     background: linear-gradient(120deg, #ff00e5, #4edea3);
     background-size: 100% 100%;
   }
 }
 
-.zentra-hero__price-badge {
+.brandbox-hero__price-badge {
   background: linear-gradient(135deg, var(--accent-pink), var(--vibrant-purple));
 }
 
@@ -282,22 +282,22 @@ summary::-webkit-details-marker {
   display: none;
 }
 
-.zentra-agent__scroll::-webkit-scrollbar {
+.brandbox-agent__scroll::-webkit-scrollbar {
   width: 4px;
 }
 
-.zentra-agent__scroll::-webkit-scrollbar-thumb {
+.brandbox-agent__scroll::-webkit-scrollbar-thumb {
   background: color-mix(in srgb, var(--primary) 30%, transparent);
   border-radius: 9999px;
 }
 
-/* —— Zentra launch CTA (Ready to launch your empire?) —— */
-.zentra-launch {
+/* —— BrandBox launch CTA (Ready to launch your empire?) —— */
+.brandbox-launch {
   position: relative;
   isolation: isolate;
 }
 
-.zentra-launch__scene {
+.brandbox-launch__scene {
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -305,34 +305,34 @@ summary::-webkit-details-marker {
   opacity: 0.55;
 }
 
-.zentra-launch__scene canvas {
+.brandbox-launch__scene canvas {
   display: block;
   width: 100% !important;
   height: 100% !important;
 }
 
-.zentra-launch__scene.is-static {
+.brandbox-launch__scene.is-static {
   opacity: 0;
 }
 
-.zentra-faq__wrap,
-.zentra-launch__content,
-.zentra-footer__grid,
-.zentra-footer__bottom {
+.brandbox-faq__wrap,
+.brandbox-launch__content,
+.brandbox-footer__grid,
+.brandbox-footer__bottom {
   padding-inline: 1.5rem;
 }
 
 @media (min-width: 1024px) {
-  .zentra-faq__wrap,
-  .zentra-launch__content,
-  .zentra-footer__grid,
-  .zentra-footer__bottom {
+  .brandbox-faq__wrap,
+  .brandbox-launch__content,
+  .brandbox-footer__grid,
+  .brandbox-footer__bottom {
     padding-inline: 0;
   }
 }
 
 /* Honeypot — visually hidden */
-.zentra-honeypot {
+.brandbox-honeypot {
   position: absolute;
   left: -10000px;
   top: auto;
@@ -341,13 +341,13 @@ summary::-webkit-details-marker {
   overflow: hidden;
 }
 
-.zentra-honeypot__field {
+.brandbox-honeypot__field {
   position: absolute;
   left: -10000px;
 }
 
 /* Newsletter thank-you popup */
-.zentra-newsletter-modal {
+.brandbox-newsletter-modal {
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -356,14 +356,14 @@ summary::-webkit-details-marker {
   padding: 1.25rem;
 }
 
-.zentra-newsletter-modal__backdrop {
+.brandbox-newsletter-modal__backdrop {
   position: absolute;
   inset: 0;
   background: rgba(6, 10, 8, 0.72);
   backdrop-filter: blur(6px);
 }
 
-.zentra-newsletter-modal__card {
+.brandbox-newsletter-modal__card {
   position: relative;
   z-index: 1;
   width: min(100%, 26rem);
@@ -375,13 +375,13 @@ summary::-webkit-details-marker {
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
 }
 
-.zentra-newsletter-modal__icon {
+.brandbox-newsletter-modal__icon {
   font-size: 2.5rem;
   color: var(--primary);
   margin-bottom: 0.75rem;
 }
 
-.zentra-newsletter-modal__card h2 {
+.brandbox-newsletter-modal__card h2 {
   font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 700;
@@ -389,13 +389,13 @@ summary::-webkit-details-marker {
   color: var(--on-surface);
 }
 
-.zentra-newsletter-modal__card p {
+.brandbox-newsletter-modal__card p {
   margin: 0 0 1.5rem;
   color: var(--on-surface-variant);
   line-height: 1.55;
   font-size: 0.98rem;
 }
 
-.zentra-newsletter-modal__card .zentra-btn {
+.brandbox-newsletter-modal__card .brandbox-btn {
   margin-inline: auto;
 }

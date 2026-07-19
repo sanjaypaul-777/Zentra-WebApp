@@ -136,7 +136,7 @@
   }
 
   function boot() {
-    const el = document.getElementById("zentra-launch-scene");
+    const el = document.getElementById("brandbox-launch-scene");
     if (el) initAiEngine3D(el);
   }
 

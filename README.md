@@ -1,15 +1,15 @@
-# Zentra-Web (Django)
+# BrandBoxWeb (Django)
 
-Public marketing site + account dashboard for **Zentra**.
+Public marketing site + account dashboard for **BrandBox**.
 
-This is a **separate** app from the Shopify embedded app in `../Zentra` (Node).
+This is a **separate** app from the Shopify embedded app in `../BrandBoxApp` (Node).
 
 | Surface | Role | Typical URL |
 |---------|------|-------------|
-| **Marketing** (this repo) | Landing, login, signup, checkout | `zentra.com` |
-| **Dashboard** (this repo) | After login — connect → build → finder → imports | `app.zentra.com` |
+| **Marketing** (this repo) | Landing, login, signup, checkout | `brandbox.co` |
+| **Dashboard** (this repo) | After login — connect → build → finder → imports | `app.brandbox.co` |
 | **Admin** (this repo) | Staff editor — vault, Product Hunter, users | `/admin/` |
-| **Zentra** (sibling Node) | Shopify OAuth, Admin API, push, live store | Cloudflare tunnel / deploy |
+| **BrandBox** (sibling Node) | Shopify OAuth, Admin API, push, live store | Cloudflare tunnel / deploy |
 
 They share **one Shopify Partner app**. In production they should share **one Postgres**; local Django defaults to SQLite.
 
@@ -20,17 +20,17 @@ They share **one Shopify Partner app**. In production they should share **one Po
 | **Routes + logic** | `apps/` | `views.py`, `urls.py`, models, services |
 | **HTML** | `templates/` | What the user sees |
 | **CSS / JS / images** | `static/` | Look & client behavior |
-| **Settings + Node client** | `config/` | Django settings, Shopify helpers, `zentra_client` |
+| **Settings + Node client** | `config/` | Django settings, Shopify helpers, `brandbox_client` |
 
-**Rule:** change copy in `templates/…`. Change behavior in `apps/…`. Talk to Node only via `config/zentra_client.py`.
+**Rule:** change copy in `templates/…`. Change behavior in `apps/…`. Talk to Node only via `config/brandbox_client.py`.
 
 **CSS rule (page → section → block):** do not style pages from `base.css`. Each page loads its own file; every section uses a unique class prefix so changing one block does not affect another page.
 
 | Page | CSS file | Section prefixes |
 |------|----------|------------------|
-| Homepage | `static/css/home.css` | `.zentra-hero*`, `.zentra-nav*`, … |
+| Homepage | `static/css/home.css` | `.brandbox-hero*`, `.brandbox-nav*`, … |
 | Login / signup | `static/css/auth.css` | `.auth-page`, `.auth-card`, … |
-| Dashboard shell | `static/css/dashboard.css` | `.dash`, `.dash-sidebar*`, `.zentra-btn*` |
+| Dashboard shell | `static/css/dashboard.css` | `.dash`, `.dash-sidebar*`, `.brandbox-btn*` |
 | Product Finder / Imports | `static/css/catalog.css` | `.catalog`, finder / import blocks |
 | My Stores | `static/css/stores.css` | `.ms-*` |
 | Settings | `static/css/settings.css` | `.st-*` |
@@ -62,7 +62,7 @@ AFTER LOGIN
   /dashboard/settings/        account + prefs
 
 STATUS / ERRORS
-  404 / 500 custom pages (handler404 / handler500 — ZEN-500-… refs)
+  404 / 500 custom pages (handler404 / handler500 — BBX-500-… refs)
   Maintenance via MAINTENANCE_MODE + MAINTENANCE_ETA
   DEBUG previews: /__debug__/404/ · /__debug__/500/ · /__debug__/maintenance/
 
@@ -75,13 +75,13 @@ STAFF / SUPERUSER
 > **Product Finder** reads Django SQL (`CatalogProduct`). **My Imports** are shop drafts
 > (`ShopImport`). **Push to Shopify** calls the Node app (Admin token stays in Node).
 >
-> **Errors:** never show raw exceptions to users. 500 pages show a `ZEN-500-…`
+> **Errors:** never show raw exceptions to users. 500 pages show a `BBX-500-…`
 > reference logged with the real traceback for support.
 
 ## Project tree
 
 ```text
-Zentra-Web/
+BrandBoxWeb/
 ├── manage.py
 ├── requirements.txt
 ├── .env.example / .env.local          # secrets gitignored
@@ -89,7 +89,7 @@ Zentra-Web/
 │   ├── settings.py                    # apps, DB, CATALOG_*, SHOPIFY_APP_URL
 │   ├── urls.py                        # mounts apps + /admin/
 │   ├── shopify.py                     # normalize shop + OAuth URL → Node
-│   ├── zentra_client.py               # all Node internal HTTP (secret header)
+│   ├── brandbox_client.py               # all Node internal HTTP (secret header)
 │   ├── middleware.py / context_processors.py
 │   ├── celery.py                      # reserved for long builds
 │   └── wsgi.py / asgi.py
@@ -135,7 +135,7 @@ Zentra-Web/
 
 Two separate accounts:
 
-1. **Zentra login** = this webapp (`User`)
+1. **BrandBox login** = this webapp (`User`)
 2. **Shopify store** = merchant’s `*.myshopify.com` (connected via Node OAuth)
 
 ### Workflow charts
@@ -144,14 +144,14 @@ Two separate accounts:
 
 ```mermaid
 flowchart TD
-  Start([Open Zentra Web]) --> Auth{Zentra logged in?}
+  Start([Open BrandBox Web]) --> Auth{BrandBox logged in?}
 
   Auth -->|No| Login[Signup / Login]
   Login -->|Fail| Login
   Login -->|OK| Dash[/dashboard/]
   Auth -->|Yes| Dash
 
-  Dash --> State{Shopify ↔ Zentra status}
+  Dash --> State{Shopify ↔ BrandBox status}
 
   State -->|No Shopify account yet| CreateCard[Create Shopify Account]
   CreateCard --> Partner[Shopify signup / free trial]
@@ -161,7 +161,7 @@ flowchart TD
   State -->|Has Shopify store<br/>but NOT connected| ConnectCard[Connect Shopify]
   ConnectCard --> Paste[Paste yourstorename.myshopify.com]
   Paste --> Pending[(DB: ShopConnection<br/>PENDING app_installed=false)]
-  Pending --> InstallUI[Install Zentra guide]
+  Pending --> InstallUI[Install BrandBox guide]
 
   State -->|Domain saved<br/>pending install| InstallUI
   InstallUI --> OAuth[Redirect → Node OAuth]
@@ -184,8 +184,8 @@ flowchart TD
 ```mermaid
 flowchart LR
   A[No Shopify store] --> B[Has Shopify store]
-  B --> C[Pending in Zentra<br/>domain saved only]
-  C --> D[Active in Zentra<br/>OAuth + app installed]
+  B --> C[Pending in BrandBox<br/>domain saved only]
+  C --> D[Active in BrandBox<br/>OAuth + app installed]
 
   A -.->|Create account| B
   B -.->|Connect + paste domain| C
@@ -195,8 +195,8 @@ flowchart LR
 | Status | Meaning | What user does |
 |--------|---------|----------------|
 | **No Shopify store** | Never created a Shopify shop | **Create Shopify Account** |
-| **Has store, not connected** | Shop exists, Zentra doesn’t know it | **Connect** → paste `*.myshopify.com` |
-| **Pending** | Domain in DB, `app_installed=false` | **Install Zentra** (Node OAuth) |
+| **Has store, not connected** | Shop exists, BrandBox doesn’t know it | **Connect** → paste `*.myshopify.com` |
+| **Pending** | Domain in DB, `app_installed=false` | **Install BrandBox** (Node OAuth) |
 | **Active / connected** | `app_installed=true` | Overview, Builder, Finder Import, Push |
 
 #### AI Store Builder (full flow)
@@ -277,7 +277,7 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-  subgraph ZentraWeb[Django webapp]
+  subgraph BrandBoxWeb[Django webapp]
     User
     ShopConnection
     CatalogProduct
@@ -285,7 +285,7 @@ flowchart LR
     BuildJob
   end
 
-  subgraph ZentraNode[Node app]
+  subgraph BrandBoxNode[Node app]
     OAuth
     Session
     Build
@@ -322,7 +322,7 @@ Who owns what:
 | Create / publish products to store | **Node only** | Shopify Admin API |
 | Theme build engine | **Node** | Prisma build + Admin API |
 
-Django **never** stores Shopify Admin access tokens. It calls Node with `X-Zentra-Internal-Secret`.
+Django **never** stores Shopify Admin access tokens. It calls Node with `X-BrandBox-Internal-Secret`.
 
 ---
 
@@ -391,7 +391,7 @@ If Node/tunnel is down → show “product count unavailable”, never invent `0
 1. /dashboard/builder/  pick niche (NichePack from DB; counts may sync from Node GET /api/niches)
 2. Start build → apps/builder/services.py
      → Node POST /api/build/start
-     → DB WRITE BuildJob (status running, zentra_build_id=…)
+     → DB WRITE BuildJob (status running, brandbox_build_id=…)
 3. /builder/building/<id>/ polls:
      → Node GET /api/build/status
      → DB UPDATE BuildJob progress / status
@@ -468,9 +468,9 @@ Push  POST … action=publish
 
 ---
 
-### 8) Node API map (Django → Zentra)
+### 8) Node API map (Django → BrandBox)
 
-All via `config/zentra_client.py` + header `X-Zentra-Internal-Secret`.  
+All via `config/brandbox_client.py` + header `X-BrandBox-Internal-Secret`.  
 Base URL = `SHOPIFY_APP_URL` (update when Cloudflare tunnel changes).
 
 | When | Django helper | Node |
@@ -497,12 +497,12 @@ Base URL = `SHOPIFY_APP_URL` (update when Cloudflare tunnel changes).
 | Finder browse | Vault cards | Empty / connect banner for Import |
 | Import | `ShopImport` created | Not in vault / no shop |
 | Push | `in_store` + Shopify product | Toast: Node/tunnel/publish error |
-| Server error | `ZEN-500-…` page | Traceback only in logs |
+| Server error | `BBX-500-…` page | Traceback only in logs |
 
 ## Local setup
 
 ```bash
-cd Zentra-Web
+cd BrandBoxWeb
 python -m venv .venv
 
 # Windows
@@ -524,20 +524,20 @@ Set in `.env.local`:
 
 ```env
 SHOPIFY_APP_URL=https://YOUR-TUNNEL.trycloudflare.com
-ZENTRA_INTERNAL_API_SECRET=zentra-dev-shared-secret
+BRANDBOX_INTERNAL_API_SECRET=brandbox-dev-shared-secret
 CATALOG_SPREADSHEET_ID=...
 CATALOG_SHEET_TAB=Meta Ads Products
 ```
 
-Refresh `SHOPIFY_APP_URL` whenever `../Zentra` → `npm run dev` prints a new Cloudflare URL.
+Refresh `SHOPIFY_APP_URL` whenever `../BrandBoxApp` → `npm run dev` prints a new Cloudflare URL.
 
 ### Shared database (production)
 
 ```env
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/zentra
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/brandbox
 ```
 
-Use the **same** Postgres as Zentra when you want shared users/shops. Local default is SQLite (`db.sqlite3`).
+Use the **same** Postgres as BrandBox when you want shared users/shops. Local default is SQLite (`db.sqlite3`).
 
 ## Useful CLI (catalog)
 
@@ -552,5 +552,5 @@ python manage.py scrape_products --purge-dead     # drop 404 vault rows
 
 1. Real password-reset email + Google / Apple / Facebook OAuth
 2. Celery worker for long Product Hunter / builds
-3. Shared Postgres with Zentra in staging/prod
+3. Shared Postgres with BrandBox in staging/prod
 4. Surface Node publish warnings (stock/scopes) clearly in My Imports toasts

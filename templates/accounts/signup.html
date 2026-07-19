@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Sign up · Zentra{% endblock %}
+{% block title %}Sign up · BrandBox{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}" />
 {% endblock %}
@@ -11,7 +11,7 @@
   <div class="auth-glow auth-glow--primary" aria-hidden="true"></div>
   <div class="auth-glow auth-glow--purple" aria-hidden="true"></div>
   <div class="auth-inner">
-    <a href="{% url 'home:index' %}" class="auth-logo" aria-label="Zentra home">
+    <a href="{% url 'home:index' %}" class="auth-logo" aria-label="BrandBox home">
       <img src="{% static 'images/logo-mark.png' %}?v=3" alt="" width="48" height="48" />
     </a>
     <h1>Create your account</h1>
@@ -69,7 +69,7 @@
     <nav class="auth-legal" aria-label="Legal">
       <span>Privacy Policy</span>
       <span>Terms of Service</span>
-      <a href="mailto:hello@zentra.com">Support</a>
+      <a href="mailto:help@brandbox.co">Support</a>
     </nav>
   </div>
 </main>

@@ -233,7 +233,7 @@
   margin: 0.25rem 0 2rem;
 }
 
-.build-success-actions .zentra-btn {
+.build-success-actions .brandbox-btn {
   width: 100%;
   max-width: 22rem;
 }
@@ -868,8 +868,8 @@
   text-decoration: underline;
 }
 
-/* —— Buttons used on this page —— */
-.zentra-btn {
+/* ï¿½ï¿½ Buttons used on this page ï¿½ï¿½ */
+.brandbox-btn {
   position: relative;
   z-index: 0;
   display: inline-flex;
@@ -891,36 +891,36 @@
   border: none;
   font-family: inherit;
 }
-.zentra-btn--primary {
+.brandbox-btn--primary {
   color: var(--on-primary);
   background: var(--primary-container);
   border: 3px solid transparent;
 }
-.zentra-btn--secondary {
+.brandbox-btn--secondary {
   color: var(--on-surface);
   background: transparent;
   border: 3px solid var(--outline-variant);
 }
-.zentra-btn--primary,
-.zentra-btn--primary:hover,
-.zentra-btn--primary:focus,
-.zentra-btn--primary:active,
-.zentra-btn--primary:visited {
+.brandbox-btn--primary,
+.brandbox-btn--primary:hover,
+.brandbox-btn--primary:focus,
+.brandbox-btn--primary:active,
+.brandbox-btn--primary:visited {
   color: var(--on-primary);
   background: var(--primary-container);
   text-decoration: none;
 }
-.zentra-btn--secondary,
-.zentra-btn--secondary:hover,
-.zentra-btn--secondary:focus,
-.zentra-btn--secondary:active,
-.zentra-btn--secondary:visited {
+.brandbox-btn--secondary,
+.brandbox-btn--secondary:hover,
+.brandbox-btn--secondary:focus,
+.brandbox-btn--secondary:active,
+.brandbox-btn--secondary:visited {
   color: var(--on-surface);
   background: transparent;
   text-decoration: none;
 }
-.zentra-btn--secondary:hover { border-color: transparent; }
-.zentra-btn--primary::before {
+.brandbox-btn--secondary:hover { border-color: transparent; }
+.brandbox-btn--primary::before {
   content: "";
   position: absolute;
   inset: -3px;
@@ -932,7 +932,7 @@
   pointer-events: none;
   transition: opacity 0.2s ease;
 }
-.zentra-btn--primary::after {
+.brandbox-btn--primary::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -941,7 +941,7 @@
   background: var(--primary-container);
   pointer-events: none;
 }
-.zentra-btn--secondary::before {
+.brandbox-btn--secondary::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -958,13 +958,13 @@
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 }
-.zentra-btn .material-symbols-outlined { font-size: 1.35rem; color: inherit; }
-.zentra-btn--primary:hover::before,
-.zentra-btn--secondary:hover::before {
+.brandbox-btn .material-symbols-outlined { font-size: 1.35rem; color: inherit; }
+.brandbox-btn--primary:hover::before,
+.brandbox-btn--secondary:hover::before {
   opacity: 1;
-  animation: zentra-btn-border 2.2s ease infinite;
+  animation: brandbox-btn-border 2.2s ease infinite;
 }
-@keyframes zentra-btn-border {
+@keyframes brandbox-btn-border {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }

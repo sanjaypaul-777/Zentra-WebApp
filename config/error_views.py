@@ -14,14 +14,14 @@ from django.shortcuts import render
 from django.template import Context, Engine
 from django.template.loader import render_to_string
 
-logger = logging.getLogger("zentra.errors")
+logger = logging.getLogger("brandbox.errors")
 
 
 def _error_reference() -> str:
-    """Short support lookup id, e.g. ZEN-500-A3F9."""
+    """Short support lookup id, e.g. BBX-500-A3F9."""
     stamp = format(int(time.time()) % 0xFFFF, "X").zfill(4)
     rand = secrets.token_hex(1).upper()
-    return f"ZEN-500-{stamp}{rand}"[:14]
+    return f"BBX-500-{stamp}{rand}"[:14]
 
 
 def page_not_found(request, exception=None):
@@ -52,7 +52,7 @@ def server_error(request):
     except Exception:
         logger.exception("Failed rendering 500.html (ref=%s)", ref)
         html = (
-            "<!DOCTYPE html><html><head><title>Server error · Zentra</title></head>"
+            "<!DOCTYPE html><html><head><title>Server error · BrandBox</title></head>"
             "<body style='background:#0a0a0c;color:#dde4dd;font-family:system-ui;"
             "display:grid;place-items:center;min-height:100vh;margin:0;padding:2rem;text-align:center'>"
             "<div><h1>Something went wrong on our end</h1>"

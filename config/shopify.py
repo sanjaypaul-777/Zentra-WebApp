@@ -1,6 +1,6 @@
 """
 Shopify helpers — normalize shop domain and build OAuth install URL.
-OAuth itself runs in the sibling Zentra (Node) app.
+OAuth itself runs in the sibling BrandBox (Node) app.
 """
 
 from __future__ import annotations
@@ -33,20 +33,20 @@ def normalize_shop_domain(raw: str) -> str | None:
 
 
 def build_shopify_install_url(shop: str, state: str | None = None) -> str:
-    """Redirect browser to Zentra Node /auth/login?shop=... (starts OAuth)."""
+    """Redirect browser to BrandBox Node /auth/login?shop=... (starts OAuth)."""
     base = (settings.SHOPIFY_APP_URL or "").rstrip("/")
     if not base:
         raise ValueError(
-            "Set SHOPIFY_APP_URL in .env.local to your Zentra tunnel "
-            "(from ../Zentra → npm run dev), e.g. https://xxxx.trycloudflare.com"
+            "Set SHOPIFY_APP_URL in .env.local to your BrandBox tunnel "
+            "(from ../BrandBoxApp → npm run dev), e.g. https://xxxx.trycloudflare.com"
         )
 
     # Block known placeholders that look configured but are unreachable
     host = base.lower().replace("https://", "").replace("http://", "").split("/")[0]
-    if host in {"app.zentra.com", "example.com", "localhost", "127.0.0.1"}:
+    if host in {"app.brandbox.co", "example.com", "localhost", "127.0.0.1"}:
         raise ValueError(
-            f"SHOPIFY_APP_URL is set to “{base}”, which isn’t a live Zentra tunnel. "
-            "Run `npm run dev` in ../Zentra and paste the Cloudflare URL into .env.local."
+            f"SHOPIFY_APP_URL is set to “{base}”, which isn’t a live BrandBox tunnel. "
+            "Run `npm run dev` in ../BrandBoxApp and paste the Cloudflare URL into .env.local."
         )
 
     query = {"shop": shop}

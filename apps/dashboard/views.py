@@ -13,7 +13,7 @@ from django.views.decorators.http import require_GET, require_http_methods
 
 from apps.builder.models import BuildJob
 from config.shopify import build_shopify_install_url, normalize_shop_domain
-from config.zentra_client import check_app_installed, sync_connection_install_flag
+from config.brandbox_client import check_app_installed, sync_connection_install_flag
 
 from .models import ShopConnection
 from .overview import PRO_FEATURES, build_overview_context, get_or_create_plan
@@ -98,7 +98,7 @@ def _save_pending_shop(user, shop: str) -> tuple[ShopConnection | None, str | No
     other = _shop_owned_by_other(shop, user)
     if other:
         return None, (
-            "This Shopify store is already linked to another Zentra account. "
+            "This Shopify store is already linked to another BrandBox account. "
             "Sign in with that account, or use a different store."
         )
 
@@ -121,7 +121,7 @@ def _save_pending_shop(user, shop: str) -> tuple[ShopConnection | None, str | No
             )
     except IntegrityError:
         return None, (
-            "This Shopify store is already linked to another Zentra account. "
+            "This Shopify store is already linked to another BrandBox account. "
             "Sign in with that account, or use a different store."
         )
     return connection, None
@@ -139,7 +139,7 @@ def dashboard_home(request):
     """
     Overview landing + OAuth return handler.
 
-    After Shopify OAuth (same-tab), Zentra Node redirects here with ?shop=...
+    After Shopify OAuth (same-tab), BrandBox Node redirects here with ?shop=...
     (and optionally installed=1). We confirm install via the Node API, mark the
     pending ShopConnection active, then show View B. Failures go to the
     connect error page — no polling, no session flag.
@@ -163,7 +163,7 @@ def dashboard_home(request):
         if other:
             messages.error(
                 request,
-                "This Shopify store is already linked to another Zentra account.",
+                "This Shopify store is already linked to another BrandBox account.",
             )
             return _oauth_failure_redirect(shop)
 
@@ -190,7 +190,7 @@ def dashboard_home(request):
             request.session.pop(SESSION_SETUP_FUNNEL, None)
             return redirect(f"{reverse('dashboard:builder')}?shop={connection.shop}")
 
-        # OAuth return: confirm real install / valid token via Zentra Node.
+        # OAuth return: confirm real install / valid token via BrandBox Node.
         result = check_app_installed(connection.shop)
         if sync_connection_install_flag(connection, result):
             request.session.pop(SESSION_SETUP_FUNNEL, None)
@@ -672,8 +672,8 @@ def settings_default_niche(request):
 @require_http_methods(["POST"])
 def settings_delete_account(request):
     """
-    Permanently delete the Zentra user account after email confirmation.
-    Does not uninstall or modify live Shopify stores — only removes Zentra data.
+    Permanently delete the BrandBox user account after email confirmation.
+    Does not uninstall or modify live Shopify stores — only removes BrandBox data.
     """
     from django.contrib.auth import logout
 
@@ -689,7 +689,7 @@ def settings_delete_account(request):
     user = request.user
     logout(request)
     user.delete()
-    messages.success(request, "Your Zentra account has been deleted.")
+    messages.success(request, "Your BrandBox account has been deleted.")
     return redirect("home:index")
 
 
@@ -824,7 +824,7 @@ def create_store_page(request):
             other = _shop_owned_by_other(shop, request.user)
             if other:
                 field_error = (
-                    "This Shopify store is already linked to another Zentra account."
+                    "This Shopify store is already linked to another BrandBox account."
                 )
                 shop_prefill = shop
             else:
@@ -846,7 +846,7 @@ def create_store_page(request):
                     except ValueError:
                         messages.error(
                             request,
-                            "Set SHOPIFY_APP_URL in .env.local to your Zentra tunnel.",
+                            "Set SHOPIFY_APP_URL in .env.local to your BrandBox tunnel.",
                         )
                         return redirect(
                             f"{reverse('dashboard:connect')}?step=install&from=create"
@@ -858,7 +858,7 @@ def create_store_page(request):
         "dashboard/create_store.html",
         "overview",
         signup_url=settings.SHOPIFY_PARTNER_SIGNUP_URL,
-        zentra_email=getattr(request.user, "email", "") or "",
+        brandbox_email=getattr(request.user, "email", "") or "",
         field_error=field_error,
         shop_prefill=shop_prefill,
         **progress,
@@ -869,7 +869,7 @@ def create_store_page(request):
 @require_http_methods(["POST"])
 def install_app(request):
     """
-    Same-tab OAuth redirect to Zentra Node /auth?shop=...
+    Same-tab OAuth redirect to BrandBox Node /auth?shop=...
     Reused by Connect Section B — do not open in a new tab.
     """
     raw = request.POST.get("shop", "")
@@ -885,7 +885,7 @@ def install_app(request):
     if other:
         messages.error(
             request,
-            "This Shopify store is already linked to another Zentra account.",
+            "This Shopify store is already linked to another BrandBox account.",
         )
         return redirect("dashboard:connect")
 
@@ -899,7 +899,7 @@ def install_app(request):
     except ValueError:
         messages.error(
             request,
-            "Set SHOPIFY_APP_URL in .env.local to your Zentra tunnel, then try Install again.",
+            "Set SHOPIFY_APP_URL in .env.local to your BrandBox tunnel, then try Install again.",
         )
         return redirect(f"{reverse('dashboard:connect')}?step=install")
 
@@ -909,7 +909,7 @@ def install_app(request):
 @login_required
 @require_GET
 def install_status(request):
-    """JSON: verify app install via Zentra Node API, update ShopConnection."""
+    """JSON: verify app install via BrandBox Node API, update ShopConnection."""
     shop = normalize_shop_domain(request.GET.get("shop", ""))
     if not shop:
         return JsonResponse(
@@ -923,7 +923,7 @@ def install_status(request):
             {
                 "ok": False,
                 "installed": False,
-                "error": "This store is linked to another Zentra account.",
+                "error": "This store is linked to another BrandBox account.",
             },
             status=409,
         )

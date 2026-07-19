@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{% block dash_title %}Dashboard{% endblock %} · Zentra{% endblock %}
+{% block title %}{% block dash_title %}Dashboard{% endblock %} · BrandBox{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
@@ -12,11 +12,11 @@
 {% csrf_token %}
 <div class="dash">
   <aside class="dash-sidebar" id="dash-sidebar" aria-label="Workspace">
-    <a href="{% url 'home:index' %}" class="dash-sidebar__brand" aria-label="Zentra home">
+    <a href="{% url 'home:index' %}" class="dash-sidebar__brand" aria-label="BrandBox home">
       <img
         class="dash-sidebar__logo"
         src="{% static 'images/logo.png' %}?v=3"
-        alt="Zentra"
+        alt="BrandBox"
         width="140"
         height="40"
       />

@@ -133,7 +133,7 @@ def scrape_single(
             timeout=8.0,
             follow_redirects=True,
             headers={
-                "User-Agent": "Mozilla/5.0 (compatible; ZentraProductHunter/1.0)",
+                "User-Agent": "Mozilla/5.0 (compatible; BrandBoxProductHunter/1.0)",
                 "Accept": "*/*",
             },
         ) as http:
@@ -253,7 +253,7 @@ def sync_sheet_into_db(*, sheet_name: str | None = None, log: LogFn | None = Non
         timeout=8.0,
         follow_redirects=True,
         headers={
-            "User-Agent": "Mozilla/5.0 (compatible; ZentraProductHunter/1.0)",
+            "User-Agent": "Mozilla/5.0 (compatible; BrandBoxProductHunter/1.0)",
             "Accept": "*/*",
         },
     ) as http:

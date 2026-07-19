@@ -9,7 +9,7 @@
  *   .dash-header*         top bar
  *   .dash-main*           content area
  *   .ov-*                 overview page blocks
- *   .zentra-btn*          primary/secondary buttons (app pages)
+ *   .brandbox-btn*          primary/secondary buttons (app pages)
  */
 
 .dash {
@@ -51,7 +51,7 @@
   flex-direction: column;
   gap: 0;
   padding: 0.875rem 0.75rem 0.875rem;
-  /* Same glass recipe as homepage .zentra-nav, on green surface (not purple navy) */
+  /* Same glass recipe as homepage .brandbox-nav, on green surface (not purple navy) */
   background: color-mix(in srgb, var(--surface-container-low) 55%, transparent);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -330,7 +330,7 @@
   height: var(--dash-header-h);
   min-height: var(--dash-header-h);
   padding: 0 1.5rem;
-  /* Same glass recipe as homepage .zentra-nav */
+  /* Same glass recipe as homepage .brandbox-nav */
   background: color-mix(in srgb, var(--surface-container-low) 55%, transparent);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -2171,7 +2171,7 @@
 }
 
 /* —— App buttons (dashboard / stores / settings / builder) —— */
-.zentra-btn {
+.brandbox-btn {
   position: relative;
   z-index: 0;
   display: inline-flex;
@@ -2194,43 +2194,43 @@
   font-family: inherit;
 }
 
-.zentra-btn--primary {
+.brandbox-btn--primary {
   color: var(--on-primary);
   background: var(--primary-container);
   border: 3px solid transparent;
 }
 
-.zentra-btn--secondary {
+.brandbox-btn--secondary {
   color: var(--on-surface);
   background: transparent;
   border: 3px solid var(--outline-variant);
 }
 
-.zentra-btn--primary,
-.zentra-btn--primary:hover,
-.zentra-btn--primary:focus,
-.zentra-btn--primary:active,
-.zentra-btn--primary:visited {
+.brandbox-btn--primary,
+.brandbox-btn--primary:hover,
+.brandbox-btn--primary:focus,
+.brandbox-btn--primary:active,
+.brandbox-btn--primary:visited {
   color: var(--on-primary);
   background: var(--primary-container);
   text-decoration: none;
 }
 
-.zentra-btn--secondary,
-.zentra-btn--secondary:hover,
-.zentra-btn--secondary:focus,
-.zentra-btn--secondary:active,
-.zentra-btn--secondary:visited {
+.brandbox-btn--secondary,
+.brandbox-btn--secondary:hover,
+.brandbox-btn--secondary:focus,
+.brandbox-btn--secondary:active,
+.brandbox-btn--secondary:visited {
   color: var(--on-surface);
   background: transparent;
   text-decoration: none;
 }
 
-.zentra-btn--secondary:hover {
+.brandbox-btn--secondary:hover {
   border-color: transparent;
 }
 
-.zentra-btn--primary::before {
+.brandbox-btn--primary::before {
   content: "";
   position: absolute;
   inset: -3px;
@@ -2243,7 +2243,7 @@
   transition: opacity 0.2s ease;
 }
 
-.zentra-btn--primary::after {
+.brandbox-btn--primary::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -2253,7 +2253,7 @@
   pointer-events: none;
 }
 
-.zentra-btn--secondary::before {
+.brandbox-btn--secondary::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -2275,18 +2275,18 @@
   mask-composite: exclude;
 }
 
-.zentra-btn .material-symbols-outlined {
+.brandbox-btn .material-symbols-outlined {
   font-size: 1.35rem;
   color: inherit;
 }
 
-.zentra-btn--primary:hover::before,
-.zentra-btn--secondary:hover::before {
+.brandbox-btn--primary:hover::before,
+.brandbox-btn--secondary:hover::before {
   opacity: 1;
-  animation: zentra-btn-border 2.2s ease infinite;
+  animation: brandbox-btn-border 2.2s ease infinite;
 }
 
-@keyframes zentra-btn-border {
+@keyframes brandbox-btn-border {
   0% {
     background-position: 0% 50%;
   }
@@ -2299,8 +2299,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .zentra-btn--primary:hover::before,
-  .zentra-btn--secondary:hover::before {
+  .brandbox-btn--primary:hover::before,
+  .brandbox-btn--secondary:hover::before {
     animation: none;
     background: linear-gradient(120deg, #ff00e5, #4edea3);
     background-size: 100% 100%;

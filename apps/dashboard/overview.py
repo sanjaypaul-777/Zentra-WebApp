@@ -144,7 +144,7 @@ def build_overview_context(user) -> dict:
         )
         products_trend = "Preview mode"
     else:
-        from config.zentra_client import check_app_installed, sync_connection_install_flag
+        from config.brandbox_client import check_app_installed, sync_connection_install_flag
 
         cache_age = None
         if connection.store_product_count_at:
@@ -229,7 +229,7 @@ def build_overview_context(user) -> dict:
             ActivityEvent(
                 user=user,
                 event_type=ActivityEvent.EventType.SYSTEM,
-                message="Welcome to Zentra — your store is connected.",
+                message="Welcome to BrandBox — your store is connected.",
                 created_at=now - timedelta(minutes=12),
             ),
             ActivityEvent(
@@ -272,7 +272,7 @@ def build_overview_context(user) -> dict:
     if latest and latest.niche_id:
         theme_name = latest.niche.display_theme
     elif latest:
-        theme_name = "Zentra"
+        theme_name = "BrandBox"
 
     snapshot = None
     if latest:

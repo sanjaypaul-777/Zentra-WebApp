@@ -92,7 +92,7 @@ def sync_live_status_from_node(*, shop: str) -> int:
     Returns number of rows updated. Silent if tunnel/Node down.
     """
     try:
-        from config.zentra_client import list_imports
+        from config.brandbox_client import list_imports
     except Exception:
         return 0
 
@@ -144,7 +144,7 @@ def push_to_shopify(*, shop: str, import_id: int) -> dict:
     Ensure Node PendingProduct exists (from sheet/sourceId), then publish.
     Updates local ShopImport on success.
     """
-    from config.zentra_client import create_import, publish_import
+    from config.brandbox_client import create_import, publish_import
 
     imp = ShopImport.objects.filter(pk=import_id, shop=shop).first()
     if not imp:

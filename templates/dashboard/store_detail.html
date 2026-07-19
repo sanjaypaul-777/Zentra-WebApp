@@ -42,13 +42,13 @@
       {% if store_row.status == "failed" %}
       <form method="post" action="{{ store_row.primary_url }}">
         {% csrf_token %}
-        <button type="submit" class="zentra-btn zentra-btn--secondary">
+        <button type="submit" class="brandbox-btn brandbox-btn--secondary">
           {{ store_row.primary_label }}
         </button>
       </form>
       {% else %}
       <a
-        class="zentra-btn zentra-btn--primary"
+        class="brandbox-btn brandbox-btn--primary"
         href="{{ store_row.primary_url }}"
         {% if store_row.primary_external %}target="_blank" rel="noopener noreferrer"{% endif %}
       >{{ store_row.primary_label }}</a>

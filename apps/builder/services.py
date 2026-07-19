@@ -1,5 +1,5 @@
 """
-Build runner — drives BuildJob from Zentra Node internal APIs.
+Build runner — drives BuildJob from BrandBox Node internal APIs.
 
 Staff preview shops (admin-preview-*) keep a local timed simulator for UI work.
 """
@@ -10,7 +10,7 @@ import logging
 
 from django.utils import timezone
 
-from config.zentra_client import (
+from config.brandbox_client import (
     get_remote_build_status,
     retry_remote_build,
     start_remote_build,
@@ -53,9 +53,9 @@ def _apply_remote_payload(job: BuildJob, data: dict) -> BuildJob:
     build_id = data.get("buildId") or data.get("id")
 
     fields = ["updated_at"]
-    if build_id and build_id != job.zentra_build_id:
-        job.zentra_build_id = str(build_id)
-        fields.append("zentra_build_id")
+    if build_id and build_id != job.brandbox_build_id:
+        job.brandbox_build_id = str(build_id)
+        fields.append("brandbox_build_id")
 
     job.engine_progress = min(100, max(0, progress))
     fields.append("engine_progress")
@@ -98,10 +98,10 @@ def _apply_remote_payload(job: BuildJob, data: dict) -> BuildJob:
 
 
 def kickoff_remote_build(job: BuildJob) -> BuildJob:
-    """POST /api/build/start and attach zentra_build_id. No-op for preview shops."""
+    """POST /api/build/start and attach brandbox_build_id. No-op for preview shops."""
     if _is_preview_shop(job.shop):
         return job
-    if job.zentra_build_id:
+    if job.brandbox_build_id:
         return job
 
     niche_id = job.niche.slug if job.niche_id else ""
@@ -116,7 +116,7 @@ def kickoff_remote_build(job: BuildJob) -> BuildJob:
         job.status = BuildJob.Status.FAILED
         err = result.get("error") or "Could not start the store build"
         if err == "app_not_installed":
-            err = "Install the Zentra app on your Shopify store, then try again."
+            err = "Install the BrandBox app on your Shopify store, then try again."
         job.error_message = str(err)[:2000]
         job.save(update_fields=["status", "error_message", "updated_at"])
         return job
@@ -132,10 +132,10 @@ def advance_build_job(job: BuildJob) -> BuildJob:
     if _is_preview_shop(job.shop):
         return _advance_preview_job(job)
 
-    if not job.zentra_build_id:
+    if not job.brandbox_build_id:
         return kickoff_remote_build(job)
 
-    result = get_remote_build_status(shop=job.shop, build_id=job.zentra_build_id)
+    result = get_remote_build_status(shop=job.shop, build_id=job.brandbox_build_id)
     if not result.get("ok"):
         # Transient network blip — keep running; hard 404/409 fail the job.
         status = result.get("status")
@@ -247,7 +247,7 @@ def retry_failed_step(job: BuildJob) -> BuildJob:
         )
         return job
 
-    previous_id = job.zentra_build_id
+    previous_id = job.brandbox_build_id
     if not previous_id:
         # Never reached Node — try a fresh start
         job.status = BuildJob.Status.PENDING
@@ -278,7 +278,7 @@ def retry_failed_step(job: BuildJob) -> BuildJob:
     job.live_label = ""
     job.engine_progress = 0
     job.progress_step = 0
-    job.zentra_build_id = ""
+    job.brandbox_build_id = ""
     job.save(
         update_fields=[
             "status",
@@ -286,7 +286,7 @@ def retry_failed_step(job: BuildJob) -> BuildJob:
             "live_label",
             "engine_progress",
             "progress_step",
-            "zentra_build_id",
+            "brandbox_build_id",
             "updated_at",
         ]
     )
@@ -300,7 +300,7 @@ def build_status_payload(job: BuildJob) -> dict:
 
     if job.status == BuildJob.Status.DONE:
         percent = 100
-    elif job.zentra_build_id or not _is_preview_shop(job.shop):
+    elif job.brandbox_build_id or not _is_preview_shop(job.shop):
         percent = int(job.engine_progress or 0)
     else:
         elapsed = (timezone.now() - job.created_at).total_seconds()
@@ -342,6 +342,6 @@ def build_status_payload(job: BuildJob) -> dict:
         "failed": job.status == BuildJob.Status.FAILED,
         "error_message": job.error_message,
         "eta_seconds": eta,
-        "zentra_build_id": job.zentra_build_id or None,
+        "brandbox_build_id": job.brandbox_build_id or None,
         "live": bool(job.live_label),
     }

@@ -2,10 +2,10 @@
  * Hero headline typewriter — only “knows what sells” (type → pause → edit → repeat).
  */
 (function () {
-  var root = document.querySelector("[data-zentra-hero-typed]");
+  var root = document.querySelector("[data-brandbox-hero-typed]");
   if (!root) return;
 
-  var el = root.querySelector("[data-zentra-hero-typed-text]");
+  var el = root.querySelector("[data-brandbox-hero-typed-text]");
   if (!el) return;
 
   var phrase = "Knows What Sells";

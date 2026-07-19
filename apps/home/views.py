@@ -73,7 +73,7 @@ class ContactView(FormView):
         inbox = getattr(
             settings,
             "CONTACT_NOTIFY_EMAIL",
-            "hello@zentra.com",
+            "help@brandbox.co",
         )
         body = (
             f"New contact form message\n\n"
@@ -83,7 +83,7 @@ class ContactView(FormView):
             f"{message.message}\n"
         )
         email = EmailMessage(
-            subject=f"[Zentra Contact] {message.subject}",
+            subject=f"[BrandBox Contact] {message.subject}",
             body=body,
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=[inbox],

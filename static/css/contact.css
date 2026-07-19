@@ -46,7 +46,7 @@
 }
 
 /* Honeypot — visually hidden, still in DOM for bots */
-.zentra-honeypot {
+.brandbox-honeypot {
   position: absolute;
   left: -10000px;
   top: auto;
@@ -55,7 +55,7 @@
   overflow: hidden;
 }
 
-.zentra-honeypot__field {
+.brandbox-honeypot__field {
   position: absolute;
   left: -10000px;
 }

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Contact · Zentra{% endblock %}
+{% block title %}Contact · BrandBox{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}" />
 <link rel="stylesheet" href="{% static 'css/contact.css' %}" />
@@ -12,7 +12,7 @@
   <div class="auth-glow auth-glow--primary" aria-hidden="true"></div>
   <div class="auth-glow auth-glow--purple" aria-hidden="true"></div>
   <div class="auth-inner auth-inner--wide">
-    <a href="{% url 'home:index' %}" class="auth-logo" aria-label="Zentra home">
+    <a href="{% url 'home:index' %}" class="auth-logo" aria-label="BrandBox home">
       <img src="{% static 'images/logo-mark.png' %}?v=3" alt="" width="48" height="48" />
     </a>
     <p class="eyebrow">Support</p>
@@ -62,7 +62,7 @@
         {% endif %}
 
         {# Honeypot — leave empty #}
-        <div class="zentra-honeypot" aria-hidden="true">
+        <div class="brandbox-honeypot" aria-hidden="true">
           <label for="{{ form.website.id_for_label }}">Website</label>
           {{ form.website }}
         </div>
@@ -76,7 +76,7 @@
 
     <p class="auth-footer">
       Or email
-      <a href="mailto:hello@zentra.com">hello@zentra.com</a>
+      <a href="mailto:help@brandbox.co">help@brandbox.co</a>
     </p>
     <nav class="auth-legal" aria-label="Back">
       <a href="{% url 'home:index' %}">← Back to home</a>

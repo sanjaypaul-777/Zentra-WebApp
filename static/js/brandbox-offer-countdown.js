@@ -1,12 +1,12 @@
 /**
  * Summer offer countdown — HH:MM:SS only (no day label).
- * Set end via data-end="ISO-8601" on [data-zentra-offer-countdown].
+ * Set end via data-end="ISO-8601" on [data-brandbox-offer-countdown].
  */
 (function () {
-  var root = document.querySelector("[data-zentra-offer-countdown]");
+  var root = document.querySelector("[data-brandbox-offer-countdown]");
   if (!root) return;
 
-  var timeEl = root.querySelector("[data-zentra-offer-countdown-time]");
+  var timeEl = root.querySelector("[data-brandbox-offer-countdown-time]");
   if (!timeEl) return;
 
   var endRaw = root.getAttribute("data-end");

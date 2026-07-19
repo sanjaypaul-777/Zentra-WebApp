@@ -1,6 +1,6 @@
 """
 Checkout — public purchase UI (billing wiring later).
-Creates a Zentra account when the buyer is not logged in / has no account.
+Creates a BrandBox account when the buyer is not logged in / has no account.
 """
 
 from django.contrib.auth import login

@@ -24,7 +24,8 @@ def product_from_sheet_row(headers: list[str], values: list[str], sheet_row: int
         row.get("id")
         or row.get("product_id")
         or row.get("source_id")
-        or row.get("zentra_id")
+        or row.get("brandbox_id")
+        or row.get("zentra_id")  # legacy Sheet column name
         or ""
     ).strip()
     source_id = sheet_id or source_id_from_key(key)

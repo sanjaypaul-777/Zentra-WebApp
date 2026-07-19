@@ -1,6 +1,6 @@
 """
-Django settings for Zentra-Web (marketing + dashboard).
-Shopify OAuth / store engine stays in ../Zentra (Node).
+Django settings for BrandBox-Web (marketing + dashboard).
+Shopify OAuth / store engine stays in ../BrandBoxApp (Node).
 """
 
 from pathlib import Path
@@ -59,7 +59,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "config.context_processors.zentra_settings",
+                "config.context_processors.brandbox_settings",
             ],
         },
     },
@@ -67,7 +67,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# Local default: SQLite. Production: set DATABASE_URL to shared Postgres with Zentra.
+# Local default: SQLite. Production: set DATABASE_URL to shared Postgres with BrandBox.
 if env("DATABASE_URL", default=""):
     DATABASES = {"default": env.db("DATABASE_URL")}
 else:
@@ -108,10 +108,10 @@ EMAIL_BACKEND = env(
     "EMAIL_BACKEND",
     default="django.core.mail.backends.console.EmailBackend",
 )
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@zentra.com")
-CONTACT_NOTIFY_EMAIL = env("CONTACT_NOTIFY_EMAIL", default="hello@zentra.com")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="help@brandbox.co")
+CONTACT_NOTIFY_EMAIL = env("CONTACT_NOTIFY_EMAIL", default="help@brandbox.co")
 
-# Zentra product URLs
+# BrandBox product URLs
 MARKETING_URL = env("MARKETING_URL", default="http://127.0.0.1:8000")
 DASHBOARD_URL = env("DASHBOARD_URL", default="http://127.0.0.1:8000/dashboard/")
 SHOPIFY_APP_URL = env("SHOPIFY_APP_URL", default="")
@@ -119,8 +119,8 @@ SHOPIFY_PARTNER_SIGNUP_URL = env(
     "SHOPIFY_PARTNER_SIGNUP_URL",
     default="https://www.shopify.com/free-trial",
 )
-# Shared secret for Django ↔ Zentra Node install-status API
-ZENTRA_INTERNAL_API_SECRET = env("ZENTRA_INTERNAL_API_SECRET", default="")
+# Shared secret for Django ↔ BrandBox Node install-status API
+BRANDBOX_INTERNAL_API_SECRET = env("BRANDBOX_INTERNAL_API_SECRET", default="")
 # DEBUG-only: allow niche step without live API (local UI work)
 ALLOW_INSTALL_BYPASS = env.bool("ALLOW_INSTALL_BYPASS", default=False)
 

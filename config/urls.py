@@ -1,5 +1,5 @@
 """
-Root URL map for Zentra-Web.
+Root URL map for BrandBox-Web.
 """
 
 from django.conf import settings

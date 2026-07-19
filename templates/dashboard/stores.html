@@ -14,10 +14,10 @@
 <section class="ms" data-my-stores>
   <header class="ms-head">
     <div class="ms-head__copy">
-      <p class="ms-head__sub">Every Shopify store you've connected to Zentra.</p>
+      <p class="ms-head__sub">Every Shopify store you've connected to BrandBox.</p>
     </div>
     {% if has_stores %}
-    <a class="zentra-btn zentra-btn--primary" href="{{ connect_url }}">+ Connect another store</a>
+    <a class="brandbox-btn brandbox-btn--primary" href="{{ connect_url }}">+ Connect another store</a>
     {% endif %}
   </header>
 
@@ -28,7 +28,7 @@
     </div>
     <h3>You haven't connected a store yet</h3>
     <p>Connect your first Shopify store to start building.</p>
-    <a class="zentra-btn zentra-btn--primary" href="{{ connect_url }}">Connect your first store →</a>
+    <a class="brandbox-btn brandbox-btn--primary" href="{{ connect_url }}">Connect your first store →</a>
   </div>
   {% else %}
 
@@ -95,7 +95,7 @@
         {% if row.primary_url %}
           {% if row.status == "live" %}
           <a
-            class="zentra-btn zentra-btn--primary ms-row__cta"
+            class="brandbox-btn brandbox-btn--primary ms-row__cta"
             href="{{ row.primary_url }}"
             target="_blank"
             rel="noopener noreferrer"
@@ -103,12 +103,12 @@
           {% elif row.status == "failed" %}
           <form method="post" action="{{ row.primary_url }}">
             {% csrf_token %}
-            <button type="submit" class="zentra-btn zentra-btn--secondary ms-row__cta">
+            <button type="submit" class="brandbox-btn brandbox-btn--secondary ms-row__cta">
               {{ row.primary_label }}
             </button>
           </form>
           {% else %}
-          <a class="zentra-btn zentra-btn--primary ms-row__cta" href="{{ row.primary_url }}">
+          <a class="brandbox-btn brandbox-btn--primary ms-row__cta" href="{{ row.primary_url }}">
             {{ row.primary_label }}
           </a>
           {% endif %}
@@ -153,14 +153,14 @@
     <div class="ms-confirm__dialog status-card" role="alertdialog" aria-labelledby="ms-disconnect-title" aria-modal="true">
       <h3 id="ms-disconnect-title">Disconnect this store?</h3>
       <p>
-        This removes <strong data-ms-confirm-shop></strong> from Zentra and clears its
+        This removes <strong data-ms-confirm-shop></strong> from BrandBox and clears its
         stored access for your account. You can reconnect later.
       </p>
       <div class="ms-confirm__actions">
-        <button type="button" class="zentra-btn zentra-btn--secondary" data-ms-confirm-cancel>Cancel</button>
+        <button type="button" class="brandbox-btn brandbox-btn--secondary" data-ms-confirm-cancel>Cancel</button>
         <form method="post" data-ms-confirm-form>
           {% csrf_token %}
-          <button type="submit" class="zentra-btn zentra-btn--primary ms-confirm__danger">Disconnect store</button>
+          <button type="submit" class="brandbox-btn brandbox-btn--primary ms-confirm__danger">Disconnect store</button>
         </form>
       </div>
     </div>

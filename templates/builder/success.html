@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Your AI store is live · Zentra{% endblock %}
+{% block title %}Your AI store is live · BrandBox{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}" />
 <link rel="stylesheet" href="{% static 'css/builder.css' %}" />
@@ -12,7 +12,7 @@
   <div class="auth-glow auth-glow--primary" aria-hidden="true"></div>
   <div class="auth-glow auth-glow--purple" aria-hidden="true"></div>
   <div class="auth-inner">
-    <a href="{% url 'dashboard:home' %}" class="auth-logo" aria-label="Zentra">
+    <a href="{% url 'dashboard:home' %}" class="auth-logo" aria-label="BrandBox">
       <img src="{% static 'images/logo-mark.png' %}?v=3" alt="" width="48" height="48" />
     </a>
 
@@ -21,11 +21,11 @@
     <p class="subtitle">{{ success_lede }}</p>
 
     <div class="build-success-actions">
-      <a class="zentra-btn zentra-btn--primary" href="{% url 'dashboard:product_finder' %}">
+      <a class="brandbox-btn brandbox-btn--primary" href="{% url 'dashboard:product_finder' %}">
         Find Trending Products
       </a>
       {% if store_url %}
-      <a class="zentra-btn zentra-btn--secondary" href="{{ store_url }}" target="_blank" rel="noopener noreferrer">
+      <a class="brandbox-btn brandbox-btn--secondary" href="{{ store_url }}" target="_blank" rel="noopener noreferrer">
         Start selling now
       </a>
       {% endif %}

@@ -36,7 +36,7 @@ class NichePack(models.Model):
     def display_theme(self) -> str:
         if self.theme_name:
             return self.theme_name
-        return f"Zentra {self.display_codename}"
+        return f"BrandBox {self.display_codename}"
 
     @property
     def catalog_product_count(self) -> int:
@@ -81,7 +81,7 @@ class BuildJob(models.Model):
         default=Status.PENDING,
     )
     # Node Build.id from POST /api/build/start (or retry)
-    zentra_build_id = models.CharField(max_length=64, blank=True, db_index=True)
+    brandbox_build_id = models.CharField(max_length=64, blank=True, db_index=True)
     progress_step = models.PositiveSmallIntegerField(default=0)
     # Live percent / label from Node GET /api/build/status
     engine_progress = models.PositiveSmallIntegerField(default=0)
@@ -132,7 +132,7 @@ class BuildJob(models.Model):
         """Prefer live Node progress; else map step index → ~33 / 66 / 100."""
         if self.status == self.Status.DONE:
             return 100
-        if self.zentra_build_id or self.engine_progress:
+        if self.brandbox_build_id or self.engine_progress:
             return min(100, int(self.engine_progress or 0))
         thresholds = (33, 66, 100)
         idx = min(self.progress_step, len(thresholds) - 1)

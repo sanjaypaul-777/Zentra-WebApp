@@ -1,5 +1,5 @@
 """
-Call Zentra (Node) internal APIs — install status, niches, builds.
+Call BrandBox (Node) internal APIs — install status, niches, builds.
 
 Never request or store Shopify Admin access tokens here.
 """
@@ -17,14 +17,14 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-SECRET_HEADER = "X-Zentra-Internal-Secret"
-USER_AGENT = "Zentra-Web/1.0"
+SECRET_HEADER = "X-BrandBox-Internal-Secret"
+USER_AGENT = "BrandBox-Web/1.0"
 DEFAULT_TIMEOUT = 20
 
 
 def _config() -> tuple[str, str] | tuple[None, None]:
     base = (settings.SHOPIFY_APP_URL or "").rstrip("/")
-    secret = getattr(settings, "ZENTRA_INTERNAL_API_SECRET", "") or ""
+    secret = getattr(settings, "BRANDBOX_INTERNAL_API_SECRET", "") or ""
     if not base or not secret:
         return None, None
     return base, secret
@@ -56,7 +56,7 @@ def _request(
         return {
             "ok": False,
             "checkable": False,
-            "error": "ZENTRA_INTERNAL_API_SECRET is not set",
+            "error": "BRANDBOX_INTERNAL_API_SECRET is not set",
             "status": None,
         }
 
@@ -82,7 +82,7 @@ def _request(
             payload = json.loads(raw) if raw else {}
     except HTTPError as exc:
         body_text = exc.read().decode("utf-8", errors="replace")[:400]
-        logger.warning("Zentra %s %s → HTTP %s: %s", method, path, exc.code, body_text)
+        logger.warning("BrandBox %s %s → HTTP %s: %s", method, path, exc.code, body_text)
         detail = body_text
         try:
             parsed = json.loads(body_text)
@@ -92,11 +92,11 @@ def _request(
         return {
             "ok": False,
             "checkable": True,
-            "error": str(detail) or f"Zentra returned HTTP {exc.code}",
+            "error": str(detail) or f"BrandBox returned HTTP {exc.code}",
             "status": exc.code,
         }
     except (URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
-        logger.warning("Zentra %s %s failed: %s", method, path, exc)
+        logger.warning("BrandBox %s %s failed: %s", method, path, exc)
         return {
             "ok": False,
             "checkable": False,
@@ -113,7 +113,7 @@ def _request(
 
 def check_app_installed(shop: str, *, timeout: float = 8) -> dict[str, Any]:
     """
-    Ask Zentra Node GET /api/install-status?shop=...
+    Ask BrandBox Node GET /api/install-status?shop=...
 
     productsCount is null when unknown — never treat that as 0.
     Prefer productsCountAvailable / statusKey / statusCopy from Node.

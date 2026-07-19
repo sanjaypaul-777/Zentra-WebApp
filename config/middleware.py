@@ -13,7 +13,7 @@ from config.error_views import attach_error_reference
 
 
 class ErrorReferenceMiddleware:
-    """Attach a ZEN-500-… reference and log the exception before the 500 page."""
+    """Attach a BBX-500-… reference and log the exception before the 500 page."""
 
     def __init__(self, get_response):
         self.get_response = get_response

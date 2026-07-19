@@ -77,9 +77,9 @@
       </div>
     </div>
 
-    <h1>Install Zentra on your store</h1>
+    <h1>Install BrandBox on your store</h1>
     <p class="flow-card__lede">
-      One click, and Zentra can start building. This only grants permission to add
+      One click, and BrandBox can start building. This only grants permission to add
       products and install a theme — nothing else on your store.
       {% if pending_shop %}
       <br />Store: <strong>{{ pending_shop.shop }}</strong>
@@ -87,7 +87,7 @@
     </p>
 
     <ol class="micro-steps">
-      <li>Click “Install Zentra” below</li>
+      <li>Click “Install BrandBox” below</li>
       <li>Log into your Shopify account if prompted</li>
       <li>Review the requested permissions</li>
       <li>Click “Install” to confirm</li>
@@ -98,7 +98,7 @@
       {% csrf_token %}
       <input type="hidden" name="shop" value="{{ pending_shop.shop }}" />
       <button type="submit" class="btn-flow btn-flow--primary btn-flow--block">
-        Install Zentra
+        Install BrandBox
         <span aria-hidden="true">→</span>
       </button>
     </form>

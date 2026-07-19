@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Checkout · Zentra{% endblock %}
+{% block title %}Checkout · BrandBox{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/checkout.css' %}" />
 {% endblock %}
@@ -10,8 +10,8 @@
 <div class="checkout">
   <div class="checkout-shell">
     <header class="checkout-top">
-      <a href="{% url 'home:index' %}" class="checkout-brand" aria-label="Zentra home">
-        <img src="{% static 'images/logo.png' %}?v=3" alt="Zentra" width="130" height="36" />
+      <a href="{% url 'home:index' %}" class="checkout-brand" aria-label="BrandBox home">
+        <img src="{% static 'images/logo.png' %}?v=3" alt="BrandBox" width="130" height="36" />
       </a>
       <div class="trust-badges" aria-label="Ratings">
         <div class="trust-badge">
@@ -40,7 +40,7 @@
         </p>
         {% if account_created %}
           <p class="muted">
-            Your Zentra account was created with <strong>{{ user.email }}</strong>.
+            Your BrandBox account was created with <strong>{{ user.email }}</strong>.
             You’re signed in — continue to your dashboard.
           </p>
         {% else %}
@@ -103,7 +103,7 @@
             {% if not user.is_authenticated %}
               <label class="label" for="id_password">Account password</label>
               {{ form.password }}
-              <p class="field-hint">We’ll create your Zentra account with this email if you don’t have one yet.</p>
+              <p class="field-hint">We’ll create your BrandBox account with this email if you don’t have one yet.</p>
               {% if form.password.errors %}<p class="form-error">{{ form.password.errors|striptags }}</p>{% endif %}
             {% else %}
               {{ form.password }}
@@ -113,7 +113,7 @@
             <label class="agree-check">
               {{ form.agree_terms }}
               <span>
-                I agree to Zentra’s
+                I agree to BrandBox’s
                 <a href="#">Terms of Service</a>
                 and
                 <a href="#">Privacy Policy</a>
@@ -124,7 +124,7 @@
           </form>
 
           <p class="pay-legal">
-            By providing your card information, you allow Zentra to charge your card
+            By providing your card information, you allow BrandBox to charge your card
             for future payments in accordance with their terms.
           </p>
         </section>
@@ -141,7 +141,7 @@
             />
           </div>
 
-          <p class="summary-product-name">Zentra Plus</p>
+          <p class="summary-product-name">BrandBox Plus</p>
 
           <ul class="summary-features">
             <li>
@@ -208,7 +208,7 @@
     <p class="checkout-foot">
       <a href="#">Privacy Policy</a>
       <a href="#">Terms of Service</a>
-      <a href="mailto:hello@zentra.com">Support</a>
+      <a href="mailto:help@brandbox.co">Support</a>
     </p>
   </div>
 </div>

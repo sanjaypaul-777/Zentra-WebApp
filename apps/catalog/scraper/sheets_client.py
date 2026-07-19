@@ -14,7 +14,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-# Node datasheetStorage accepts: id | product_id | source_id | zentra_id | sku
+# Node datasheetStorage accepts: id | product_id | source_id | brandbox_id | sku
 SHEET_HEADERS = [
     "id",
     "Ad ID",

@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zentra AI | The AI Store That Knows What Sells</title>
+<title>BrandBox AI | The AI Store That Knows What Sells</title>
 <meta name="description" content="Build a store by typing. Run it from a chat window. Make ads in minutes."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -20,73 +20,73 @@
 <body class="bg-background text-on-surface font-body-md overflow-x-hidden">
 
 <!-- TopNavBar -->
-<nav class="zentra-nav fixed top-0 w-full z-50 bg-surface-navy/60 backdrop-blur-xl border-b border-white/10 shadow-2xl">
+<nav class="brandbox-nav fixed top-0 w-full z-50 bg-surface-navy/60 backdrop-blur-xl border-b border-white/10 shadow-2xl">
 <div class="max-w-container-max mx-auto flex justify-between items-center h-20">
 <div class="flex items-center gap-8">
-<a href="{% url 'home:index' %}" class="zentra-brand zentra-brand--nav" aria-label="Zentra home">
-<img src="{% static 'images/logo.png' %}?v=3" alt="Zentra" width="148" height="40"/>
+<a href="{% url 'home:index' %}" class="brandbox-brand brandbox-brand--nav" aria-label="BrandBox home">
+<img src="{% static 'images/logo.png' %}?v=3" alt="BrandBox" width="148" height="40"/>
 </a>
 <div class="hidden md:flex gap-6">
-<a class="font-body-md text-body-md text-primary border-b-2 border-primary pb-1 transition-colors duration-300" href="#zentra-how">How it works</a>
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#zentra-features">Winning Products</a>
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#zentra-niches">Niches</a>
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#zentra-pricing">Pricing</a>
+<a class="font-body-md text-body-md text-primary border-b-2 border-primary pb-1 transition-colors duration-300" href="#brandbox-how">How it works</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#brandbox-features">Winning Products</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#brandbox-niches">Niches</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#brandbox-pricing">Pricing</a>
 </div>
 </div>
 <div class="flex items-center gap-4">
 <a href="{% url 'accounts:login' %}" class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300">Log In</a>
-<a href="{% url 'accounts:signup' %}" class="zentra-btn zentra-btn--secondary zentra-btn--nav">Get Started</a>
+<a href="{% url 'accounts:signup' %}" class="brandbox-btn brandbox-btn--secondary brandbox-btn--nav">Get Started</a>
 </div>
 </div>
 </nav>
 <!-- Hero Section -->
-<header class="zentra-hero relative pt-32 pb-stack-lg overflow-hidden">
-<div class="absolute top-0 left-1/4 w-[600px] h-[600px] zentra-glow-primary -z-10"></div>
-<div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] zentra-glow-purple -z-10"></div>
+<header class="brandbox-hero relative pt-32 pb-stack-lg overflow-hidden">
+<div class="absolute top-0 left-1/4 w-[600px] h-[600px] brandbox-glow-primary -z-10"></div>
+<div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] brandbox-glow-purple -z-10"></div>
 <div class="max-w-container-max mx-auto px-gutter text-center relative z-10">
 <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mb-8">
 <span class="bg-accent-pink px-2 py-0.5 rounded text-[10px] font-bold text-white uppercase">65% Off</span>
 <span
   class="text-label-caps font-label-caps text-on-surface-variant uppercase"
-  data-zentra-offer-countdown
+  data-brandbox-offer-countdown
   data-end="2026-07-31T23:59:59+05:30"
 >
-  Summer Offer Ends in <span class="zentra-hero__countdown-time" data-zentra-offer-countdown-time>00:00:00</span>
+  Summer Offer Ends in <span class="brandbox-hero__countdown-time" data-brandbox-offer-countdown-time>00:00:00</span>
 </span>
 </div>
 <h1 class="font-display-hero text-display-hero-mobile md:text-display-hero mb-6 tracking-tighter leading-[1.15]">
-                The <span class="zentra-hero__accent">AI Store</span> That Already <br/>
-<span class="zentra-hero__typed italic" data-zentra-hero-typed>
-<span class="zentra-hero__typed-ghost" aria-hidden="true">Knows What Sells</span>
-<span class="zentra-hero__typed-text" data-zentra-hero-typed-text>Knows What Sells</span>
+                The <span class="brandbox-hero__accent">AI Store</span> That Already <br/>
+<span class="brandbox-hero__typed italic" data-brandbox-hero-typed>
+<span class="brandbox-hero__typed-ghost" aria-hidden="true">Knows What Sells</span>
+<span class="brandbox-hero__typed-text" data-brandbox-hero-typed-text>Knows What Sells</span>
 </span>
 </h1>
 <p class="max-w-2xl mx-auto font-body-lg text-body-lg text-on-surface-variant mb-10">
                 New to dropshipping? Build a store by typing. Run it from a chat window. Make ads in minutes, with a free 5-day live series to guide your first steps.
             </p>
 <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-<a href="{% url 'accounts:signup' %}" class="zentra-btn zentra-btn--primary">
+<a href="{% url 'accounts:signup' %}" class="brandbox-btn brandbox-btn--primary">
                     Build My AI Store
                     <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
 </a>
-<a href="#zentra-niches" class="zentra-btn zentra-btn--secondary">
+<a href="#brandbox-niches" class="brandbox-btn brandbox-btn--secondary">
                     View Demo
                 </a>
 </div>
-<div class="mt-20 zentra-glass rounded-2xl p-4 max-w-4xl mx-auto shadow-2xl relative">
+<div class="mt-20 brandbox-glass rounded-2xl p-4 max-w-4xl mx-auto shadow-2xl relative">
 <div class="absolute -top-10 -right-10 hidden md:block">
-<div class="zentra-hero__price-badge p-6 rounded-2xl shadow-2xl text-left border border-white/20">
+<div class="brandbox-hero__price-badge p-6 rounded-2xl shadow-2xl text-left border border-white/20">
 <p class="text-label-caps font-label-caps text-white/70 mb-1">SUMMER LAUNCH STACK</p>
 <p class="text-3xl font-bold text-white">$192<span class="text-sm font-normal text-white/60">/year</span></p>
 <p class="text-sm text-white/80 line-through">$549</p>
 </div>
 </div>
-<img class="rounded-xl w-full h-auto object-cover aspect-[2.04]" data-alt="A cinematic, high-resolution wide shot of a modern e-commerce dashboard interface displayed on a sleek, glowing digital screen. The UI features neon emerald and vibrant purple accents on a deep obsidian glassmorphic background. Data visualizations, product tiles, and an AI chat interface are visible, creating a feeling of advanced automation and premium tech. Soft volumetric lighting highlights the depth of the interface layers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDj9GjIIaHENpFoI7fceEUl2-UiB0Z4Ce6Tg2IhwF8lziwkbZt9iDa726jgPUlnwddfAkUMxC2bO2EMa6F8Mb3LW93Our4P53xLxHSssi_RyKlrWPVzgBqOf_wV-QH6F8fS8fUZ-xS59bvPkXeQW3NZgC9GuwEjSHwBXrws-5-1BJ1fpAsWWZNes9Dr5yKU7m6eaNSXLczIkga1Qe8d7fDdDu2tY4jDNZzHz5au2r6roXKVBiI1dBWpRIFC-2UpimnkuFiiU3t2Wu9z" alt="Zentra AI store dashboard preview"/>
+<img class="rounded-xl w-full h-auto object-cover aspect-[2.04]" data-alt="A cinematic, high-resolution wide shot of a modern e-commerce dashboard interface displayed on a sleek, glowing digital screen. The UI features neon emerald and vibrant purple accents on a deep obsidian glassmorphic background. Data visualizations, product tiles, and an AI chat interface are visible, creating a feeling of advanced automation and premium tech. Soft volumetric lighting highlights the depth of the interface layers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDj9GjIIaHENpFoI7fceEUl2-UiB0Z4Ce6Tg2IhwF8lziwkbZt9iDa726jgPUlnwddfAkUMxC2bO2EMa6F8Mb3LW93Our4P53xLxHSssi_RyKlrWPVzgBqOf_wV-QH6F8fS8fUZ-xS59bvPkXeQW3NZgC9GuwEjSHwBXrws-5-1BJ1fpAsWWZNes9Dr5yKU7m6eaNSXLczIkga1Qe8d7fDdDu2tY4jDNZzHz5au2r6roXKVBiI1dBWpRIFC-2UpimnkuFiiU3t2Wu9z" alt="BrandBox AI store dashboard preview"/>
 </div>
 </div>
 </header>
 <!-- Trusted By -->
-<section id="zentra-trusted" class="zentra-trusted py-stack-md border-y border-white/5">
+<section id="brandbox-trusted" class="brandbox-trusted py-stack-md border-y border-white/5">
 <div class="max-w-container-max mx-auto px-gutter">
 <p class="text-center text-label-caps font-label-caps text-on-surface-variant mb-8 uppercase opacity-60">Powering stores globally with</p>
 <div class="flex flex-wrap justify-center items-center gap-12 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
@@ -98,7 +98,7 @@
 </div>
 </section>
 <!-- Core Features Bento -->
-<section id="zentra-how" class="zentra-how py-stack-lg relative overflow-hidden">
+<section id="brandbox-how" class="brandbox-how py-stack-lg relative overflow-hidden">
 <div class="max-w-container-max mx-auto px-gutter">
 <div class="text-center mb-16">
 <span class="text-primary font-label-caps tracking-widest uppercase mb-4 block">E-commerce Made Simple</span>
@@ -106,16 +106,16 @@
 </div>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 <!-- Build -->
-<div class="zentra-glass p-8 rounded-2xl group hover:border-primary/50 transition-all">
+<div class="brandbox-glass p-8 rounded-2xl group hover:border-primary/50 transition-all">
 <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
 <span class="material-symbols-outlined">auto_awesome</span>
 </div>
 <h3 class="font-headline-md text-headline-md mb-4 text-primary">Build your store</h3>
 <p class="text-on-surface-variant mb-8">Pre-loaded with winning products. Ready to sell from day one with AI-optimized copy and images.</p>
-<img class="w-full h-48 object-cover rounded-xl group-hover:scale-105 transition-transform duration-500" data-alt="A high-quality 3D render of a smartphone displaying a premium e-commerce store interface. The phone glows with a soft emerald light and is surrounded by floating icons representing shopping carts and product tags. The background is deep obsidian with subtle glassmorphic textures, fitting the Zentra aesthetic of high-end SaaS tools. Lighting is focused and dramatic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOHdkSIfjutpDa6kLqqGdQ49y4fK3ZoFogK6NKJnznZnT3OntbaG9y0gNdP25_Se-3UwqBo8UKnGicgJVv5G6oHylawRrb0b3jWin6zuXJL0iZErC27LnxUCAMpE9DvOwYMNmTV4wGDLqjVAAAA0D1jH6dHd58TGVw77HYt48E1Wh6XYG014xZem-3qQZPDANuDWcBdkMl0Ku6eUMTn22INgpk_qIbZulg6IhpPzgw73ThW49JVs810A2vvXtWycMZrI9ahuGHhbjl"/>
+<img class="w-full h-48 object-cover rounded-xl group-hover:scale-105 transition-transform duration-500" data-alt="A high-quality 3D render of a smartphone displaying a premium e-commerce store interface. The phone glows with a soft emerald light and is surrounded by floating icons representing shopping carts and product tags. The background is deep obsidian with subtle glassmorphic textures, fitting the BrandBox aesthetic of high-end SaaS tools. Lighting is focused and dramatic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOHdkSIfjutpDa6kLqqGdQ49y4fK3ZoFogK6NKJnznZnT3OntbaG9y0gNdP25_Se-3UwqBo8UKnGicgJVv5G6oHylawRrb0b3jWin6zuXJL0iZErC27LnxUCAMpE9DvOwYMNmTV4wGDLqjVAAAA0D1jH6dHd58TGVw77HYt48E1Wh6XYG014xZem-3qQZPDANuDWcBdkMl0Ku6eUMTn22INgpk_qIbZulg6IhpPzgw73ThW49JVs810A2vvXtWycMZrI9ahuGHhbjl"/>
 </div>
 <!-- Connect -->
-<div class="zentra-glass p-8 rounded-2xl group hover:border-vibrant-purple/50 transition-all relative overflow-hidden">
+<div class="brandbox-glass p-8 rounded-2xl group hover:border-vibrant-purple/50 transition-all relative overflow-hidden">
 <div class="w-12 h-12 bg-vibrant-purple/10 rounded-lg flex items-center justify-center mb-6 text-vibrant-purple">
 <span class="material-symbols-outlined">workspace_premium</span>
 </div>
@@ -124,7 +124,7 @@
 <img class="w-full h-48 object-cover rounded-xl group-hover:scale-105 transition-transform duration-500" data-alt="A stylized digital workspace showing a video editing interface where an AI avatar is being selected. The scene is illuminated by neon purple and pink light leaks. Translucent panels float over a dark background, showing wave forms and color adjustment sliders. The overall feel is futuristic, clean, and professional, representing rapid AI-driven content creation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVetNthKkLub46LZuJAbnlvNWOwjL02hXkF71DGKHqkNVIzgOPrxEjmFG_q4CE5DbSEx2SOfm5RSlGQe-FYEAFcl5FwvC-VdEA2ThTTyJUGZE04Mj9_dijjld_NOYznyQJQqLhQkaL68GdoDnY5zUGZK3_mRcZmdzClIw4op6ik98sbcIaY1-6f4sO8BxNnQzvUIl41_Gpb8dHWbeIOhrz8Uu7vQWQyGqyeawRgcfucusHdOKGYJo3K4hSDK9cTYGH-AkkWDsbpCvZ"/>
 </div>
 <!-- Grow -->
-<div class="zentra-glass p-8 rounded-2xl group hover:border-white/30 transition-all">
+<div class="brandbox-glass p-8 rounded-2xl group hover:border-white/30 transition-all">
 <div class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-6 text-white">
 <span class="material-symbols-outlined">category</span>
 </div>
@@ -136,14 +136,14 @@
 </div>
 </section>
 <!-- Chat Agent Section -->
-<section id="zentra-features" class="zentra-agent py-stack-lg bg-surface-container-low/30">
+<section id="brandbox-features" class="brandbox-agent py-stack-lg bg-surface-container-low/30">
 <div class="max-w-container-max mx-auto px-gutter">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 <div>
 <span class="text-vibrant-purple font-label-caps tracking-widest uppercase mb-4 block">AI Agent for E-Commerce</span>
 <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-6 leading-tight">Run your store from a chat window</h2>
 <p class="font-body-lg text-body-lg text-on-surface-variant mb-8">
-                        Connect Zentra to ChatGPT, Claude, or any MCP client. Ask about your inventory, track shipping delays, or generate new product ideas through simple natural language commands.
+                        Connect BrandBox to ChatGPT, Claude, or any MCP client. Ask about your inventory, track shipping delays, or generate new product ideas through simple natural language commands.
                     </p>
 <div class="space-y-4 mb-10">
 <div class="flex items-center gap-3">
@@ -159,21 +159,21 @@
 <span class="text-on-surface">"Create an ad for the portable blender."</span>
 </div>
 </div>
-<a href="{% url 'accounts:signup' %}" class="zentra-btn zentra-btn--primary">Get AI Access</a>
+<a href="{% url 'accounts:signup' %}" class="brandbox-btn brandbox-btn--primary">Get AI Access</a>
 </div>
 <div class="relative">
-<div class="absolute inset-0 zentra-glow-primary scale-75 blur-3xl opacity-20"></div>
-<div class="zentra-glass rounded-2xl p-6 relative border border-white/10 shadow-2xl">
+<div class="absolute inset-0 brandbox-glow-primary scale-75 blur-3xl opacity-20"></div>
+<div class="brandbox-glass rounded-2xl p-6 relative border border-white/10 shadow-2xl">
 <div class="flex items-center gap-4 mb-6 pb-4 border-b border-white/5">
 <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
 <span class="material-symbols-outlined">forum</span>
 </div>
 <div>
-<p class="font-bold text-on-surface">Zentra AI Agent</p>
+<p class="font-bold text-on-surface">BrandBox AI Agent</p>
 <p class="text-xs text-primary">Connected &amp; Online</p>
 </div>
 </div>
-<div class="space-y-4 h-[300px] overflow-y-auto pr-2 zentra-agent__scroll">
+<div class="space-y-4 h-[300px] overflow-y-auto pr-2 brandbox-agent__scroll">
 <div class="bg-white/5 p-4 rounded-xl rounded-tl-none max-w-[85%]">
 <p class="text-sm text-on-surface-variant">Hello! I've analyzed today's trends. There's a 24% spike in demand for "Smart Home Seed Starter Kits". Would you like me to build a product page for it?</p>
 </div>
@@ -196,11 +196,11 @@
 </div>
 </section>
 <!-- Comparison Section -->
-<section class="zentra-compare py-stack-lg">
+<section class="brandbox-compare py-stack-lg">
 <div class="max-w-container-max mx-auto px-gutter">
-<h2 class="font-headline-lg text-center mb-16">The Zentra Difference</h2>
+<h2 class="font-headline-lg text-center mb-16">The BrandBox Difference</h2>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-<div class="zentra-glass p-10 rounded-3xl border-white/5">
+<div class="brandbox-glass p-10 rounded-3xl border-white/5">
 <p class="text-label-caps font-label-caps text-on-surface-variant mb-6 uppercase">Traditional Dropshipping</p>
 <ul class="space-y-6">
 <li class="flex items-start gap-4 opacity-50">
@@ -221,9 +221,9 @@
 </li>
 </ul>
 </div>
-<div class="zentra-glass p-10 rounded-3xl border-primary/20 relative">
+<div class="brandbox-glass p-10 rounded-3xl border-primary/20 relative">
 <div class="absolute -top-4 right-8 bg-primary text-on-primary px-4 py-1 rounded-full text-xs font-bold uppercase shadow-lg">Recommended</div>
-<p class="text-label-caps font-label-caps text-primary mb-6 uppercase">Zentra AI Protocol</p>
+<p class="text-label-caps font-label-caps text-primary mb-6 uppercase">BrandBox AI Protocol</p>
 <ul class="space-y-6">
 <li class="flex items-start gap-4">
 <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
@@ -247,7 +247,7 @@
 </div>
 </section>
 <!-- Niche Showcase -->
-<section id="zentra-niches" class="zentra-niches py-stack-lg relative">
+<section id="brandbox-niches" class="brandbox-niches py-stack-lg relative">
 
 <div class="max-w-container-max mx-auto px-gutter relative z-10">
 <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
@@ -258,7 +258,7 @@
 <a href="{% url 'accounts:signup' %}" class="border-b border-primary text-primary font-bold hover:opacity-80 transition-opacity pb-1">View All 42+ Niches</a>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-<div class="group relative aspect-square rounded-2xl overflow-hidden zentra-glass">
+<div class="group relative aspect-square rounded-2xl overflow-hidden brandbox-glass">
 <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A luxurious product photography shot of a minimalist smartwatch on a sleek charging stand. The watch has a vibrant display and metallic finish. The lighting is moody and professional, with emerald green backlighting casting soft glows on a dark reflective surface. The entire composition feels high-end, futuristic, and premium, representing a successful niche in tech accessories." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNBfvgFY9nNMPOD1zScY-QS7yYF5QJ06Ih0rmzuJQyBij_C9QIrvYRHFQFowF7Id1Z8L0X0vBUkrdYFc8meCyjB5Af7BGphH1_qgV86a9yEbdM5k9Z0hoOkOopkCBl2cVDCVoOs0K4aM9vWvNPE43MHyp703xS8TrQXlYox5XqZ_tGxDfjDLwRqY9SKVI_FRWYKaptxAX1H2f_JNdBOuaONQtayCuh2blrsAYXGDcKkK_OCgtZ18vB3HtekqC9VocZhS2oChx-AVk3"/>
 <div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
 <div class="absolute bottom-4 left-4">
@@ -266,7 +266,7 @@
 <p class="text-xs text-primary">High Margin</p>
 </div>
 </div>
-<div class="group relative aspect-square rounded-2xl overflow-hidden zentra-glass">
+<div class="group relative aspect-square rounded-2xl overflow-hidden brandbox-glass">
 <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A clean, professional studio shot of high-end skincare bottles arranged on a white marble slab. One bottle is open, showing a translucent gel. The scene is accented by deep purple and blue ambient light, creating a glassmorphic aesthetic. The lighting is soft and flattering, highlighting the product labels and textures. This image represents a lucrative health and beauty niche with a focus on luxury and quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWj4WP3Gl1fA7dFGuki7nVfo3Sg9HJNcXFsEjecnQY0Gv3M7MugeQIP8Tlw_cBtLadozf0T_mIv7alIQtoxu7EkG1hjvD9OaPwY1eAwIQ4R_Odhi1-jmfeIck073MiBYlWwL83BlzSE0U7n6raS3wcZQMBhlo5RcS6BiwEYksmXCgLyU3x9SCzYdI4czeE_KCeMSrFLSBM3e_xDUfJq3Q2ZpymxtR1ew77pcANVdHw9fUdFxy_bD8iIHzEgqjZtNR17s9YTgXeFZrU"/>
 <div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
 <div class="absolute bottom-4 left-4">
@@ -274,7 +274,7 @@
 <p class="text-xs text-primary">Viral Potential</p>
 </div>
 </div>
-<div class="group relative aspect-square rounded-2xl overflow-hidden zentra-glass">
+<div class="group relative aspect-square rounded-2xl overflow-hidden brandbox-glass">
 <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A vibrant, energetic shot of professional kitchen equipment being used to prepare a gourmet meal. A high-quality chef's knife sits next to a sleek, matte black blender. The lighting features bright primary emerald highlights against a dark, modern kitchen background. The composition is dynamic and suggests high performance and quality, representing the home and kitchen niche for top-tier dropshipping stores." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBpnmZmG2cXibZMfVZMtyahmdk27f-CaZYyNqiVJPvMDf0at5LEQ5_V81odh-TAkJNCCokcIiHsi7-XAdBnUHGG0K__oG5Otyimv7tN5WR7ZWRS4S7x_oNqwvKgedK-ebWcsn2GbxrH60Xxkl9w8WlsMNMiWOToxJPYb5a3tSQAi4rDA2qRA6_a5sf3X5GoiDbRlVDfVrscvg2lb46ev1kic7X9J8gwogyrNaJRHAZ5JmNFyNzQXAM5q2LS00RE1o7VnU4SA_z_dsf"/>
 <div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
 <div class="absolute bottom-4 left-4">
@@ -282,7 +282,7 @@
 <p class="text-xs text-primary">Steady Demand</p>
 </div>
 </div>
-<div class="group relative aspect-square rounded-2xl overflow-hidden zentra-glass">
+<div class="group relative aspect-square rounded-2xl overflow-hidden brandbox-glass">
 <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A high-tech fitness recovery device, such as a percussion massage gun, displayed in a minimalist home gym setting. The device is sleek and futuristic with glowing LED indicators. The background is softly blurred, showing premium fitness gear in a dark, atmospheric room with neon blue and purple accents. The lighting is dramatic and highlights the device's ergonomic design, representing the high-growth wellness and fitness tech niche." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4GlxSUI_rg3lZFJDMQLiqhfxjPtKU1KucHqrc8t7qjXwlGGho3V3OkuZX18_0MTNmb_fBMZnvVk1ojU0BcsnLl2tvX1Uz995nEcJU1gOK2ATICjrWZ4lKIVzKcUF69t8V8kJ3lJZRqBSgy3PUi9UC8hmyIHGoLHfCepuHKHRC749ya07N6C3-uuZiImgVHNjHZqVUUQhr930929A6ghVSA-0TqNJpp4IUmgGcd-3z2qClpMbLRQ_rdjHyK6zcJCuTp___5Qg6aPvC"/>
 <div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
 <div class="absolute bottom-4 left-4">
@@ -294,11 +294,11 @@
 </div>
 </section>
 <!-- Testimonial Section -->
-<section class="zentra-testimonial py-stack-lg border-y border-white/5 bg-deep-obsidian">
+<section class="brandbox-testimonial py-stack-lg border-y border-white/5 bg-deep-obsidian">
 <div class="max-w-container-max mx-auto px-gutter">
-<div class="zentra-glass p-12 rounded-3xl flex flex-col md:flex-row items-center gap-12 max-w-5xl mx-auto">
+<div class="brandbox-glass p-12 rounded-3xl flex flex-col md:flex-row items-center gap-12 max-w-5xl mx-auto">
 <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-primary/20 shrink-0">
-<img class="w-full h-full object-cover" data-alt="A professional, high-resolution portrait of a young entrepreneur, Jared Goetz, smiling confidently into the camera. He is wearing a simple black t-shirt and standing in a modern, softly lit office environment. The background has subtle neon purple and blue highlights that align with the Zentra brand. The lighting is clean and professional, capturing a sense of authority and approachability. This portrait serves as a strong human element for a founder testimonial." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPXgmW0j4LVg3-damLOYUgcM7gynRC0IUImqgv3T816DiSmp7GorpL2SToq_H_roJBue2Xwtqonbd3uAi11jpkh6bH4ZmGfTn8AUSWynkaQcxcVpBoTKvGJubbplQLKwOwAIB_IPLJBNJeKSSgozQ2a_CqdEZcHy0kl1PBvRDBjL49YYk_GKW22cXiO41iCnOjV9XhINkLPxOhytvUKnsuKW9xSF7UtCxQJi1zv-SvfNfp3cGIcrcbiEA3Vu6ibRFkww64rd7Ktb2o"/>
+<img class="w-full h-full object-cover" data-alt="A professional, high-resolution portrait of a young entrepreneur, Jared Goetz, smiling confidently into the camera. He is wearing a simple black t-shirt and standing in a modern, softly lit office environment. The background has subtle neon purple and blue highlights that align with the BrandBox brand. The lighting is clean and professional, capturing a sense of authority and approachability. This portrait serves as a strong human element for a founder testimonial." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPXgmW0j4LVg3-damLOYUgcM7gynRC0IUImqgv3T816DiSmp7GorpL2SToq_H_roJBue2Xwtqonbd3uAi11jpkh6bH4ZmGfTn8AUSWynkaQcxcVpBoTKvGJubbplQLKwOwAIB_IPLJBNJeKSSgozQ2a_CqdEZcHy0kl1PBvRDBjL49YYk_GKW22cXiO41iCnOjV9XhINkLPxOhytvUKnsuKW9xSF7UtCxQJi1zv-SvfNfp3cGIcrcbiEA3Vu6ibRFkww64rd7Ktb2o"/>
 </div>
 <div>
 <div class="flex gap-1 mb-6 text-primary">
@@ -308,83 +308,83 @@
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
 </div>
-<p class="font-headline-md italic mb-8">"Zentra AI simplifies everything and lets me focus on marketing, product research, and building my brand. It’s the closest thing to an 'auto-pilot' switch for e-commerce."</p>
+<p class="font-headline-md italic mb-8">"BrandBox AI simplifies everything and lets me focus on marketing, product research, and building my brand. It’s the closest thing to an 'auto-pilot' switch for e-commerce."</p>
 <div>
 <p class="font-bold text-on-surface text-lg">Alexandros Savvides</p>
-<p class="text-primary font-label-caps">ZENTRA PLUS USER</p>
+<p class="text-primary font-label-caps">BRANDBOX PLUS USER</p>
 </div>
 </div>
 </div>
 </div>
 </section>
 <!-- FAQ -->
-<section id="zentra-faq" class="zentra-faq py-stack-lg">
-<div class="zentra-faq__wrap max-w-3xl mx-auto">
-<div class="zentra-faq__intro text-center mb-12">
+<section id="brandbox-faq" class="brandbox-faq py-stack-lg">
+<div class="brandbox-faq__wrap max-w-3xl mx-auto">
+<div class="brandbox-faq__intro text-center mb-12">
 <span class="text-on-surface-variant font-label-caps uppercase tracking-widest mb-4 block">Knowledge Base</span>
 <h2 class="font-headline-lg">Your questions, answered</h2>
 </div>
-<div class="zentra-faq__list space-y-4">
-<details class="zentra-faq__item group zentra-glass rounded-xl">
-<summary class="zentra-faq__question flex justify-between items-center p-6 cursor-pointer list-none">
+<div class="brandbox-faq__list space-y-4">
+<details class="brandbox-faq__item group brandbox-glass rounded-xl">
+<summary class="brandbox-faq__question flex justify-between items-center p-6 cursor-pointer list-none">
 <span class="font-bold text-on-surface">What is included in the Summer Promo?</span>
 <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
 </summary>
-<div class="zentra-faq__answer px-6 pb-6 text-on-surface-variant">
-                        The Summer Promo gives eligible customers 65% off Plus Annual. That brings your first-year price to $192.15, regularly $549/year. You'll also get $100 in Zentra order credits and 525 AI credits for UGC-style video ads.
+<div class="brandbox-faq__answer px-6 pb-6 text-on-surface-variant">
+                        The Summer Promo gives eligible customers 65% off Plus Annual. That brings your first-year price to $192.15, regularly $549/year. You'll also get $100 in BrandBox order credits and 525 AI credits for UGC-style video ads.
                     </div>
 </details>
-<details class="zentra-faq__item group zentra-glass rounded-xl">
-<summary class="zentra-faq__question flex justify-between items-center p-6 cursor-pointer list-none">
-<span class="font-bold text-on-surface">Can Zentra help if I've never done dropshipping?</span>
+<details class="brandbox-faq__item group brandbox-glass rounded-xl">
+<summary class="brandbox-faq__question flex justify-between items-center p-6 cursor-pointer list-none">
+<span class="font-bold text-on-surface">Can BrandBox help if I've never done dropshipping?</span>
 <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
 </summary>
-<div class="zentra-faq__answer px-6 pb-6 text-on-surface-variant">
+<div class="brandbox-faq__answer px-6 pb-6 text-on-surface-variant">
                         Yes—that's who this is built for. The AI Store Builder sets up your store in one click, and the free 5-day cohort walks you through every step live. No prior experience required.
                     </div>
 </details>
-<details class="zentra-faq__item group zentra-glass rounded-xl">
-<summary class="zentra-faq__question flex justify-between items-center p-6 cursor-pointer list-none">
+<details class="brandbox-faq__item group brandbox-glass rounded-xl">
+<summary class="brandbox-faq__question flex justify-between items-center p-6 cursor-pointer list-none">
 <span class="font-bold text-on-surface">Do I need to buy inventory ahead of time?</span>
 <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
 </summary>
-<div class="zentra-faq__answer px-6 pb-6 text-on-surface-variant">
-                        No. You only pay for products after a customer orders them from your store. Zentra handles the fulfillment automatically, and your $100 in credits help cover initial costs.
+<div class="brandbox-faq__answer px-6 pb-6 text-on-surface-variant">
+                        No. You only pay for products after a customer orders them from your store. BrandBox handles the fulfillment automatically, and your $100 in credits help cover initial costs.
                     </div>
 </details>
 </div>
 </div>
 </section>
 <!-- Launch CTA -->
-<section id="zentra-pricing" class="zentra-launch py-stack-lg relative overflow-hidden">
-<div class="zentra-launch__glow absolute inset-0 bg-primary/5 -z-10"></div>
+<section id="brandbox-pricing" class="brandbox-launch py-stack-lg relative overflow-hidden">
+<div class="brandbox-launch__glow absolute inset-0 bg-primary/5 -z-10"></div>
 <div
-  id="zentra-launch-scene"
-  class="zentra-launch__scene"
+  id="brandbox-launch-scene"
+  class="brandbox-launch__scene"
   aria-hidden="true"
 ></div>
-<div class="zentra-launch__content max-w-container-max mx-auto text-center relative z-10">
-<div class="zentra-launch__panel zentra-glass p-16 rounded-[3rem] border-primary/20 relative overflow-hidden">
-<div class="absolute -top-32 -left-32 w-64 h-64 zentra-glow-primary opacity-20"></div>
-<div class="absolute -bottom-32 -right-32 w-64 h-64 zentra-glow-purple opacity-20"></div>
+<div class="brandbox-launch__content max-w-container-max mx-auto text-center relative z-10">
+<div class="brandbox-launch__panel brandbox-glass p-16 rounded-[3rem] border-primary/20 relative overflow-hidden">
+<div class="absolute -top-32 -left-32 w-64 h-64 brandbox-glow-primary opacity-20"></div>
+<div class="absolute -bottom-32 -right-32 w-64 h-64 brandbox-glow-purple opacity-20"></div>
 <h2 class="font-display-hero text-headline-lg-mobile md:text-headline-lg mb-8">Ready to launch your empire?</h2>
-<p class="max-w-2xl mx-auto font-body-lg text-on-surface-variant mb-12">Join 15,000+ entrepreneurs building the future of e-commerce with Zentra AI.</p>
-<div class="zentra-launch__actions flex flex-col sm:flex-row justify-center gap-4">
-<a href="{% url 'accounts:signup' %}" class="zentra-btn zentra-btn--primary">Build My Store Now <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span></a>
-<a href="{% url 'checkout:index' %}" class="zentra-btn zentra-btn--secondary">Claim 65% Discount</a>
+<p class="max-w-2xl mx-auto font-body-lg text-on-surface-variant mb-12">Join 15,000+ entrepreneurs building the future of e-commerce with BrandBox AI.</p>
+<div class="brandbox-launch__actions flex flex-col sm:flex-row justify-center gap-4">
+<a href="{% url 'accounts:signup' %}" class="brandbox-btn brandbox-btn--primary">Build My Store Now <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span></a>
+<a href="{% url 'checkout:index' %}" class="brandbox-btn brandbox-btn--secondary">Claim 65% Discount</a>
 </div>
 </div>
 </div>
 </section>
 <!-- Footer -->
-<footer class="zentra-footer bg-deep-obsidian border-t border-outline-variant w-full py-stack-lg">
-<div class="zentra-footer__grid max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-stack-md">
-<div class="zentra-footer__brand col-span-1 md:col-span-1">
-<a href="{% url 'home:index' %}" class="zentra-brand zentra-brand--footer" aria-label="Zentra home">
-<img src="{% static 'images/logo.png' %}?v=3" alt="Zentra" width="160" height="44"/>
+<footer class="brandbox-footer bg-deep-obsidian border-t border-outline-variant w-full py-stack-lg">
+<div class="brandbox-footer__grid max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-stack-md">
+<div class="brandbox-footer__brand col-span-1 md:col-span-1">
+<a href="{% url 'home:index' %}" class="brandbox-brand brandbox-brand--footer" aria-label="BrandBox home">
+<img src="{% static 'images/logo.png' %}?v=3" alt="BrandBox" width="160" height="44"/>
 </a>
 <p class="text-on-surface-variant text-body-md mb-8 mt-6">The intelligent foundation for the next generation of e-commerce entrepreneurs.</p>
-<div class="zentra-footer__social flex gap-4">
+<div class="brandbox-footer__social flex gap-4">
 <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary/20 transition-colors" href="#">
 <span class="material-symbols-outlined text-sm">public</span>
 </a>
@@ -393,16 +393,16 @@
 </a>
 </div>
 </div>
-<div class="zentra-footer__column">
+<div class="brandbox-footer__column">
 <h4 class="font-bold text-on-surface mb-6 uppercase text-sm tracking-widest">Platform</h4>
 <ul class="space-y-4">
 <li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#">Features</a></li>
-<li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#zentra-pricing">Pricing</a></li>
+<li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#brandbox-pricing">Pricing</a></li>
 <li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#">AI Agent</a></li>
 <li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#">Case Studies</a></li>
 </ul>
 </div>
-<div class="zentra-footer__column">
+<div class="brandbox-footer__column">
 <h4 class="font-bold text-on-surface mb-6 uppercase text-sm tracking-widest">Company</h4>
 <ul class="space-y-4">
 <li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#">About Us</a></li>
@@ -411,15 +411,15 @@
 <li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#">Terms of Service</a></li>
 </ul>
 </div>
-<div class="zentra-footer__column zentra-footer__newsletter">
+<div class="brandbox-footer__column brandbox-footer__newsletter">
 <h4 class="font-bold text-on-surface mb-6 uppercase text-sm tracking-widest">Newsletter</h4>
 <p class="text-sm text-on-surface-variant mb-4">Get the latest winning products delivered to your inbox.</p>
-<form method="post" action="{% url 'home:newsletter' %}" class="zentra-footer__newsletter-form flex gap-2 relative">
+<form method="post" action="{% url 'home:newsletter' %}" class="brandbox-footer__newsletter-form flex gap-2 relative">
 {% csrf_token %}
 <label class="sr-only" for="{{ newsletter_form.email.id_for_label }}">Email</label>
 {{ newsletter_form.email }}
 {# Honeypot — leave empty #}
-<div class="zentra-honeypot" aria-hidden="true">
+<div class="brandbox-honeypot" aria-hidden="true">
 <label for="{{ newsletter_form.website.id_for_label }}">Website</label>
 {{ newsletter_form.website }}
 </div>
@@ -429,9 +429,9 @@
 </form>
 </div>
 </div>
-<div class="zentra-footer__bottom max-w-container-max mx-auto mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-<p class="text-on-surface-variant text-sm">© 2024 Zentra AI. All rights reserved.</p>
-<nav class="zentra-footer__legal flex gap-8 text-sm text-on-surface-variant" aria-label="Footer links">
+<div class="brandbox-footer__bottom max-w-container-max mx-auto mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-on-surface-variant text-sm">© 2024 BrandBox AI. All rights reserved.</p>
+<nav class="brandbox-footer__legal flex gap-8 text-sm text-on-surface-variant" aria-label="Footer links">
 <a class="hover:text-primary transition-colors" href="#">Affiliates</a>
 <a class="hover:text-primary transition-colors" href="{% url 'home:contact' %}">Support</a>
 <a class="hover:text-primary transition-colors" href="#">Discord</a>
@@ -441,25 +441,25 @@
 
 {% if show_newsletter_thanks %}
 <div
-  id="zentra-newsletter-thanks"
-  class="zentra-newsletter-modal"
+  id="brandbox-newsletter-thanks"
+  class="brandbox-newsletter-modal"
   role="dialog"
   aria-modal="true"
-  aria-labelledby="zentra-newsletter-thanks-title"
+  aria-labelledby="brandbox-newsletter-thanks-title"
 >
-  <div class="zentra-newsletter-modal__backdrop" data-zentra-newsletter-close></div>
-  <div class="zentra-newsletter-modal__card">
-    <span class="material-symbols-outlined zentra-newsletter-modal__icon" aria-hidden="true">mark_email_read</span>
-    <h2 id="zentra-newsletter-thanks-title">You’re subscribed</h2>
-    <p>Thanks for joining. Winning products and Zentra updates will land in your inbox.</p>
-    <button type="button" class="zentra-btn zentra-btn--primary" data-zentra-newsletter-close>Got it</button>
+  <div class="brandbox-newsletter-modal__backdrop" data-brandbox-newsletter-close></div>
+  <div class="brandbox-newsletter-modal__card">
+    <span class="material-symbols-outlined brandbox-newsletter-modal__icon" aria-hidden="true">mark_email_read</span>
+    <h2 id="brandbox-newsletter-thanks-title">You’re subscribed</h2>
+    <p>Thanks for joining. Winning products and BrandBox updates will land in your inbox.</p>
+    <button type="button" class="brandbox-btn brandbox-btn--primary" data-brandbox-newsletter-close>Got it</button>
   </div>
 </div>
 {% endif %}
 
-<script src="{% static 'js/zentra-hero-typed.js' %}"></script>
-<script src="{% static 'js/zentra-offer-countdown.js' %}?v=4"></script>
-<script src="{% static 'js/zentra-newsletter-modal.js' %}"></script>
+<script src="{% static 'js/brandbox-hero-typed.js' %}"></script>
+<script src="{% static 'js/brandbox-offer-countdown.js' %}?v=4"></script>
+<script src="{% static 'js/brandbox-newsletter-modal.js' %}"></script>
 <script>
         // Micro-interactions and subtle scroll effects
         document.addEventListener('DOMContentLoaded', () => {
@@ -484,7 +484,7 @@
         });
     </script>
 <script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
-<script src="{% static 'js/zentra-launch-3d.js' %}"></script>
+<script src="{% static 'js/brandbox-launch-3d.js' %}"></script>
 
 </body>
 </html>
