@@ -143,7 +143,7 @@
           if (btn) {
             btn.disabled = false;
             btn.innerHTML =
-              'Import <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>';
+              'Import <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>';
           }
           return;
         }
@@ -154,7 +154,7 @@
         if (btn) {
           btn.disabled = false;
           btn.innerHTML =
-            'Import <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>';
+            'Import <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>';
         }
       });
   }
@@ -262,7 +262,7 @@
       btn.setAttribute("data-import-product","");
       btn.setAttribute("data-source-id", data.sourceId);
       btn.innerHTML =
-        'Import <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>';
+        'Import <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>';
       btn.addEventListener("click", function () {
         importProduct(data.sourceId, card, btn);
         closeModal();

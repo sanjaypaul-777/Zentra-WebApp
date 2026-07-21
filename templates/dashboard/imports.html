@@ -21,6 +21,15 @@
     <p class="imp-intro__sub">Saved from Product Hunter. Push to add in your store.</p>
   </header>
 
+  {% if needs_shop_connect %}
+  <div class="cat-connect-note" role="status">
+    <p>
+      Connect your Shopify store to manage imports.
+      <a href="{% url 'dashboard:connect' %}">Connect store</a>
+    </p>
+  </div>
+  {% endif %}
+
   <div class="imp-toast-slot">
     <div class="imp-toast imp-toast--success" data-imp-toast role="status" hidden>
       <p class="imp-toast__msg" data-imp-toast-msg></p>
@@ -35,6 +44,20 @@
     <h2>Couldn’t load imports</h2>
     <p>{{ api_error }}</p>
   </div>
+  {% elif needs_shop_connect %}
+  <div class="cat-empty cat-empty--imports" role="status">
+    <div class="cat-empty__icon" aria-hidden="true">
+      <span class="material-symbols-outlined">link</span>
+    </div>
+    <h2>No store connected</h2>
+    <p>
+      Connect a Shopify store to save and push products from
+      <a class="btn-text" href="{% url 'dashboard:product_hunter' %}">
+        Product Hunter
+        <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
+      </a>.
+    </p>
+  </div>
   {% elif show_empty %}
   <div class="cat-empty cat-empty--imports" role="status">
     <div class="cat-empty__icon" aria-hidden="true">
@@ -45,7 +68,7 @@
       Discover proven winners in the
       <a class="btn-text" href="{% url 'dashboard:product_hunter' %}">
         Product Hunter
-        <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+        <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
       </a>.
     </p>
   </div>

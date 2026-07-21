@@ -40,6 +40,172 @@ def _page(request, template: str, nav_active: str, **extra):
     return render(request, template, ctx)
 
 
+@login_required
+@require_GET
+def address_suggest(request):
+    """
+    Address autocomplete biased to the selected country.
+    Prefers Google Places when GOOGLE_PLACES_API_KEY is set; falls back to
+    Photon then Nominatim.
+    """
+    from .geo import (
+        country_name_for_code,
+        detect_country,
+        google_place_autocomplete,
+        nominatim_address_suggest,
+        photon_address_suggest,
+    )
+
+    q = (request.GET.get("q") or "").strip()
+    if len(q) < 2:
+        return JsonResponse({"results": []})
+
+    geo = detect_country(request)
+    country_code = (request.GET.get("country") or geo["code"] or "").strip().upper()
+    country_name = country_name_for_code(country_code) or geo["name"]
+
+    results = google_place_autocomplete(q, country_code=country_code)
+    source = "google" if results else ""
+    if not results:
+        results = photon_address_suggest(q, country_code=country_code)
+        source = "photon" if results else ""
+    if not results:
+        results = nominatim_address_suggest(
+            q, country_code=country_code, country_name=country_name
+        )
+        source = "nominatim" if results else ""
+
+    return JsonResponse(
+        {
+            "results": results,
+            "source": source,
+            "country": {"code": country_code, "name": country_name},
+        }
+    )
+
+
+@login_required
+@require_GET
+def address_details(request):
+    """Resolve a Google place_id into fillable address fields."""
+    from .geo import google_place_details
+
+    place_id = (request.GET.get("place_id") or "").strip()
+    if not place_id:
+        return JsonResponse({"ok": False, "error": "missing place_id"}, status=400)
+    details = google_place_details(place_id)
+    if not details:
+        return JsonResponse({"ok": False, "error": "not_found"}, status=404)
+    return JsonResponse({"ok": True, "result": details})
+
+
+@login_required
+@require_GET
+def geo_phone_meta(request):
+    """Dial code + example format for the selected country."""
+    from .geo import (
+        country_code_for_name,
+        detect_country,
+        phone_meta_for_country,
+    )
+
+    geo = detect_country(request)
+    code = (request.GET.get("country_code") or "").strip().upper()
+    if not code:
+        name = (request.GET.get("country") or "").strip()
+        code = country_code_for_name(name) if name else geo.get("code") or "US"
+    return JsonResponse({"ok": True, "phone": phone_meta_for_country(code)})
+
+
+@login_required
+@require_GET
+def geo_resolve_timezone(request):
+    """Map browser IANA timezone → country (soft hint)."""
+    from .geo import country_from_timezone
+
+    tz = (request.GET.get("tz") or "").strip()
+    hit = country_from_timezone(tz)
+    if not hit:
+        return JsonResponse({"ok": False, "results": None})
+    return JsonResponse({"ok": True, "country": hit})
+
+
+@login_required
+@require_GET
+def geo_countries(request):
+    """Worldwide country list for searchable Country dropdown."""
+    from .geo import filter_countries
+
+    q = (request.GET.get("q") or "").strip()
+    rows = filter_countries(q, limit=300)
+    return JsonResponse(
+        {
+            "results": [r["name"] for r in rows],
+            "items": rows,
+        }
+    )
+
+
+@login_required
+@require_GET
+def geo_states(request):
+    """States/provinces for the selected country — searchable dropdown list."""
+    from .geo import (
+        country_code_for_name,
+        country_name_for_code,
+        detect_country,
+        filter_names,
+        states_for_country,
+        states_for_country_code,
+    )
+
+    geo = detect_country(request)
+    country_code = (request.GET.get("country_code") or "").strip().upper()
+    country = (request.GET.get("country") or "").strip()
+    if not country_code and country:
+        country_code = country_code_for_name(country)
+    if not country_code:
+        country_code = geo["code"]
+    if not country:
+        country = country_name_for_code(country_code) or geo["name"]
+    q = (request.GET.get("q") or "").strip()
+    names = (
+        states_for_country_code(country_code)
+        if country_code
+        else states_for_country(country)
+    )
+    return JsonResponse(
+        {
+            "country": {"code": country_code, "name": country},
+            "results": filter_names(names, q, limit=80),
+        }
+    )
+
+
+@login_required
+@require_GET
+def geo_cities(request):
+    """Cities for country + state — optional typeahead (Settings)."""
+    from .geo import cities_for_state, detect_country, filter_names
+
+    geo = detect_country(request)
+    country = (request.GET.get("country") or geo["name"] or "").strip()
+    state = (request.GET.get("state") or "").strip()
+    q = (request.GET.get("q") or "").strip()
+    if not state:
+        return JsonResponse(
+            {"country": geo, "state": "", "results": []},
+        )
+    names = cities_for_state(country, state)
+    return JsonResponse(
+        {
+            "country": {"code": geo["code"], "name": country or geo["name"]},
+            "state": state,
+            "results": filter_names(names, q),
+        }
+    )
+
+
 SESSION_SETUP_FUNNEL = "store_setup_funnel"  # "create" | "connect"
 
 
@@ -202,6 +368,18 @@ def dashboard_home(request):
 
     ctx = build_overview_context(request.user)
     ctx["nav_active"] = "overview"
+    just_done = bool(request.session.pop("just_completed_onboarding", False))
+    # Design preview: /dashboard/?welcome=1 (survives refresh)
+    preview = (request.GET.get("welcome") or "").strip().lower() in ("1", "true", "yes")
+    if just_done or preview:
+        from .models import MerchantProfile
+
+        profile = MerchantProfile.for_user(request.user)
+        ctx["show_onboarding_welcome"] = True
+        ctx["welcome_full_name"] = profile.first_name or profile.display_name or request.user.get_username()
+    else:
+        ctx["show_onboarding_welcome"] = False
+        ctx["welcome_full_name"] = ""
     return render(request, "dashboard/overview.html", ctx)
 
 
@@ -226,16 +404,10 @@ def product_finder_page(request):
     from .models import ShopConnection
 
     connection = connected_shop_for_user(request.user)
-    can_import = bool(connection and connection.is_connected)
-    # Browse vault without Shopify; staff preview is fine for viewing only
+    # Browse vault without Shopify; staff preview is fine for viewing only.
     if not connection:
         connection = ShopConnection.for_builder(request.user)
-    if not connection:
-        messages.info(
-            request,
-            "Connect your Shopify store to import products. You can still browse after connecting.",
-        )
-        return redirect("dashboard:connect")
+    can_import = bool(connection and connection.is_connected)
 
     q = (request.GET.get("q") or "").strip()
     country = (request.GET.get("country") or "").strip()
@@ -325,12 +497,33 @@ def imports_page(request):
         sync_live_status_from_node,
     )
 
+    from .access import is_dev_admin
     from .catalog import TOAST_VARIANTS, connected_shop_for_user
+    from .models import ShopConnection
 
     connection = connected_shop_for_user(request.user)
-    if not connection or connection.is_preview:
-        messages.info(request, "Connect your Shopify store to manage imports.")
-        return redirect("dashboard:connect")
+    if not connection and is_dev_admin(request.user):
+        connection = ShopConnection.for_builder(request.user)
+
+    toast_map = {t["key"]: t for t in TOAST_VARIANTS}
+    needs_shop_connect = not connection or (
+        connection.is_preview and not is_dev_admin(request.user)
+    )
+    if needs_shop_connect:
+        return _page(
+            request,
+            "dashboard/imports.html",
+            "imports",
+            imports=[],
+            show_empty=True,
+            api_error="",
+            shop="",
+            needs_shop_connect=True,
+            toast_variants=TOAST_VARIANTS,
+            toast_variants_json=json.dumps(toast_map),
+            unpublished_count=0,
+            import_api_base=reverse("dashboard:api_imports_create"),
+        )
 
     # Best-effort live status (deleted / in_store) when Node tunnel is up
     try:
@@ -355,7 +548,6 @@ def imports_page(request):
         qs = qs.filter(status=status_filter)
 
     imports = [shop_import_to_item(row) for row in qs]
-    toast_map = {t["key"]: t for t in TOAST_VARIANTS}
     unpublished = [i for i in imports if i.status != "in_store"]
 
     return _page(
@@ -366,6 +558,7 @@ def imports_page(request):
         show_empty=not imports,
         api_error="",
         shop=connection.shop,
+        needs_shop_connect=False,
         toast_variants=TOAST_VARIANTS,
         toast_variants_json=json.dumps(toast_map),
         unpublished_count=len(unpublished),
@@ -574,9 +767,277 @@ def store_disconnect(request, pk: int):
 
 
 @login_required
+def onboarding_page(request):
+    """Required multi-step store setup — gates dashboard until complete."""
+    from .models import MerchantProfile
+    from .onboarding_forms import (
+        OnboardingStep1Form,
+        OnboardingStep2Form,
+        OnboardingStep3Form,
+        OnboardingStep4Form,
+    )
+
+    profile = MerchantProfile.for_user(request.user)
+    from .access import is_dev_admin
+
+    is_admin = is_dev_admin(request.user)
+    if profile.onboarding_completed and not is_admin:
+        return redirect("dashboard:home")
+
+    # Seed full_name from account if empty
+    if not profile.full_name:
+        profile.full_name = (request.user.get_full_name() or "").strip() or (
+            request.user.first_name or ""
+        )
+        if profile.full_name:
+            profile.save(update_fields=["full_name", "updated_at"])
+
+    step = int(request.GET.get("step") or profile.onboarding_step or 1)
+    step = max(1, min(4, step))
+    # Merchants cannot skip ahead of saved progress; staff/superuser can preview any step
+    if not is_admin:
+        step = min(step, max(1, profile.onboarding_step or 1))
+
+    forms_by_step = {
+        1: OnboardingStep1Form,
+        2: OnboardingStep2Form,
+        3: OnboardingStep3Form,
+        4: OnboardingStep4Form,
+    }
+    form_cls = forms_by_step[step]
+    form_kwargs = {"profile": profile}
+    if step == 1:
+        from .geo import detect_country, resolve_initial_country
+
+        geo = resolve_initial_country(
+            profile_country=profile.address_country,
+            geo=detect_country(request),
+        )
+        form_kwargs["user"] = request.user
+        form_kwargs["geo_country"] = geo
+    else:
+        geo = None
+
+    if request.method == "POST":
+        posted_step = int(request.POST.get("step") or step)
+        posted_step = max(1, min(4, posted_step))
+        form_cls = forms_by_step[posted_step]
+        form_kwargs = {"profile": profile, "data": request.POST}
+        if posted_step == 1:
+            from .geo import detect_country, resolve_initial_country
+
+            geo = resolve_initial_country(
+                profile_country=profile.address_country,
+                geo=detect_country(request),
+            )
+            form_kwargs["user"] = request.user
+            form_kwargs["geo_country"] = geo
+        form = form_cls(**form_kwargs)
+        if form.is_valid():
+            if posted_step == 4:
+                form.save(complete=True)
+                request.session["just_completed_onboarding"] = True
+                return redirect("dashboard:home")
+            form.save()
+            return redirect(f"{reverse('onboarding')}?step={posted_step + 1}")
+        step = posted_step
+    else:
+        form = form_cls(**form_kwargs)
+        if step == 1 and geo is None:
+            from .geo import detect_country, resolve_initial_country
+
+            geo = resolve_initial_country(
+                profile_country=profile.address_country,
+                geo=detect_country(request),
+            )
+
+    titles = {
+        1: "First, a bit about you",
+        2: "Now, tell us about your business",
+        3: "What are you hoping to achieve?",
+        4: "Almost done — just your resources and goals",
+    }
+
+    from django.conf import settings as dj_settings
+
+    return render(
+        request,
+        "onboarding/index.html",
+        {
+            "step": step,
+            "step_total": 4,
+            "step_title": titles[step],
+            "form": form,
+            "profile": profile,
+            "geo_country": geo,
+            "google_places_api_key": getattr(dj_settings, "GOOGLE_PLACES_API_KEY", "")
+            or "",
+            "vertical_choices": MerchantProfile.Vertical.choices,
+            "niche_choices": MerchantProfile.Niche.choices,
+            "revenue_choices": MerchantProfile.Revenue.choices,
+            "goal_choices": MerchantProfile.EcommerceGoal.choices,
+            "experience_choices": MerchantProfile.PreviousExperience.choices,
+            "success_choices": MerchantProfile.SuccessDefinition.choices,
+            "time_choices": MerchantProfile.WeeklyTime.choices,
+            "budget_choices": MerchantProfile.AdBudget.choices,
+            "challenge_choices": MerchantProfile.CHALLENGE_CHOICES,
+        },
+    )
+
+
+@login_required
 def schedule_page(request):
-    """Schedule — upcoming live sessions."""
-    return _page(request, "dashboard/schedule.html", "schedule")
+    """Schedule — live greeting + next call / calendar booking."""
+    from datetime import timedelta
+
+    from django.utils import timezone
+
+    from .models import CallSlot, MerchantProfile, ScheduledCall
+
+    now = timezone.localtime()
+    profile = MerchantProfile.for_user(request.user)
+    first_name = profile.first_name
+
+    hour = now.hour
+    if hour < 12:
+        day_part = "morning"
+    elif hour < 17:
+        day_part = "afternoon"
+    else:
+        day_part = "evening"
+
+    live_clock = now.strftime("%I:%M %p").lstrip("0") + " — " + now.strftime("%A, %B ") + str(
+        now.day
+    )
+
+    next_call = ScheduledCall.next_for_user(request.user)
+    is_first_call = not ScheduledCall.has_past_for_user(request.user)
+
+    open_slots_payload = []
+    if next_call is None:
+        _ensure_open_call_slots()
+        slots = list(
+            CallSlot.objects.filter(
+                is_open=True,
+                starts_at__gte=timezone.now(),
+                starts_at__lte=timezone.now() + timedelta(days=45),
+            ).order_by("starts_at")[:80]
+        )
+        for slot in slots:
+            open_slots_payload.append(
+                {
+                    "id": slot.pk,
+                    "iso": slot.starts_at.isoformat(),
+                    "duration": slot.duration_minutes,
+                    "topic": slot.topic,
+                }
+            )
+
+    return _page(
+        request,
+        "dashboard/schedule.html",
+        "schedule",
+        live_date=live_clock,
+        greeting=f"Good {day_part}, {first_name}",
+        first_name=first_name,
+        next_call=next_call,
+        is_first_call=is_first_call,
+        open_slots=open_slots_payload,
+        has_open_slots=bool(open_slots_payload),
+        book_url=reverse("dashboard:schedule_book"),
+    )
+
+
+def _ensure_open_call_slots() -> None:
+    """Keep a few weekday slots ahead so calendar booking stays usable pre-integration."""
+    from datetime import datetime, time, timedelta
+
+    from django.utils import timezone
+
+    from .models import CallSlot
+
+    now = timezone.now()
+    horizon = now + timedelta(days=28)
+    existing = CallSlot.objects.filter(
+        is_open=True, starts_at__gte=now, starts_at__lte=horizon
+    ).count()
+    if existing >= 10:
+        return
+
+    tz = timezone.get_current_timezone()
+    hours = (10, 14, 16)
+    topics = (
+        "BrandBox strategy call",
+        "Store launch review",
+        "Product hunt strategy",
+    )
+    day = timezone.localtime(now).date() + timedelta(days=1)
+    end = timezone.localtime(horizon).date()
+    created = 0
+    topic_i = 0
+    while day <= end and created < 24:
+        if day.weekday() < 5:  # Mon–Fri
+            for hour in hours:
+                starts = timezone.make_aware(datetime.combine(day, time(hour, 0)), tz)
+                if starts <= now:
+                    continue
+                _, was_created = CallSlot.objects.get_or_create(
+                    starts_at=starts,
+                    defaults={
+                        "duration_minutes": 30,
+                        "topic": topics[topic_i % len(topics)],
+                        "is_open": True,
+                    },
+                )
+                if was_created:
+                    created += 1
+                    topic_i += 1
+                    if created >= 24:
+                        break
+        day += timedelta(days=1)
+
+
+@login_required
+@require_http_methods(["POST"])
+def schedule_book(request):
+    """Book an open CallSlot → ScheduledCall for the current user."""
+    from django.utils import timezone
+
+    from .models import CallSlot, ScheduledCall
+
+    if ScheduledCall.next_for_user(request.user):
+        messages.info(request, "You already have an upcoming call booked.")
+        return redirect("dashboard:schedule")
+
+    slot_id = request.POST.get("slot_id")
+    slot = get_object_or_404(CallSlot, pk=slot_id, is_open=True)
+
+    if slot.starts_at < timezone.now():
+        messages.error(request, "That time slot is no longer available.")
+        return redirect("dashboard:schedule")
+
+    try:
+        with transaction.atomic():
+            slot = CallSlot.objects.select_for_update().get(pk=slot.pk, is_open=True)
+            ScheduledCall.objects.create(
+                user=request.user,
+                starts_at=slot.starts_at,
+                duration_minutes=slot.duration_minutes,
+                topic=slot.topic,
+                status=ScheduledCall.Status.SCHEDULED,
+                slot=slot,
+            )
+            slot.is_open = False
+            slot.save(update_fields=["is_open"])
+    except CallSlot.DoesNotExist:
+        messages.error(request, "That time slot was just taken. Pick another.")
+        return redirect("dashboard:schedule")
+    except IntegrityError:
+        messages.error(request, "Could not book that slot. Please try again.")
+        return redirect("dashboard:schedule")
+
+    messages.success(request, "Your call is booked.")
+    return redirect("dashboard:schedule")
 
 
 @login_required
@@ -615,15 +1076,23 @@ def settings_page(request):
 @require_http_methods(["GET", "POST"])
 def settings_profile_page(request):
     """Edit customer profile — Account section grows here over time."""
+    from django.conf import settings as dj_settings
+
     from apps.accounts.forms import ProfileForm
 
+    from .geo import detect_country, resolve_initial_country
     from .models import MerchantProfile
 
     profile = MerchantProfile.for_user(request.user)
+    geo = resolve_initial_country(
+        profile_country=profile.address_country,
+        geo=detect_country(request),
+    )
     form = ProfileForm(
         request.POST or None,
         user=request.user,
         profile=profile,
+        geo_country=geo,
     )
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -635,6 +1104,9 @@ def settings_profile_page(request):
         "dashboard/settings_profile.html",
         "settings",
         form=form,
+        profile=profile,
+        geo_country=geo,
+        google_places_api_key=getattr(dj_settings, "GOOGLE_PLACES_API_KEY", "") or "",
     )
 
 

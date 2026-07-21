@@ -73,25 +73,124 @@
 
 .auth-glow {
   position: absolute;
-  width: min(520px, 90vw);
-  height: min(520px, 90vw);
+  left: 50%;
+  top: 50%;
+  width: min(440px, 88vw);
+  height: min(440px, 88vw);
   border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.12;
+  transform: translate(-50%, -50%);
+  filter: blur(90px);
+  opacity: 0.24;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(
+      circle at 38% 46%,
+      color-mix(in srgb, var(--auth-primary, #4edea3) 72%, transparent) 0%,
+      transparent 52%
+    ),
+    radial-gradient(
+      circle at 62% 54%,
+      color-mix(in srgb, var(--auth-accent, #ff00e5) 78%, transparent) 0%,
+      transparent 54%
+    ),
+    radial-gradient(
+      circle,
+      color-mix(in srgb, var(--auth-accent, #ff00e5) 48%, var(--auth-primary, #4edea3)) 0%,
+      transparent 68%
+    );
+  will-change: transform, opacity, filter;
+}
+
+.auth-glow-ripples {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
   pointer-events: none;
   z-index: 0;
 }
 
-.auth-glow--primary {
-  top: -10%;
-  left: 10%;
-  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+.auth-glow-ripple {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: min(300px, 72vw);
+  height: min(300px, 72vw);
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  transform: translate(-50%, -50%) scale(0.22);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
-.auth-glow--purple {
-  bottom: -15%;
-  right: 5%;
-  background: radial-gradient(circle, var(--vibrant-purple) 0%, transparent 70%);
+.auth-glow-ripple--magenta {
+  border-color: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--auth-accent, #ff00e5) 70%, var(--auth-primary, #4edea3)) 50%,
+    transparent
+  );
+  box-shadow:
+    0 0 28px color-mix(in srgb, var(--auth-accent, #ff00e5) 26%, transparent),
+    inset 0 0 32px color-mix(in srgb, var(--auth-primary, #4edea3) 16%, transparent);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--auth-accent, #ff00e5) 18%, transparent) 0%,
+    color-mix(in srgb, var(--auth-primary, #4edea3) 10%, transparent) 42%,
+    transparent 68%
+  );
+}
+
+.auth-glow-ripple--green {
+  border-color: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--auth-primary, #4edea3) 70%, var(--auth-accent, #ff00e5)) 50%,
+    transparent
+  );
+  box-shadow:
+    0 0 28px color-mix(in srgb, var(--auth-primary, #4edea3) 26%, transparent),
+    inset 0 0 32px color-mix(in srgb, var(--auth-accent, #ff00e5) 14%, transparent);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--auth-primary, #4edea3) 18%, transparent) 0%,
+    color-mix(in srgb, var(--auth-accent, #ff00e5) 10%, transparent) 42%,
+    transparent 68%
+  );
+}
+
+@keyframes auth-glow-ripple-fallback {
+  0% {
+    transform: translate(-50%, -50%) scale(0.22);
+    opacity: 0;
+  }
+  12% {
+    transform: translate(-50%, -50%) scale(0.42);
+    opacity: 0.42;
+  }
+  45% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 0.28;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.05);
+    opacity: 0;
+  }
+}
+
+.auth-glow-ripple--fallback {
+  animation: auth-glow-ripple-fallback 6.2s cubic-bezier(0.33, 0.05, 0.2, 1) forwards;
+}
+
+.auth-logo-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 24px;
+  z-index: 0;
+  overflow: visible;
 }
 
 .auth-inner {
@@ -122,9 +221,11 @@
 }
 
 .auth-logo {
+  position: relative;
+  z-index: 1;
   width: 56px;
   height: 56px;
-  margin: 0 auto 24px;
+  margin: 0;
   display: grid;
   place-items: center;
   border-radius: 14.4px;

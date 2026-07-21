@@ -201,13 +201,18 @@ def readiness_summary(readiness: list[ReadinessItem], pct: int) -> str:
 
 def build_overview_context(user) -> dict:
     # Customers: only a confirmed install counts.
-    # Staff/superuser: allow preview via demo shop so admin can use the builder.
+    # Staff/superuser: use preview shop only when it is marked installed
+    # (uncheck App installed in admin to preview the connect UI).
     connection = ShopConnection.active_for_user(user)
     if not connection and (
         getattr(user, "is_staff", False) or getattr(user, "is_superuser", False)
     ):
-        connection = ShopConnection.ensure_staff_preview(user)
-    is_connected = connection is not None
+        preview = ShopConnection.staff_preview_for_user(user)
+        if preview is None:
+            connection = ShopConnection.ensure_staff_preview(user)
+        elif preview.app_installed:
+            connection = preview
+    is_connected = connection is not None and bool(connection.app_installed)
     plan = get_or_create_plan(user)
 
     if not is_connected:

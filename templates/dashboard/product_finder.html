@@ -18,15 +18,10 @@
   data-csrf="{{ csrf_token }}"
 >
   {% if needs_shop_connect %}
-  <div class="cat-empty" role="status" style="margin-bottom: 16px; padding: 16px 20px;">
-    <h2 style="font-size: 16px; margin: 0 0 6px;">Connect a Shopify store to import</h2>
-    <p style="margin: 0;">
-      You can browse the Winning Product Vault below.
-      <a class="btn-text" href="{% url 'dashboard:connect' %}">
-        Connect store
-        <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
-      </a>
-      to import and push products.
+  <div class="cat-connect-note" role="status">
+    <p>
+      Connect your Shopify store to import products.
+      <a href="{% url 'dashboard:connect' %}">Connect store</a>
     </p>
   </div>
   {% endif %}
@@ -192,7 +187,7 @@
         <div class="cat-card__actions">
           <button type="button" class="btn-text" data-open-details>
             View details
-            <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+            <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
           </button>
           {% if p.status == "imported" %}
           <a class="cat-badge cat-badge--imported" href="{% url 'dashboard:imports' %}">
@@ -203,7 +198,7 @@
           {% else %}
           <button type="button" class="btn-primary btn--sm" data-import-product>
             Import
-            <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+            <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
           </button>
           {% endif %}
         </div>
@@ -264,7 +259,7 @@
         <p class="cat-source__label">Product source</p>
         <a class="btn-text" data-m-source-link href="#" target="_blank" rel="noopener noreferrer">
           Open product page
-          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+          <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
         </a>
         <p class="cat-source__url" data-m-source-url></p>
       </div>

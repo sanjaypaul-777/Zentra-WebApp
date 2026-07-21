@@ -1159,8 +1159,13 @@
   gap: 7.2px 12px;
 }
 
-/* �� Buttons used on this page �� */
-.btn-primary {
+/* —— Buttons used on this page —— */
+.btn-primary,
+.btn-secondary,
+a.btn-primary,
+button.btn-primary,
+a.btn-secondary,
+button.btn-secondary {
   position: relative;
   z-index: 0;
   display: inline-flex;
@@ -1171,16 +1176,11 @@
   width: fit-content;
   padding: 0 32px;
   border-radius: 9999px;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 1;
   white-space: nowrap;
   text-decoration: none;
   box-sizing: border-box;
   isolation: isolate;
   cursor: pointer;
-  border: none;
-  font-family: inherit;
 }
 .btn-primary {
   color: var(--on-primary);

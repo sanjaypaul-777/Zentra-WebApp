@@ -1,5 +1,5 @@
 /**
- * Hero headline typewriter — only “knows what sells” (type → pause → edit → repeat).
+ * Hero headline typewriter — “AI Built Shopify Store” (type → pause → edit → repeat).
  */
 (function () {
   var root = document.querySelector("[data-brandbox-hero-typed]");
@@ -8,7 +8,7 @@
   var el = root.querySelector("[data-brandbox-hero-typed-text]");
   if (!el) return;
 
-  var phrase ="Knows What Sells";
+  var phrase = "AI Built Shopify Store";
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     el.textContent = phrase;

@@ -21,11 +21,13 @@
     </div>
 
     <h1>Connect your Shopify store</h1>
-    <p class="flow-card__lede">
-      Enter the store domain you use with Shopify. You’ll find it in Shopify Admin →
-      Settings → Domains, or in the browser address bar when you’re logged into Admin
-      (it looks like <strong>yourstorename.myshopify.com</strong>).
-    </p>
+    <p class="flow-card__lede">Find your store domain, then paste it below.</p>
+    <ol class="micro-steps">
+      <li>Open Shopify Admin</li>
+      <li>Go to <strong>Settings → Domains</strong></li>
+      <li>Copy the address that ends in <strong>.myshopify.com</strong></li>
+      <li>Paste it in the field below</li>
+    </ol>
 
     <form method="post" action="{% url 'dashboard:connect' %}?from={{ funnel }}" class="dash-form" id="connect-shop-form" novalidate>
       {% csrf_token %}
@@ -55,7 +57,7 @@
       <div class="flow-actions">
         <button type="submit" class="btn-primary">
           Continue
-          <span aria-hidden="true">→</span>
+          <span class="material-symbols-outlined" aria-hidden="true">link</span>
         </button>
       </div>
     </form>
@@ -96,9 +98,9 @@
     <form method="post" action="{% url 'dashboard:install' %}" class="flow-actions">
       {% csrf_token %}
       <input type="hidden" name="shop" value="{{ pending_shop.shop }}" />
-      <button type="submit" class="btn-primary btn--block">
+      <button type="submit" class="btn-primary">
         Install BrandBox
-        <span aria-hidden="true">→</span>
+        <span class="material-symbols-outlined" aria-hidden="true">download</span>
       </button>
     </form>
 

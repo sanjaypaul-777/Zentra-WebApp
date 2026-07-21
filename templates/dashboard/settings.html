@@ -19,6 +19,9 @@
       <h2 id="st-account" class="st-card__title st-card__title--flush">Account</h2>
       <a class="btn-text" href="{{ profile_edit_url }}">Edit</a>
     </header>
+    <p class="st-card__body st-card__hint">
+      Email, username, and password are used to sign in.
+    </p>
     <dl class="st-dl">
       <div class="st-dl__row">
         <dt>Name</dt>
@@ -46,11 +49,11 @@
       </div>
       <div class="st-dl__row">
         <dt>Vertical / Industry</dt>
-        <dd>{% if profile.vertical_industry %}{{ profile.vertical_industry }}{% else %}—{% endif %}</dd>
+        <dd>{{ profile.vertical_display }}</dd>
       </div>
       <div class="st-dl__row">
         <dt>Desired Niche</dt>
-        <dd>{% if profile.desired_niche %}{{ profile.desired_niche }}{% else %}—{% endif %}</dd>
+        <dd>{{ profile.niche_display }}</dd>
       </div>
       <div class="st-dl__row">
         <dt>Bio</dt>
@@ -61,7 +64,7 @@
         <dd>
           <a class="btn-text" href="{{ password_change_url }}">
             Change Password
-            <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+            <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
           </a>
         </dd>
       </div>

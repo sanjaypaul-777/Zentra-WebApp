@@ -18,15 +18,12 @@
     </div>
 
     <h1>Create your Shopify store</h1>
-    <p class="flow-card__lede">
-      New to Shopify? Create an account first. Already have a store? Paste your
-      admin URL below and continue — we’ll install BrandBox and take you to the builder.
-    </p>
-
+    <p class="flow-card__lede">New to Shopify? Follow these steps.</p>
     <ol class="micro-steps">
-      <li>Click “Create Shopify account” (opens a new tab)</li>
-      <li>Finish signup, then come back to this page</li>
-      <li>Paste your store URL and hit Continue</li>
+      <li>Click <strong>Create Shopify account</strong> (opens a new tab)</li>
+      <li>Finish signup on Shopify</li>
+      <li>Come back to this page</li>
+      <li>Paste your store URL below and continue</li>
     </ol>
 
     <div class="flow-note flow-note--warn" role="note">
@@ -38,15 +35,15 @@
       </p>
     </div>
 
-    <div class="flow-actions" style="flex-direction: column; align-items: stretch;">
+    <div class="flow-actions">
       <a
-        class="btn-primary btn--block"
+        class="btn-primary"
         href="{{ signup_url }}"
         target="_blank"
         rel="noopener noreferrer"
       >
         Create Shopify account
-        <span aria-hidden="true">↗</span>
+        <span class="material-symbols-outlined" aria-hidden="true">person_add</span>
       </a>
     </div>
 
@@ -79,9 +76,9 @@
       {% endif %}
 
       <div class="flow-actions" style="margin-top: 16px;">
-        <button type="submit" class="btn-primary btn--block">
+        <button type="submit" class="btn-primary">
           Continue to install &amp; build
-          <span aria-hidden="true">→</span>
+          <span class="material-symbols-outlined" aria-hidden="true">link</span>
         </button>
       </div>
     </form>

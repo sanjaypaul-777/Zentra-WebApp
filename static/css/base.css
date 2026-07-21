@@ -11,7 +11,7 @@
  *   .ab / .build-page → builder.css  (--ab-* / --build-*)
  *   .auth-page     → auth.css        (--auth-*)
  *   .checkout      → checkout.css    (--checkout-*)
- *   .status-page   → status.css      (--status-*)
+ *   .status-page   → status.css      (content/buttons; shell = auth.css)
  *   .contact-page  → contact.css     (--contact-*)
  *   .brandbox-home → home.css        (--home-* / section --hero-* etc.)
  *
@@ -83,7 +83,7 @@
   --radius-lg: 16px;
   --radius-xl: 24px;
   --radius-full: 9999px;
-  --font-display:"Plus Jakarta Sans", system-ui, sans-serif;
+  --font-display: Inter, system-ui, sans-serif;
   --font-body: Inter, system-ui, sans-serif;
   --font-mono:"JetBrains Mono", ui-monospace, monospace;
 }
@@ -108,6 +108,21 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+h1,
+h2 {
+  font-family: Inter, var(--font-display), system-ui, sans-serif;
+}
+
+h1 {
+  font-size: 48px;
+  line-height: 1.15;
+}
+
+h2 {
+  font-size: 32px;
+  line-height: 1.2;
 }
 
 img {
@@ -188,11 +203,14 @@ button.btn-text {
 }
 
 .btn-text .material-symbols-outlined {
-  font-family:"Material Symbols Outlined";
+  font-family: "Material Symbols Outlined";
   font-size: 18px;
   width: 18px;
   height: 18px;
-  font-variation-settings:"FILL" 0,"wght" 400,"GRAD" 0,"opsz" 20;
+  display: inline-block;
+  overflow: visible;
+  flex-shrink: 0;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
   transition: transform 0.25s ease, color 0.2s ease, opacity 0.15s ease;
 }
 
@@ -204,8 +222,13 @@ button.btn-text {
 
 .btn-text:hover .material-symbols-outlined,
 .btn-text:focus-visible .material-symbols-outlined {
-  transform: translateX(3px);
+  transform: translateX(4px);
   color: var(--midnight-blue);
+}
+
+.btn-text:hover .btn-text__arrow,
+.btn-text:focus-visible .btn-text__arrow {
+  transform: translateX(4px) rotate(45deg);
 }
 
 /* Primary / secondary pill buttons */
@@ -326,6 +349,15 @@ a.btn-secondary:visited {
   width: 18px;
   height: 18px;
   color: inherit;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.btn-primary:hover .btn-text__arrow,
+.btn-primary:focus-visible .btn-text__arrow,
+.btn-secondary:hover .btn-text__arrow,
+.btn-secondary:focus-visible .btn-text__arrow {
+  transform: translateX(4px) rotate(45deg);
 }
 
 .btn-primary:hover::before,

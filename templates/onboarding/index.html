@@ -1,0 +1,368 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Let's set up your store · BrandBox{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/onboarding.css' %}" />
+{% endblock %}
+
+{% block body %}
+<section class="ob" data-onboarding data-step="{{ step }}">
+  <div class="ob-shell">
+    <header class="ob-hero">
+      <h1 class="ob-hero__title">Let's set up your store</h1>
+      <p class="ob-hero__sub">
+        A few quick questions so we can personalize your AI recommendations and coaching — takes about 2 minutes.
+      </p>
+      <p class="ob-hero__trust">
+        Your answers help us tailor your experience — nothing here is shared publicly.
+      </p>
+    </header>
+
+    <div class="ob-progress">
+      <div class="ob-progress__meta">
+        <span class="ob-progress__step">Step {{ step }} of {{ step_total }}</span>
+        <span class="ob-progress__eta">About 2 minutes</span>
+      </div>
+      <div class="ob-bar" aria-hidden="true">
+        {% for n in "1234" %}
+        <span class="{% if forloop.counter < step %}is-done{% elif forloop.counter == step %}is-current{% endif %}"></span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <article class="ob-card">
+      <h2 class="ob-card__title">{{ step_title }}</h2>
+
+      <form method="post" class="ob-form" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="step" value="{{ step }}" />
+
+        {% if form.non_field_errors %}
+        <p class="ob-error" role="alert">{{ form.non_field_errors|striptags }}</p>
+        {% endif %}
+
+        {% if step == 1 %}
+        <div
+          class="ob-fields"
+          data-address-autocomplete
+          data-suggest-url="{% url 'address_suggest' %}"
+          data-details-url="{% url 'address_details' %}"
+          data-countries-url="{% url 'geo_countries' %}"
+          data-states-url="{% url 'geo_states' %}"
+          data-country-code="{{ geo_country.code }}"
+          data-country-name="{{ geo_country.name }}"
+          data-geo-confident="{% if geo_country.confident %}1{% else %}0{% endif %}"
+          data-geo-client-detect="{% if not profile.address_country %}1{% endif %}"
+          data-timezone-url="{% url 'geo_resolve_timezone' %}"
+          data-phone-meta-url="{% url 'geo_phone_meta' %}"
+          {% if google_places_api_key %}data-google-places-key="{{ google_places_api_key }}"{% endif %}
+        >
+          <div class="ob-field">
+            <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
+            {{ form.full_name }}
+            {% if form.full_name.errors %}<p class="ob-error">{{ form.full_name.errors|striptags }}</p>{% endif %}
+          </div>
+          <div class="ob-field">
+            <label for="{{ form.company.id_for_label }}">{{ form.company.label }}</label>
+            {{ form.company }}
+          </div>
+          <div class="ob-field addr-combo" data-addr-combo="country">
+            <label for="id_address_country_display">Country</label>
+            <div class="addr-combo__control">
+              <input
+                type="text"
+                id="id_address_country_display"
+                class="ob-input"
+                value="{{ form.address_country.value|default:geo_country.name }}"
+                data-address-country-display
+                placeholder="Search country"
+                autocomplete="off"
+                role="combobox"
+                aria-expanded="false"
+                aria-autocomplete="list"
+              />
+              <span class="material-symbols-outlined addr-combo__chevron" aria-hidden="true">expand_more</span>
+            </div>
+            <input
+              type="hidden"
+              name="address_country"
+              value="{{ form.address_country.value|default:geo_country.name }}"
+              data-address-country
+              data-country-code="{{ geo_country.code }}"
+            />
+            {% if form.address_country.errors %}<p class="ob-error">{{ form.address_country.errors|striptags }}</p>{% endif %}
+          </div>
+          <div class="ob-field">
+            <label for="{{ form.address_street.id_for_label }}">{{ form.address_street.label }}</label>
+            <input
+              type="text"
+              name="address_street"
+              id="{{ form.address_street.id_for_label }}"
+              class="ob-input"
+              value="{{ form.address_street.value|default:'' }}"
+              data-address-street
+              placeholder="Start typing an address"
+              autocomplete="off"
+            />
+            {% if form.address_street.errors %}<p class="ob-error">{{ form.address_street.errors|striptags }}</p>{% endif %}
+          </div>
+          <div class="ob-fields ob-fields--2">
+            <div class="ob-field addr-combo" data-addr-combo="state">
+              <label for="{{ form.address_state.id_for_label }}">{{ form.address_state.label }}</label>
+              <div class="addr-combo__control">
+                <input
+                  type="text"
+                  name="address_state"
+                  id="{{ form.address_state.id_for_label }}"
+                  class="ob-input"
+                  value="{{ form.address_state.value|default:'' }}"
+                  data-address-state
+                  placeholder="Search state or province"
+                  autocomplete="off"
+                  role="combobox"
+                  aria-expanded="false"
+                  aria-autocomplete="list"
+                />
+                <span class="material-symbols-outlined addr-combo__chevron" aria-hidden="true">expand_more</span>
+              </div>
+              {% if form.address_state.errors %}<p class="ob-error">{{ form.address_state.errors|striptags }}</p>{% endif %}
+            </div>
+            <div class="ob-field">
+              <label for="{{ form.address_city.id_for_label }}">{{ form.address_city.label }}</label>
+              <input
+                type="text"
+                name="address_city"
+                id="{{ form.address_city.id_for_label }}"
+                class="ob-input"
+                value="{{ form.address_city.value|default:'' }}"
+                data-address-city
+                placeholder="City"
+                autocomplete="address-level2"
+              />
+              {% if form.address_city.errors %}<p class="ob-error">{{ form.address_city.errors|striptags }}</p>{% endif %}
+            </div>
+          </div>
+          <div class="ob-field">
+            <label for="{{ form.address_zip.id_for_label }}">{{ form.address_zip.label }}</label>
+            <input
+              type="text"
+              name="address_zip"
+              id="{{ form.address_zip.id_for_label }}"
+              class="ob-input"
+              value="{{ form.address_zip.value|default:'' }}"
+              data-address-zip
+              autocomplete="postal-code"
+            />
+            {% if form.address_zip.errors %}<p class="ob-error">{{ form.address_zip.errors|striptags }}</p>{% endif %}
+          </div>
+          <div class="ob-field">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+            {{ form.email }}
+            {% if form.email.errors %}<p class="ob-error">{{ form.email.errors|striptags }}</p>{% endif %}
+          </div>
+          <div class="ob-field">
+            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+            <div class="phone-input" data-phone-input>
+              <span class="phone-input__dial" data-phone-dial aria-hidden="true">+</span>
+              <input
+                type="tel"
+                name="phone"
+                id="{{ form.phone.id_for_label }}"
+                class="ob-input phone-input__field"
+                value="{{ form.phone.value|default:'' }}"
+                data-address-phone
+                autocomplete="tel"
+                inputmode="tel"
+                placeholder="Phone number"
+              />
+            </div>
+            {% if form.phone.errors %}<p class="ob-error">{{ form.phone.errors|striptags }}</p>{% endif %}
+          </div>
+        </div>
+
+        {% elif step == 2 %}
+        <div class="ob-fields">
+          <fieldset class="ob-fieldset">
+            <legend>Vertical / Industry</legend>
+            <div class="ob-pills" data-ob-single data-ob-name="vertical_industry">
+              {% for value, label in vertical_choices %}
+              <button type="button" class="ob-pill{% if form.vertical_industry.value == value %} is-selected{% endif %}" data-value="{{ value }}" aria-pressed="{% if form.vertical_industry.value == value %}true{% else %}false{% endif %}">{{ label }}</button>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="vertical_industry" value="{{ form.vertical_industry.value|default:'' }}" data-ob-hidden />
+            {% if form.vertical_industry.errors %}<p class="ob-error">{{ form.vertical_industry.errors|striptags }}</p>{% endif %}
+            <div class="ob-field ob-other{% if form.vertical_industry.value != 'other' %} is-hidden{% endif %}" data-ob-other>
+              <label for="{{ form.vertical_other.id_for_label }}">Please specify</label>
+              {{ form.vertical_other }}
+              {% if form.vertical_other.errors %}<p class="ob-error">{{ form.vertical_other.errors|striptags }}</p>{% endif %}
+            </div>
+          </fieldset>
+
+          <fieldset class="ob-fieldset">
+            <legend>Desired niche</legend>
+            <div class="ob-pills" data-ob-single data-ob-name="desired_niche">
+              {% for value, label in niche_choices %}
+              <button type="button" class="ob-pill{% if form.desired_niche.value == value %} is-selected{% endif %}" data-value="{{ value }}" aria-pressed="{% if form.desired_niche.value == value %}true{% else %}false{% endif %}">{{ label }}</button>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="desired_niche" value="{{ form.desired_niche.value|default:'' }}" data-ob-hidden />
+            {% if form.desired_niche.errors %}<p class="ob-error">{{ form.desired_niche.errors|striptags }}</p>{% endif %}
+          </fieldset>
+
+          <fieldset class="ob-fieldset">
+            <legend>Do you already have a Shopify store?</legend>
+            <div class="ob-pills ob-pills--yn" data-ob-single data-ob-name="has_existing_shopify_store">
+              <button type="button" class="ob-pill{% if form.has_existing_shopify_store.value == True or form.has_existing_shopify_store.value == 'true' %} is-selected{% endif %}" data-value="true" aria-pressed="false">Yes</button>
+              <button type="button" class="ob-pill{% if form.has_existing_shopify_store.value == False or form.has_existing_shopify_store.value == 'false' %} is-selected{% endif %}" data-value="false" aria-pressed="false">No</button>
+            </div>
+            <input type="hidden" name="has_existing_shopify_store" value="{% if form.has_existing_shopify_store.value == True or form.has_existing_shopify_store.value == 'true' %}true{% elif form.has_existing_shopify_store.value == False or form.has_existing_shopify_store.value == 'false' %}false{% endif %}" data-ob-hidden />
+            {% if form.has_existing_shopify_store.errors %}<p class="ob-error">{{ form.has_existing_shopify_store.errors|striptags }}</p>{% endif %}
+          </fieldset>
+
+          <fieldset class="ob-fieldset">
+            <legend>Current revenue</legend>
+            <div class="ob-pills" data-ob-single data-ob-name="current_revenue">
+              {% for value, label in revenue_choices %}
+              <button type="button" class="ob-pill{% if form.current_revenue.value == value %} is-selected{% endif %}" data-value="{{ value }}" aria-pressed="{% if form.current_revenue.value == value %}true{% else %}false{% endif %}">{{ label }}</button>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="current_revenue" value="{{ form.current_revenue.value|default:'' }}" data-ob-hidden />
+            {% if form.current_revenue.errors %}<p class="ob-error">{{ form.current_revenue.errors|striptags }}</p>{% endif %}
+          </fieldset>
+        </div>
+
+        {% elif step == 3 %}
+        <div class="ob-fields">
+          <fieldset class="ob-fieldset">
+            <legend>Goals for starting an ecommerce business</legend>
+            <div class="ob-choice-list" data-ob-single data-ob-name="ecommerce_goal" role="radiogroup" aria-label="Goals for starting an ecommerce business">
+              {% for value, label in goal_choices %}
+              <button type="button" class="ob-choice{% if form.ecommerce_goal.value == value %} is-selected{% endif %}" data-value="{{ value }}" role="radio" aria-checked="{% if form.ecommerce_goal.value == value %}true{% else %}false{% endif %}">
+                <span class="ob-choice__circle" aria-hidden="true"></span>
+                <span class="ob-choice__label">{{ label }}</span>
+              </button>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="ecommerce_goal" value="{{ form.ecommerce_goal.value|default:'' }}" data-ob-hidden />
+            {% if form.ecommerce_goal.errors %}<p class="ob-error">{{ form.ecommerce_goal.errors|striptags }}</p>{% endif %}
+          </fieldset>
+
+          <fieldset class="ob-fieldset">
+            <legend>Previous ecommerce experience</legend>
+            <div class="ob-choice-list" data-ob-single data-ob-name="previous_experience" role="radiogroup" aria-label="Previous ecommerce experience">
+              {% for value, label in experience_choices %}
+              <button type="button" class="ob-choice{% if form.previous_experience.value == value %} is-selected{% endif %}" data-value="{{ value }}" role="radio" aria-checked="{% if form.previous_experience.value == value %}true{% else %}false{% endif %}">
+                <span class="ob-choice__circle" aria-hidden="true"></span>
+                <span class="ob-choice__label">{{ label }}</span>
+              </button>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="previous_experience" value="{{ form.previous_experience.value|default:'' }}" data-ob-hidden />
+            {% if form.previous_experience.errors %}<p class="ob-error">{{ form.previous_experience.errors|striptags }}</p>{% endif %}
+          </fieldset>
+
+          <fieldset class="ob-fieldset">
+            <legend>What success looks like for you</legend>
+            <div class="ob-choice-list" data-ob-single data-ob-name="success_definition" role="radiogroup" aria-label="What success looks like for you">
+              {% for value, label in success_choices %}
+              <button type="button" class="ob-choice{% if form.success_definition.value == value %} is-selected{% endif %}" data-value="{{ value }}" role="radio" aria-checked="{% if form.success_definition.value == value %}true{% else %}false{% endif %}">
+                <span class="ob-choice__circle" aria-hidden="true"></span>
+                <span class="ob-choice__label">{{ label }}</span>
+              </button>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="success_definition" value="{{ form.success_definition.value|default:'' }}" data-ob-hidden />
+            {% if form.success_definition.errors %}<p class="ob-error">{{ form.success_definition.errors|striptags }}</p>{% endif %}
+          </fieldset>
+        </div>
+
+        {% else %}
+        <div class="ob-fields">
+          <fieldset class="ob-fieldset">
+            <legend>How much time can you invest each week?</legend>
+            <div class="ob-choice-list" data-ob-single data-ob-name="weekly_time_investment" role="radiogroup" aria-label="Weekly time investment">
+              {% for value, label in time_choices %}
+              <button type="button" class="ob-choice{% if form.weekly_time_investment.value == value %} is-selected{% endif %}" data-value="{{ value }}" role="radio" aria-checked="{% if form.weekly_time_investment.value == value %}true{% else %}false{% endif %}">
+                <span class="ob-choice__circle" aria-hidden="true"></span>
+                <span class="ob-choice__label">{{ label }}</span>
+              </button>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="weekly_time_investment" value="{{ form.weekly_time_investment.value|default:'' }}" data-ob-hidden />
+            {% if form.weekly_time_investment.errors %}<p class="ob-error">{{ form.weekly_time_investment.errors|striptags }}</p>{% endif %}
+          </fieldset>
+
+          <fieldset class="ob-fieldset">
+            <legend>Budget for advertising</legend>
+            <div class="ob-choice-list" data-ob-single data-ob-name="ad_budget" role="radiogroup" aria-label="Budget for advertising">
+              {% for value, label in budget_choices %}
+              <button type="button" class="ob-choice{% if form.ad_budget.value == value %} is-selected{% endif %}" data-value="{{ value }}" role="radio" aria-checked="{% if form.ad_budget.value == value %}true{% else %}false{% endif %}">
+                <span class="ob-choice__circle" aria-hidden="true"></span>
+                <span class="ob-choice__label">{{ label }}</span>
+              </button>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="ad_budget" value="{{ form.ad_budget.value|default:'' }}" data-ob-hidden />
+            {% if form.ad_budget.errors %}<p class="ob-error">{{ form.ad_budget.errors|striptags }}</p>{% endif %}
+          </fieldset>
+
+          <fieldset class="ob-fieldset">
+            <legend>Biggest challenges</legend>
+            <div class="ob-choice-list" data-ob-multi data-ob-name="biggest_challenges" role="group" aria-label="Biggest challenges">
+              {% for value, label in challenge_choices %}
+              <button type="button" class="ob-choice{% if form.biggest_challenges.value and value in form.biggest_challenges.value %} is-selected{% endif %}" data-value="{{ value }}" aria-pressed="{% if form.biggest_challenges.value and value in form.biggest_challenges.value %}true{% else %}false{% endif %}">
+                <span class="ob-choice__circle" aria-hidden="true"></span>
+                <span class="ob-choice__label">{{ label }}</span>
+              </button>
+              {% endfor %}
+            </div>
+            <div data-ob-multi-inputs>
+              {% if form.biggest_challenges.value %}
+              {% for value in form.biggest_challenges.value %}
+              <input type="hidden" name="biggest_challenges" value="{{ value }}" />
+              {% endfor %}
+              {% endif %}
+            </div>
+            {% if form.biggest_challenges.errors %}<p class="ob-error">{{ form.biggest_challenges.errors|striptags }}</p>{% endif %}
+            <div class="ob-field ob-other{% if not form.biggest_challenges.value or 'other' not in form.biggest_challenges.value %} is-hidden{% endif %}" data-ob-other>
+              <label for="{{ form.biggest_challenges_other.id_for_label }}">{{ form.biggest_challenges_other.label }}</label>
+              {{ form.biggest_challenges_other }}
+              {% if form.biggest_challenges_other.errors %}<p class="ob-error">{{ form.biggest_challenges_other.errors|striptags }}</p>{% endif %}
+            </div>
+          </fieldset>
+
+          <div class="ob-field">
+            <label for="{{ form.additional_comments.id_for_label }}">{{ form.additional_comments.label }}</label>
+            {{ form.additional_comments }}
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="ob-actions">
+          {% if step > 1 %}
+          <a class="ob-back btn-text" href="{% url 'onboarding' %}?step={{ step|add:'-1' }}">
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+            Back
+          </a>
+          {% else %}
+          <span></span>
+          {% endif %}
+
+          {% if step < 4 %}
+          <button type="submit" class="btn-primary">Next</button>
+          {% else %}
+          <button type="submit" class="btn-primary">
+            Enter my dashboard
+            <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
+          </button>
+          {% endif %}
+        </div>
+      </form>
+    </article>
+  </div>
+</section>
+<script src="{% static 'js/address-autocomplete.js' %}" defer></script>
+<script src="{% static 'js/onboarding.js' %}" defer></script>
+{% endblock %}

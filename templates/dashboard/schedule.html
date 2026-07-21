@@ -1,22 +1,103 @@
 {% extends "dashboard/base_dashboard.html" %}
+{% load static %}
 
 {% block dash_title %}Schedule{% endblock %}
 
 {% block dash_content %}
-<section class="sch" aria-label="Schedule">
-  <header class="sch-head">
-    <h1 class="sch-head__title">Schedule</h1>
-    <p class="sch-head__sub">
-      Upcoming live sessions to launch, stock, and scale your store with BrandBox AI.
-    </p>
+<section class="sch" aria-label="Schedule" data-sch-live data-first-name="{{ first_name }}">
+  <header class="sch-live">
+    <p class="sch-live__date" data-sch-clock>{{ live_date }}</p>
+    <h1 class="sch-live__greeting" data-sch-greeting>{{ greeting }}</h1>
   </header>
 
+  {% if next_call %}
   <div class="sch-grid">
-    <article class="sch-card">
-      <span class="material-symbols-outlined sch-card__icon" aria-hidden="true">event</span>
-      <h2 class="sch-card__title">Upcoming sessions</h2>
-      <p class="sch-card__body">New live sessions will appear here. Check back soon for the next schedule.</p>
+    <article class="sch-card sch-card--call">
+      <span class="material-symbols-outlined sch-card__icon" aria-hidden="true">event_available</span>
+      <h2 class="sch-card__title">Your next call</h2>
+      <dl class="sch-call">
+        <div class="sch-call__row">
+          <dt>Date</dt>
+          <dd>{{ next_call.starts_at|date:"l, F j" }}</dd>
+        </div>
+        <div class="sch-call__row">
+          <dt>Time</dt>
+          <dd>{{ next_call.starts_at|time:"g:i A" }}</dd>
+        </div>
+        <div class="sch-call__row">
+          <dt>Duration</dt>
+          <dd>{{ next_call.duration_minutes }} min</dd>
+        </div>
+        <div class="sch-call__row">
+          <dt>Topic</dt>
+          <dd>{{ next_call.topic }}</dd>
+        </div>
+      </dl>
     </article>
   </div>
+  {% else %}
+  <article
+    class="sch-book"
+    data-sch-calendar
+    data-book-url="{{ book_url }}"
+  >
+    {{ open_slots|json_script:"sch-slots-data" }}
+    <div class="sch-book__intro">
+      <h2 class="sch-book__title">
+        {% if is_first_call %}Book your first call{% else %}Book your next call{% endif %}
+      </h2>
+      <p class="sch-book__body">
+        {% if is_first_call %}
+          Pick a date and time for your BrandBox strategy session.
+        {% else %}
+          Choose a date and time for your next meeting.
+        {% endif %}
+      </p>
+    </div>
+
+    {% if has_open_slots %}
+    <div class="sch-book__panel">
+      <div class="sch-cal" aria-label="Choose a date">
+        <div class="sch-cal__nav">
+          <button type="button" class="sch-cal__nav-btn" data-cal-prev aria-label="Previous month">
+            <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+          </button>
+          <h3 class="sch-cal__month" data-cal-month></h3>
+          <button type="button" class="sch-cal__nav-btn" data-cal-next aria-label="Next month">
+            <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+          </button>
+        </div>
+        <div class="sch-cal__weekdays" aria-hidden="true">
+          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+          <span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+        <div class="sch-cal__grid" data-cal-grid role="grid"></div>
+      </div>
+
+      <div class="sch-cal__side">
+        <h3 class="sch-cal__side-title" data-cal-day-label>Select a date</h3>
+        <p class="sch-cal__side-hint" data-cal-hint>Available times will appear here.</p>
+        <div class="sch-cal__times" data-cal-times hidden></div>
+        <form class="sch-cal__confirm" method="post" action="{{ book_url }}" data-cal-form hidden>
+          {% csrf_token %}
+          <input type="hidden" name="slot_id" value="" data-cal-slot-id />
+          <p class="sch-cal__summary" data-cal-summary></p>
+          <button type="submit" class="btn-primary">
+            Confirm booking
+            <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
+          </button>
+        </form>
+      </div>
+    </div>
+    {% else %}
+    <p class="sch-book__empty">No open times right now — check back soon, or ask support to schedule you.</p>
+    <a class="btn-secondary" href="mailto:help@brandbox.co">Contact support</a>
+    {% endif %}
+  </article>
+  {% endif %}
 </section>
+{% endblock %}
+
+{% block dash_extra_js %}
+<script src="{% static 'js/schedule.js' %}" defer></script>
 {% endblock %}

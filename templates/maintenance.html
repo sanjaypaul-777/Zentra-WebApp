@@ -7,30 +7,33 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/auth.css" />
     <link rel="stylesheet" href="{{ STATIC_URL }}css/status.css" />
     <link rel="icon" href="{{ STATIC_URL }}images/favicon.png?v=5" type="image/png" />
   </head>
   <body>
-    <main class="status-page">
-      <div class="status-glow status-glow--primary" aria-hidden="true"></div>
-      <div class="status-glow status-glow--purple" aria-hidden="true"></div>
-      <div class="status-inner">
-        <div class="status-logo" aria-hidden="true">
-          <img src="{{ STATIC_URL }}images/favicon.png?v=5" alt="" width="48" height="48" />
-        </div>
-        <div class="status-card">
-          <div class="status-icon" aria-hidden="true">
-            <span class="material-symbols-outlined">build</span>
+    <main class="auth-page">
+      <div class="auth-inner">
+        <div class="auth-logo-wrap">
+          <div class="auth-glow" aria-hidden="true"></div>
+          <div class="auth-logo" aria-hidden="true">
+            <img src="{{ STATIC_URL }}images/favicon.png?v=5" alt="" width="48" height="48" />
           </div>
-          <h1>BrandBox is getting a quick tune-up</h1>
-          <p class="status-body">
-            We're making some improvements behind the scenes. This usually
-            takes less than 15 minutes — thanks for your patience.
-          </p>
+        </div>
+
+        <p class="eyebrow">Maintenance</p>
+        <h1>BrandBox is getting a quick tune-up</h1>
+        <p class="subtitle">
+          We&apos;re making some improvements behind the scenes. This usually
+          takes less than 15 minutes — thanks for your patience.
+        </p>
+
+        {% if maintenance_eta or status_page_url %}
+        <div class="auth-card status-card">
           {% if maintenance_eta %}
           <p class="status-eta">Expected back online: ~{{ maintenance_eta }}</p>
           {% endif %}
@@ -38,11 +41,14 @@
           <div class="status-actions">
             <a class="btn-primary" href="{{ status_page_url }}" target="_blank" rel="noopener noreferrer">
               Check status page
+              <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
             </a>
           </div>
           {% endif %}
         </div>
+        {% endif %}
       </div>
     </main>
+    <script src="{{ STATIC_URL }}js/auth-glow.js" defer></script>
   </body>
 </html>

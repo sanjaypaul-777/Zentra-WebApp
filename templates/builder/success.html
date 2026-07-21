@@ -9,12 +9,13 @@
 
 {% block body %}
 <main class="auth-page">
-  <div class="auth-glow auth-glow--primary" aria-hidden="true"></div>
-  <div class="auth-glow auth-glow--purple" aria-hidden="true"></div>
   <div class="auth-inner">
-    <a href="{% url 'dashboard:home' %}" class="auth-logo" aria-label="BrandBox">
-      <img src="{% static 'images/favicon.png' %}?v=5" alt="" width="48" height="48" />
-    </a>
+    <div class="auth-logo-wrap">
+      <div class="auth-glow" aria-hidden="true"></div>
+      <a href="{% url 'dashboard:home' %}" class="auth-logo" aria-label="BrandBox">
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="" width="48" height="48" />
+      </a>
+    </div>
 
     <p class="auth-eyebrow">Success</p>
     <h1>Your AI store is live</h1>
@@ -39,4 +40,8 @@
     </nav>
   </div>
 </main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/auth-glow.js' %}" defer></script>
 {% endblock %}

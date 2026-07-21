@@ -7,34 +7,36 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/auth.css" />
     <link rel="stylesheet" href="{{ STATIC_URL }}css/status.css" />
     <link rel="icon" href="{{ STATIC_URL }}images/favicon.png?v=5" type="image/png" />
   </head>
   <body>
-    <main class="status-page">
-      <div class="status-glow status-glow--primary" aria-hidden="true"></div>
-      <div class="status-glow status-glow--magenta" aria-hidden="true"></div>
-      <div class="status-inner">
-        <a href="/" class="status-logo" aria-label="BrandBox">
-          <img src="{{ STATIC_URL }}images/favicon.png?v=5" alt="" width="48" height="48" />
-        </a>
-        <div class="status-card">
-          <p class="status-code status-code--magenta" aria-hidden="true">500</p>
-          <div class="status-icon status-icon--magenta" aria-hidden="true">
-            <span class="material-symbols-outlined">warning</span>
-          </div>
-          <h1>Something went wrong on our end</h1>
-          <p class="status-body">
-            This isn't something you did — our team's already been notified.
-            Try again in a moment.
-          </p>
+    <main class="auth-page">
+      <div class="auth-inner">
+        <div class="auth-logo-wrap">
+          <div class="auth-glow" aria-hidden="true"></div>
+          <a href="/" class="auth-logo" aria-label="BrandBox home">
+            <img src="{{ STATIC_URL }}images/favicon.png?v=5" alt="" width="48" height="48" />
+          </a>
+        </div>
+
+        <p class="eyebrow">500</p>
+        <h1>Something went wrong on our end</h1>
+        <p class="subtitle">
+          This isn&apos;t something you did — our team&apos;s already been notified.
+          Try again in a moment.
+        </p>
+
+        <div class="auth-card status-card">
           <div class="status-actions">
             <a class="btn-primary" href="javascript:location.reload()">
-              Try again →
+              Try again
+              <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
             </a>
             <a class="btn-secondary" href="/dashboard/">
               Back to Dashboard
@@ -42,7 +44,14 @@
           </div>
           <p class="status-ref">Error reference: {{ error_reference }}</p>
         </div>
+
+        <nav class="auth-legal" aria-label="Legal">
+          <a href="/privacy/">Privacy Policy</a>
+          <a href="/terms/">Terms of Service</a>
+          <a href="/refund/">Refund Policy</a>
+        </nav>
       </div>
     </main>
+    <script src="{{ STATIC_URL }}js/auth-glow.js" defer></script>
   </body>
 </html>

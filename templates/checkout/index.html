@@ -4,6 +4,7 @@
 {% block title %}Checkout · BrandBox{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/checkout.css' %}" />
+<link rel="stylesheet" href="{% static 'css/password-toggle.css' %}" />
 {% endblock %}
 
 {% block body %}
@@ -114,9 +115,9 @@
               {{ form.agree_terms }}
               <span>
                 I agree to BrandBox’s
-                <a href="#">Terms of Service</a>
+                <a href="{% url 'home:terms' %}">Terms of Service</a>
                 and
-                <a href="#">Privacy Policy</a>
+                <a href="{% url 'home:privacy' %}">Privacy Policy</a>
               </span>
             </label>
             {% if form.agree_terms.errors %}<p class="form-error">{{ form.agree_terms.errors|striptags }}</p>{% endif %}
@@ -206,9 +207,9 @@
     {% endif %}
 
     <p class="checkout-foot">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-      <a href="mailto:help@brandbox.co">Support</a>
+      <a href="{% url 'home:privacy' %}">Privacy Policy</a>
+      <a href="{% url 'home:terms' %}">Terms of Service</a>
+      <a href="{% url 'home:refund' %}">Refund Policy</a>
     </p>
   </div>
 </div>
@@ -240,4 +241,8 @@
 })();
 </script>
 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/password-toggle.js' %}" defer></script>
 {% endblock %}

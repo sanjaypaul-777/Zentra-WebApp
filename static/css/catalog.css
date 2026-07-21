@@ -423,10 +423,6 @@
   color: var(--on-surface-variant);
 }
 
-.btn-text:hover {
-  color: var(--cat-text);
-}
-
 .catalog .btn--sm {
   height: 40px;
   min-height: 40px;
@@ -685,6 +681,34 @@
 }
 
 /* —— Empty / pagination —— */
+.cat-connect-note {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--cat-hairline, rgba(15, 23, 42, 0.1));
+  background: var(--cat-surface, #fff);
+  text-align: left;
+}
+
+.cat-connect-note p {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--cat-muted, #64748b);
+}
+
+.cat-connect-note a {
+  color: var(--deep-navy, #06101a);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cat-connect-note a:hover {
+  color: var(--cat-text, #06101a);
+}
+
 .cat-empty {
   text-align: center;
   padding: 48px 20px;
@@ -736,13 +760,27 @@
   color: var(--cat-text);
 }
 
+.cat-empty--imports p .btn-text:hover,
+.cat-empty--imports p .btn-text:focus-visible {
+  color: var(--midnight-blue, #0d172f);
+}
+
 .cat-empty--imports p .btn-text .material-symbols-outlined {
-  display: block;
+  display: inline-block;
   flex-shrink: 0;
+  overflow: visible;
   font-size: 1em;
   width: 1em;
   height: 1em;
   line-height: 1;
+}
+
+.cat-empty--imports p .btn-text:hover .material-symbols-outlined,
+.cat-empty--imports p .btn-text:focus-visible .material-symbols-outlined,
+.cat-empty--imports p .btn-text:hover .btn-text__arrow,
+.cat-empty--imports p .btn-text:focus-visible .btn-text__arrow {
+  transform: translateX(4px) rotate(45deg);
+  color: var(--midnight-blue, #0d172f);
 }
 
 .cat-empty--imports .cat-empty__icon {

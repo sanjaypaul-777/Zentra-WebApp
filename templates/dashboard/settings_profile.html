@@ -3,6 +3,7 @@
 
 {% block dash_extra_css %}
 <link rel="stylesheet" href="{% static 'css/settings.css' %}" />
+<link rel="stylesheet" href="{% static 'css/onboarding.css' %}" />
 {% endblock %}
 
 {% block dash_title %}Edit Profile{% endblock %}
@@ -19,7 +20,23 @@
       <h2 id="st-profile" class="st-card__title st-card__title--flush">Edit Profile</h2>
     </header>
 
-    <form method="post" class="st-profile-form" novalidate>
+    <form
+      method="post"
+      class="st-profile-form"
+      novalidate
+      data-address-autocomplete
+      data-suggest-url="{% url 'address_suggest' %}"
+      data-details-url="{% url 'address_details' %}"
+      data-countries-url="{% url 'geo_countries' %}"
+      data-states-url="{% url 'geo_states' %}"
+      data-country-code="{{ geo_country.code }}"
+      data-country-name="{{ geo_country.name }}"
+      data-geo-confident="{% if geo_country.confident %}1{% else %}0{% endif %}"
+      data-geo-client-detect="{% if not profile.address_country %}1{% else %}0{% endif %}"
+      data-timezone-url="{% url 'geo_resolve_timezone' %}"
+      data-phone-meta-url="{% url 'geo_phone_meta' %}"
+      {% if google_places_api_key %}data-google-places-key="{{ google_places_api_key }}"{% endif %}
+    >
       {% csrf_token %}
       {% if form.non_field_errors %}
       <p class="st-profile-form__error" role="alert">{{ form.non_field_errors|striptags }}</p>
@@ -27,13 +44,92 @@
 
       <div class="st-profile-form__grid">
         {% for field in form %}
-        <div class="st-field{% if field.name == 'address' or field.name == 'bio' or field.name == 'email' %} st-profile-form__full{% endif %}">
-          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-          {{ field }}
-          {% if field.errors %}
-          <p class="st-profile-form__error">{{ field.errors|striptags }}</p>
+          {% if field.name == 'address_country' %}
+          <div class="st-field st-profile-form__full addr-combo" data-addr-combo="country">
+            <label for="id_address_country_display">Country</label>
+            <div class="addr-combo__control">
+              <input
+                type="text"
+                id="id_address_country_display"
+                class="ob-input"
+                value="{{ form.address_country.value|default:geo_country.name }}"
+                data-address-country-display
+                placeholder="Search country"
+                autocomplete="off"
+                role="combobox"
+                aria-expanded="false"
+                aria-autocomplete="list"
+              />
+              <span class="material-symbols-outlined addr-combo__chevron" aria-hidden="true">expand_more</span>
+            </div>
+            <input
+              type="hidden"
+              name="address_country"
+              id="{{ field.id_for_label }}"
+              value="{{ form.address_country.value|default:geo_country.name }}"
+              data-address-country
+              data-country-code="{{ geo_country.code }}"
+            />
+            {% if field.errors %}
+            <p class="st-profile-form__error">{{ field.errors|striptags }}</p>
+            {% endif %}
+          </div>
+          {% elif field.name == 'address_state' %}
+          <div class="st-field addr-combo" data-addr-combo="state">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            <div class="addr-combo__control">
+              <input
+                type="text"
+                name="{{ field.name }}"
+                id="{{ field.id_for_label }}"
+                class="ob-input"
+                value="{{ field.value|default:'' }}"
+                data-address-state
+                placeholder="Search state or province"
+                autocomplete="off"
+                role="combobox"
+                aria-expanded="false"
+                aria-autocomplete="list"
+              />
+              <span class="material-symbols-outlined addr-combo__chevron" aria-hidden="true">expand_more</span>
+            </div>
+            {% if field.errors %}
+            <p class="st-profile-form__error">{{ field.errors|striptags }}</p>
+            {% endif %}
+          </div>
+          {% elif field.name == 'phone' %}
+          <div class="st-field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            <div class="phone-input" data-phone-input>
+              <span class="phone-input__dial" data-phone-dial aria-hidden="true">+</span>
+              <input
+                type="tel"
+                name="{{ field.name }}"
+                id="{{ field.id_for_label }}"
+                class="ob-input phone-input__field"
+                value="{{ field.value|default:'' }}"
+                data-address-phone
+                autocomplete="tel"
+                inputmode="tel"
+                placeholder="Phone number"
+              />
+            </div>
+            {% if field.errors %}
+            <p class="st-profile-form__error">{{ field.errors|striptags }}</p>
+            {% endif %}
+          </div>
+          {% else %}
+          <div class="st-field{% if field.name == 'bio' or field.name == 'email' or field.name == 'address_street' %} st-profile-form__full{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+            <p class="st-field__hint">{{ field.help_text }}</p>
+            {% endif %}
+            {% if field.errors %}
+            <p class="st-profile-form__error">{{ field.errors|striptags }}</p>
+            {% endif %}
+          </div>
           {% endif %}
-        </div>
         {% endfor %}
       </div>
 
@@ -44,4 +140,8 @@
     </form>
   </section>
 </section>
+{% endblock %}
+
+{% block dash_extra_js %}
+<script src="{% static 'js/address-autocomplete.js' %}" defer></script>
 {% endblock %}

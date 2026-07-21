@@ -43,6 +43,7 @@
         {% csrf_token %}
         <button type="submit" class="btn-secondary">
           {{ store_row.primary_label }}
+          <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
         </button>
       </form>
       {% else %}
@@ -50,7 +51,10 @@
         class="btn-primary"
         href="{{ store_row.primary_url }}"
         {% if store_row.primary_external %}target="_blank" rel="noopener noreferrer"{% endif %}
-      >{{ store_row.primary_label }}</a>
+      >
+        {{ store_row.primary_label }}
+        <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
+      </a>
       {% endif %}
       {% endif %}
     </div>

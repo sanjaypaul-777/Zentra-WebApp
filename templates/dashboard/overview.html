@@ -10,6 +10,12 @@
 {% block dash_title %}Overview{% endblock %}
 
 {% block dash_content %}
+{% if show_onboarding_welcome %}
+<section class="ov-welcome" aria-label="Welcome">
+  <h2 class="ov-welcome__title">You're in, {{ welcome_full_name }}!</h2>
+  <p class="ov-welcome__sub">🚀 Let's build something people actually want to buy.</p>
+</section>
+{% endif %}
 {% if not is_connected %}
 {# Not connected — entry only (no View B content). Driven by app_installed DB check. #}
 <section class="nc" aria-label="Connect your Shopify store">
@@ -28,7 +34,10 @@
       </div>
       <h3 class="nc-card__title">Connect Shopify</h3>
       <p class="nc-card__body">Paste your *.myshopify.com domain and install BrandBox.</p>
-      <a class="btn-primary nc-card__btn" href="{% url 'dashboard:connect' %}?from=connect">Connect →</a>
+      <a class="btn-primary nc-card__btn" href="{% url 'dashboard:connect' %}?from=connect">
+        Connect
+        <span class="material-symbols-outlined" aria-hidden="true">link</span>
+      </a>
     </article>
 
     <article class="nc-card">
@@ -41,7 +50,10 @@
       </div>
       <h3 class="nc-card__title">Create Shopify Account</h3>
       <p class="nc-card__body">Create a Shopify account, then come back to connect.</p>
-      <a class="btn-secondary nc-card__btn" href="{% url 'dashboard:create_store' %}">Create account →</a>
+      <a class="btn-secondary nc-card__btn" href="{% url 'dashboard:create_store' %}">
+        Create account
+        <span class="material-symbols-outlined" aria-hidden="true">person_add</span>
+      </a>
     </article>
   </div>
 </section>
@@ -67,7 +79,7 @@
       <div class="ov-hero__actions">
         <a href="{% url 'dashboard:builder' %}" class="btn-primary">
           Build Another Store
-          <span aria-hidden="true">+</span>
+          <span class="material-symbols-outlined" aria-hidden="true">add</span>
         </a>
         {% if storefront_url %}
         <a
@@ -77,12 +89,12 @@
           rel="noopener noreferrer"
         >
           View Live Store
-          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+          <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
         </a>
         {% else %}
         <a class="btn-secondary" href="{% url 'dashboard:settings' %}">
           View Live Store
-          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+          <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
         </a>
         {% endif %}
       </div>
@@ -212,7 +224,7 @@
       <h3 class="ov-spotlight__title">AI Recommended Product Spotlight</h3>
       <a class="btn-text" href="{% url 'dashboard:product_hunter' %}?picks=1">
         View All
-        <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+        <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
       </a>
     </div>
     <div class="ov-spotlight__grid">

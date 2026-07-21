@@ -1,5 +1,5 @@
 /**
- * Summer offer countdown — HH:MM:SS only (no day label).
+ * Offer countdown — HH:MM:SS in the outlined time pill.
  * Set end via data-end="ISO-8601" on [data-brandbox-offer-countdown].
  */
 (function () {
@@ -18,13 +18,14 @@
   }
 
   function pad(n) {
-    return String(n).padStart(2,"0");
+    return String(n).padStart(2, "0");
   }
 
   function render() {
     var remaining = endAt - Date.now();
     if (remaining <= 0) {
-      root.textContent ="Summer Offer Ended";
+      root.classList.add("is-ended");
+      timeEl.textContent = "Offer ended";
       return false;
     }
 
@@ -33,7 +34,6 @@
     var mins = Math.floor((totalSec % 3600) / 60);
     var secs = totalSec % 60;
 
-    // HH:MM:SS only — days are included in total hours
     timeEl.textContent = pad(hours) + ":" + pad(mins) + ":" + pad(secs);
     return true;
   }

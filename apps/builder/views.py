@@ -24,6 +24,15 @@ from .services import (
 )
 
 
+def _job_for_request(request, job_id: int) -> BuildJob:
+    """Merchants: own jobs only. Staff/superuser: any job (dev QA)."""
+    from apps.dashboard.access import is_dev_admin
+
+    if is_dev_admin(request.user):
+        return get_object_or_404(BuildJob, pk=job_id)
+    return get_object_or_404(BuildJob, pk=job_id, user=request.user)
+
+
 def _require_ready_shop(user, shop_raw: str | None) -> tuple[ShopConnection | None, str | None]:
     from config.brandbox_client import check_app_installed, sync_connection_install_flag
 
@@ -107,7 +116,7 @@ def start_build(request):
 
 @login_required
 def building(request, job_id: int):
-    job = get_object_or_404(BuildJob, pk=job_id, user=request.user)
+    job = _job_for_request(request, job_id)
     advance_build_job(job)
     if job.status == BuildJob.Status.DONE:
         return redirect("builder:success", job_id=job.pk)
@@ -151,7 +160,7 @@ def building(request, job_id: int):
 @require_http_methods(["POST"])
 def retry_build(request, job_id: int):
     """Retry a failed build via Node /api/build/retry (new buildId). POST-only."""
-    job = get_object_or_404(BuildJob, pk=job_id, user=request.user)
+    job = _job_for_request(request, job_id)
     if job.status == BuildJob.Status.FAILED:
         retry_failed_step(job)
     return redirect("builder:building", job_id=job.pk)
@@ -160,7 +169,7 @@ def retry_build(request, job_id: int):
 @login_required
 @require_GET
 def job_status(request, job_id: int):
-    job = get_object_or_404(BuildJob, pk=job_id, user=request.user)
+    job = _job_for_request(request, job_id)
     payload = build_status_payload(job)
     if payload["done"]:
         payload["redirect"] = reverse("builder:success", kwargs={"job_id": job.pk})
@@ -171,14 +180,16 @@ def job_status(request, job_id: int):
 
 @login_required
 def success(request, job_id: int):
-    job = get_object_or_404(BuildJob, pk=job_id, user=request.user)
+    job = _job_for_request(request, job_id)
     advance_build_job(job)
     if job.status != BuildJob.Status.DONE:
         return redirect("builder:building", job_id=job.pk)
 
-    # Real connected shop only — skip staff preview domains
-    connection = ShopConnection.active_for_user(request.user)
-    store_url = connection.storefront_url if connection else ""
+    # Prefer the job's shop; fall back to viewer's active shop
+    store_url = f"https://{job.shop}" if job.shop else ""
+    if not store_url:
+        connection = ShopConnection.active_for_user(request.user)
+        store_url = connection.storefront_url if connection else ""
 
     if job.product_count > 0:
         lede = (

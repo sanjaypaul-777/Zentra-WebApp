@@ -13,7 +13,9 @@
 <section class="ms" data-my-stores>
   <header class="ms-head">
     <div class="ms-head__copy">
+      {% if has_stores %}
       <p class="ms-head__sub">Every Shopify store you've connected to BrandBox.</p>
+      {% endif %}
     </div>
     {% if has_stores %}
     <a class="btn-primary" href="{{ connect_url }}">+ Connect another store</a>
@@ -98,17 +100,22 @@
             href="{{ row.primary_url }}"
             target="_blank"
             rel="noopener noreferrer"
-          >{{ row.primary_label }}</a>
+          >
+            {{ row.primary_label }}
+            <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
+          </a>
           {% elif row.status == "failed" %}
           <form method="post" action="{{ row.primary_url }}">
             {% csrf_token %}
             <button type="submit" class="btn-secondary ms-row__cta">
               {{ row.primary_label }}
+              <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
             </button>
           </form>
           {% else %}
           <a class="btn-primary ms-row__cta" href="{{ row.primary_url }}">
             {{ row.primary_label }}
+            <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
           </a>
           {% endif %}
         {% endif %}

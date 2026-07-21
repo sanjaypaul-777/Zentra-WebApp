@@ -93,7 +93,7 @@ def derive_store_row(connection: ShopConnection, latest_job: BuildJob | None) ->
             connected_at=connected,
             progress_line="",
             primary_url=f"{reverse('dashboard:builder')}?shop={connection.shop}",
-            primary_label="Build AI store →",
+            primary_label="Build AI store",
             primary_external=False,
             detail_url=detail_url,
         )
@@ -125,7 +125,7 @@ def derive_store_row(connection: ShopConnection, latest_job: BuildJob | None) ->
             connected_at=connected,
             progress_line="",
             primary_url=connection.storefront_url,
-            primary_label="Open store →",
+            primary_label="Open store",
             primary_external=True,
             detail_url=detail_url,
         )
@@ -141,7 +141,7 @@ def derive_store_row(connection: ShopConnection, latest_job: BuildJob | None) ->
         connected_at=connected,
         progress_line="",
         primary_url=reverse("builder:retry", kwargs={"job_id": latest_job.pk}),
-        primary_label="Retry build →",
+        primary_label="Retry build",
         primary_external=False,
         detail_url=detail_url,
     )

@@ -42,6 +42,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.dashboard.middleware.OnboardingRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "config.middleware.ErrorReferenceMiddleware",
@@ -123,6 +124,10 @@ SHOPIFY_PARTNER_SIGNUP_URL = env(
 BRANDBOX_INTERNAL_API_SECRET = env("BRANDBOX_INTERNAL_API_SECRET", default="")
 # DEBUG-only: allow niche step without live API (local UI work)
 ALLOW_INSTALL_BYPASS = env.bool("ALLOW_INSTALL_BYPASS", default=False)
+# Localhost / failed IP lookup fallback (ISO2)
+GEO_FALLBACK_COUNTRY = env("GEO_FALLBACK_COUNTRY", default="US")
+# Google Places Autocomplete (browser key; restrict by HTTP referrer in Cloud Console)
+GOOGLE_PLACES_API_KEY = env("GOOGLE_PLACES_API_KEY", default="")
 
 # Site-wide maintenance (DB-independent middleware)
 MAINTENANCE_MODE = env.bool("MAINTENANCE_MODE", default=False)

@@ -60,7 +60,6 @@ def _require_connected(request):
 
     connection = ShopConnection.for_builder(request.user)
     if not connection:
-        messages.info(request, "Connect your Shopify store before building.")
         return None
     return connection
 
@@ -107,7 +106,7 @@ def wizard(request):
     ensure_niche_packs()
     connection = _require_connected(request)
     if connection is None:
-        return redirect("dashboard:home")
+        return redirect("dashboard:connect")
 
     shop = connection.shop
     plan = get_or_create_plan(request.user)

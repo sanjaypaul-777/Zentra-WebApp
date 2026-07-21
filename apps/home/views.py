@@ -1,17 +1,18 @@
 """
-Home — marketing landing, contact, newsletter (public).
+Home — marketing landing, contact, newsletter, legal pages (public).
 """
 
 from django.conf import settings
 from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import FormView, TemplateView
 
 from .forms import ContactForm, NewsletterForm
+from .models import LegalPage
 
 
 class HomeView(TemplateView):
@@ -90,3 +91,16 @@ class ContactView(FormView):
             reply_to=[message.email],
         )
         email.send(fail_silently=True)
+
+
+def legal_page(request, key: str):
+    """Public Privacy / Terms / Refund page (content from admin)."""
+    page = get_object_or_404(LegalPage, key=key)
+    return render(
+        request,
+        "home/legal.html",
+        {
+            "page": page,
+            "page_available": page.is_published and bool((page.body or "").strip()),
+        },
+    )

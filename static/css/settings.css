@@ -125,6 +125,13 @@
   font-weight: 700;
 }
 
+.st-card__hint {
+  margin: -4px 0 16px;
+  color: var(--st-muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
 .st-card__btn {
   height: 44px;
   font-size: 15px;
@@ -288,6 +295,13 @@
   font-family: var(--st-font-body);
   font-size: 13px;
   font-weight: 600;
+  color: var(--st-muted);
+}
+
+.st-field__hint {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.4;
   color: var(--st-muted);
 }
 

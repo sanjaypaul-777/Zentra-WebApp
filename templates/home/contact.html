@@ -9,15 +9,15 @@
 
 {% block body %}
 <main class="auth-page contact-page">
-  <div class="auth-glow auth-glow--primary" aria-hidden="true"></div>
-  <div class="auth-glow auth-glow--purple" aria-hidden="true"></div>
   <div class="auth-inner auth-inner--wide">
-    <a href="{% url 'home:index' %}" class="auth-logo" aria-label="BrandBox home">
-      <img src="{% static 'images/favicon.png' %}?v=5" alt="" width="48" height="48" />
-    </a>
-    <p class="eyebrow">Support</p>
+    <div class="auth-logo-wrap">
+      <div class="auth-glow" aria-hidden="true"></div>
+      <a href="{% url 'home:index' %}" class="auth-logo" aria-label="BrandBox home">
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="" width="48" height="48" />
+      </a>
+    </div>
     <h1>Contact us</h1>
-    <p class="subtitle">Questions about your store, billing, or getting started? Send a note — we read every message.</p>
+    <p class="subtitle">Whether you need clarity on billing, guidance for your store, or a hand getting started — our team is here.</p>
 
     {% if messages %}
       {% for message in messages %}
@@ -83,4 +83,8 @@
     </nav>
   </div>
 </main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/auth-glow.js' %}" defer></script>
 {% endblock %}

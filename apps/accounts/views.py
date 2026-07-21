@@ -5,14 +5,13 @@ Staff / superuser use /admin/ (Django admin).
 
 from django.contrib import messages
 from django.contrib.auth import login
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 
-from .forms import SignupForm
+from .forms import BrandBoxAuthenticationForm, SignupForm
 
 SOCIAL_PROVIDERS = {
     "google": "Google",
@@ -24,7 +23,7 @@ SOCIAL_PROVIDERS = {
 class BrandBoxLoginView(LoginView):
     template_name = "accounts/login.html"
     redirect_authenticated_user = True
-    authentication_form = AuthenticationForm
+    authentication_form = BrandBoxAuthenticationForm
 
 
 class BrandBoxLogoutView(LogoutView):

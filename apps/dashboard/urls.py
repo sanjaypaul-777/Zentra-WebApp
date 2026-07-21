@@ -23,6 +23,7 @@ urlpatterns = [
     path("stores/<int:pk>/", views.store_detail_page, name="store_detail"),
     path("stores/<int:pk>/disconnect/", views.store_disconnect, name="store_disconnect"),
     path("schedule/", views.schedule_page, name="schedule"),
+    path("schedule/book/", views.schedule_book, name="schedule_book"),
     path("training/", views.training_page, name="training"),
     path("settings/", views.settings_page, name="settings"),
     path("settings/profile/", views.settings_profile_page, name="settings_profile"),

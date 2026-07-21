@@ -4,27 +4,29 @@
 {% block title %}Sign in · BrandBox{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}" />
+<link rel="stylesheet" href="{% static 'css/password-toggle.css' %}" />
 {% endblock %}
 
 {% block body %}
 <main class="auth-page">
-  <div class="auth-glow auth-glow--primary" aria-hidden="true"></div>
-  <div class="auth-glow auth-glow--purple" aria-hidden="true"></div>
   <div class="auth-inner">
-    <a href="{% url 'home:index' %}" class="auth-logo" aria-label="BrandBox home">
-      <img src="{% static 'images/favicon.png' %}?v=5" alt="" width="48" height="48" />
-    </a>
+    <div class="auth-logo-wrap">
+      <div class="auth-glow" aria-hidden="true"></div>
+      <a href="{% url 'home:index' %}" class="auth-logo" aria-label="BrandBox home">
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="" width="48" height="48" />
+      </a>
+    </div>
     <h1>Welcome back</h1>
     <p class="subtitle">Sign in to build and manage your AI store.</p>
 
     <div class="auth-card">
-      {% include"accounts/_social_auth.html" %}
+      {% include "accounts/_social_auth.html" %}
       <form method="post" class="auth-form">
         {% csrf_token %}
         {% if form.non_field_errors %}
           <p class="error">{{ form.non_field_errors|striptags }}</p>
         {% endif %}
-        <label class="label" for="id_username">Email</label>
+        <label class="label" for="id_username">Email or username</label>
         {{ form.username }}
         <div class="label-row">
           <label class="label" for="id_password">Password</label>
@@ -44,10 +46,15 @@
     </p>
 
     <nav class="auth-legal" aria-label="Legal">
-      <span>Privacy Policy</span>
-      <span>Terms of Service</span>
-      <a href="mailto:help@brandbox.co">Support</a>
+      <a href="{% url 'home:privacy' %}">Privacy Policy</a>
+      <a href="{% url 'home:terms' %}">Terms of Service</a>
+      <a href="{% url 'home:refund' %}">Refund Policy</a>
     </nav>
   </div>
 </main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/auth-glow.js' %}" defer></script>
+<script src="{% static 'js/password-toggle.js' %}" defer></script>
 {% endblock %}

@@ -6,7 +6,7 @@ This is a **separate** app from the Shopify embedded app in `../BrandBoxApp` (No
 
 | Surface | Role | Typical URL |
 |---------|------|-------------|
-| **Marketing** (this repo) | Landing, login, signup, checkout | `brandbox.co` |
+| **Marketing** (this repo) | Landing, contact, legal, login, signup, checkout | `brandbox.co` |
 | **Dashboard** (this repo) | After login — connect → build → finder → imports | `app.brandbox.co` |
 | **Admin** (this repo) | Staff editor — vault, Product Hunter, users | `/admin/` |
 | **BrandBox** (sibling Node) | Shopify OAuth, Admin API, push, live store | Cloudflare tunnel / deploy |
@@ -29,16 +29,18 @@ They share **one Shopify Partner app**. In production they should share **one Po
 | Page | CSS file | Section root → tokens |
 |------|----------|----------------------|
 | Homepage | `static/css/home.css` | `.brandbox-home` → `--home-*`; `.brandbox-hero` → `--hero-*` |
-| Login / signup | `static/css/auth.css` | `.auth-page` → `--auth-*` |
+| Login / signup / legal shell | `static/css/auth.css` | `.auth-page` → `--auth-*` |
+| Legal (privacy / terms / refund) | `static/css/legal.css` | `.legal-page` → `--legal-*` |
 | Dashboard shell | `static/css/dashboard.css` | `.dash` → `--dash-*`; `.dash-sidebar` → `--sidebar-*` |
 | Overview / Connect | `static/css/dashboard.css` | `.ov` → `--ov-*`; `.nc` → `--nc-*`; `.flow-wrap` → `--flow-*` |
 | Product Hunter / Imports | `static/css/catalog.css` | `.catalog` → `--cat-*` |
 | My Stores | `static/css/stores.css` | `.ms` → `--ms-*` |
 | Settings | `static/css/settings.css` | `.st` → `--st-*` |
+| Onboarding | `static/css/onboarding.css` | `.ob` → `--ob-*` |
 | Builder | `static/css/builder.css` | `.ab` → `--ab-*`; `.build-page` → `--build-*` |
 | Checkout | `static/css/checkout.css` | `.checkout` → `--checkout-*` |
 | Contact | `static/css/contact.css` | `.contact-page` → `--contact-*` |
-| 404 / 500 / failed | `static/css/status.css` | `.status-page` → `--status-*` |
+| 404 / 500 / failed | `static/css/status.css` + `auth.css` | Auth shell (`.auth-page`); status content/buttons |
 
 Example: left panel background → `--sidebar-bg` on `.dash-sidebar` in `dashboard.css`. Shared `.brandbox-btn` keeps using bridged `--primary` from the nearest section.
 
@@ -47,30 +49,49 @@ Example: left panel background → `--sidebar-bg` on `.dash-sidebar` in `dashboa
 ```text
 PUBLIC
   /                         marketing landing
+  /contact/                 contact form
+  /privacy/                 privacy policy
+  /terms/                   terms of service
+  /refund/                  refund policy
+  /newsletter/              newsletter subscribe (POST)
   /checkout/                purchase (optional account)
   /login/ /signup/ /forgot/
+  /oauth/<provider>/        social auth start (google, …)
 
-AFTER LOGIN
+AFTER LOGIN (merchants)
+  /onboarding/              required once — 4-step store setup (gates dashboard)
+  /password/change/         change password
+  /logout/                  end session
   /dashboard/               Overview (stores built + live product count)
   /dashboard/connect/       paste *.myshopify.com → install guide
+  /dashboard/create-store/  create store guide
   /dashboard/install/       redirect to Node OAuth
   /dashboard/builder/       AI Store Builder niche wizard
+  /builder/start/           start build job
   /builder/building/<id>/   build progress
   /builder/success/<id>/    build success
   /dashboard/product-hunter/  Winning Product Vault browse + Import
   /dashboard/imports/         My Imports edit / remove / Push
   /dashboard/stores/          My Stores
+  /dashboard/stores/<id>/     store detail
+  /dashboard/schedule/        live clock + call booking calendar
+  /dashboard/training/        on-demand lessons
   /dashboard/settings/        account + prefs
+  /dashboard/settings/profile/  edit profile (same fields as onboarding)
+  /dashboard/upgrade/         upgrade / plans
 
 STATUS / ERRORS
   404 / 500 custom pages (handler404 / handler500 — BBX-500-… refs)
   Maintenance via MAINTENANCE_MODE + MAINTENANCE_ETA
-  DEBUG previews: /__debug__/404/ · /__debug__/500/ · /__debug__/maintenance/
+  DEBUG previews: /404/ · /500/ · /__debug__/404/ · /__debug__/500/ · /__debug__/maintenance/
+  (With DEBUG=True, unknown URLs show Django’s yellow page — not the custom template)
 
-STAFF / SUPERUSER
-  /admin/                   users, ShopConnection, NichePack, BuildJob
-  /admin/ … Product Hunter  ScrapeRun — hunt / sync / purge-dead / clean-prices
-  /admin/ … Winning Product Vault  CatalogProduct rows
+STAFF / SUPERUSER (development)
+  Bypass onboarding gate — open any /dashboard/* and /builder/* URL
+  /onboarding/?step=1…4     preview any step anytime
+  /builder/building/<id>/   open any build job (not only own)
+  /dashboard/imports/       preview shop allowed for staff QA
+  /admin/                   full CRUD on all models (profiles, shops, jobs, vault, …)
 ```
 
 > **Product Hunter** reads Django SQL (`CatalogProduct`). **My Imports** are shop drafts
@@ -78,6 +99,70 @@ STAFF / SUPERUSER
 >
 > **Errors:** never show raw exceptions to users. 500 pages show a `BBX-500-…`
 > reference logged with the real traceback for support.
+>
+> **Superadmin / staff (dev):** `is_staff` or `is_superuser` can view and walk **any**
+> product URL and wizard step without merchant gates. Create with
+> `python manage.py createsuperuser`. Prefer `/admin/` to edit other users’ data.
+
+## URL flow (step · status · error)
+
+Merchant journey URLs — use this as the product flow checklist.
+
+| URL | Step | Status (happy path) | Error / blocked |
+|-----|------|---------------------|-----------------|
+| `/` | Marketing | Landing loads | — |
+| `/contact/` | Contact | Message sent + flash | Validation |
+| `/privacy/` | Legal | Privacy policy | Unavailable copy |
+| `/terms/` | Legal | Terms of service | Unavailable copy |
+| `/refund/` | Legal | Refund policy | Unavailable copy |
+| `/newsletter/` | Marketing | Subscribe (POST) | Invalid email |
+| `/checkout/` | Purchase | Checkout form | Validation / payment |
+| `/signup/` | Auth | Account created → session | Validation / email taken |
+| `/login/` | Auth | Session → `/dashboard/` | Bad credentials |
+| `/forgot/` | Auth | Reset email sent | Unknown email (soft) |
+| `/logout/` | Auth | Session cleared → `/` | — |
+| `/oauth/<provider>/` | Social auth | Redirect to provider | Unknown provider |
+| `/password/change/` | Auth | Password updated | Validation / login required |
+| `/onboarding/` | Onboarding 1–4 | Profile fields saved each step | Form validation; incomplete merchants cannot enter dashboard |
+| `/onboarding/?step=2` | Onboarding step 2 | Business / niche / revenue | Cannot skip past saved `onboarding_step` (merchants) |
+| `/onboarding/?step=3` | Onboarding step 3 | Goals / experience / success | Same |
+| `/onboarding/?step=4` | Onboarding step 4 | Resources → `onboarding_completed=True` → `/dashboard/` | Challenges required; then enter dashboard |
+| `/dashboard/` | Overview | Stats + coach | Redirect `/onboarding/` if not completed (non-staff) |
+| `/dashboard/connect/` | Connect | Pending `ShopConnection` | Invalid domain / owned by other user |
+| `/dashboard/create-store/` | Create store | Guide to open Shopify | — |
+| `/dashboard/install/` | OAuth handoff | Redirect to Node | Missing shop / Node URL |
+| `/dashboard/connect/error/` | OAuth fail | Retry message | Cancel / OAuth error |
+| `/dashboard/builder/` | Builder wizard | Niche selected | No connected shop (customers) |
+| `/builder/start/` | Start build | Creates job → building | No shop / validation |
+| `/builder/building/<id>/` | Build running | Progress poll | Failed → retry / support |
+| `/builder/building/<id>/status/` | Build poll | JSON progress | Not found / forbidden |
+| `/builder/building/<id>/retry/` | Build retry | Restarts failed job | Not failed / forbidden |
+| `/builder/success/<id>/` | Build done | Store ready links | — |
+| `/builder/status/` | Builder API | JSON status | Login required |
+| `/dashboard/product-hunter/` | Vault browse | Product cards | Empty vault / filters |
+| `/dashboard/imports/` | My Imports | Drafts + push | No shop / Node publish error |
+| `/dashboard/stores/` | My Stores | Rows + retry / open | Disconnect confirm |
+| `/dashboard/stores/<id>/` | Store detail | Single store | Not found / forbidden |
+| `/dashboard/stores/<id>/disconnect/` | Disconnect | Shop removed | Confirm / forbidden |
+| `/dashboard/schedule/` | Schedule | Live clock + book call | Slot taken / no open slots |
+| `/dashboard/schedule/book/` | Book call | Slot reserved | Validation / taken |
+| `/dashboard/training/` | Training | Lessons list | — |
+| `/dashboard/settings/` | Settings | Account + prefs | — |
+| `/dashboard/settings/profile/` | Edit profile | Same `MerchantProfile` fields | Validation / email taken |
+| `/dashboard/upgrade/` | Upgrade | Plans / CTA | — |
+| `/api/address-suggest/?q=` | Address autocomplete | JSON suggestions | Login required |
+| `/api/address-details/` | Place details | JSON address parts | Login required |
+| `/api/geo/countries/?q=` | Country searchable dropdown | Worldwide country list | Login required |
+| `/api/geo/states/?country_code=` | State/province dropdown | Subdivisions for selected country | Login required |
+| `/api/geo/cities/` | City suggestions | City list for state | Login required |
+| `/api/geo/timezone/` | Timezone resolve | Suggested timezone | Login required |
+| `/api/geo/phone-meta/` | Phone dial meta | Dial code + example | Login required |
+| `/admin/` | Staff admin | Full CRUD on all models | Not staff → login / 403 |
+| `/404/` | Status preview (DEBUG) | Custom 404 template | Only when `DEBUG=True` |
+| `/500/` | Status preview (DEBUG) | Custom 500 template | Only when `DEBUG=True` |
+| `404` / `500` | Status (production) | Custom pages via handlers | `DEBUG=False`; `BBX-500-…` ref (500) |
+
+**Onboarding gate:** any `/dashboard/*` or `/builder/*` request for a logged-in merchant with `MerchantProfile.onboarding_completed=False` redirects to `/onboarding/`. **Staff and superusers are not gated** — they can open any URL or wizard step for development/QA.
 
 ## Project tree
 
@@ -491,14 +576,17 @@ Base URL = `SHOPIFY_APP_URL` (update when Cloudflare tunnel changes).
 
 | Step | Success | Failure |
 |------|---------|---------|
-| Signup/Login | Session + `/dashboard/` | Form errors |
+| Signup/Login | Session + `/dashboard/` (or `/onboarding/` if incomplete) | Form errors |
+| Onboarding | Each step saved; step 4 → `onboarding_completed` + dashboard | Field validation; dashboard gated until done |
 | Connect | Pending `ShopConnection` | Invalid domain / owned by other user |
 | OAuth / install | `app_installed=True` | Connect error page; tunnel/secret wrong |
 | Builder | `BuildJob` done + success page | Failed page + retry |
 | Finder browse | Vault cards | Empty / connect banner for Import |
 | Import | `ShopImport` created | Not in vault / no shop |
 | Push | `in_store` + Shopify product | Toast: Node/tunnel/publish error |
+| Schedule book | `ScheduledCall` + next-call card | Slot taken / already booked |
 | Server error | `BBX-500-…` page | Traceback only in logs |
+| Superadmin | `/admin/` edit any profile / shop / job | Must be `is_superuser` / staff |
 
 ## Local setup
 
@@ -528,7 +616,13 @@ SHOPIFY_APP_URL=https://YOUR-TUNNEL.trycloudflare.com
 BRANDBOX_INTERNAL_API_SECRET=brandbox-dev-shared-secret
 CATALOG_SPREADSHEET_ID=...
 CATALOG_SHEET_TAB=Meta Ads Products
+GOOGLE_PLACES_API_KEY=your-browser-restricted-places-key
+GEO_FALLBACK_COUNTRY=US
 ```
+
+`GOOGLE_PLACES_API_KEY` powers Step 1 / Settings address autocomplete (Places API). Restrict the key by HTTP referrer in Google Cloud Console. Without it, Nominatim/Photon suggestions are used as a fallback.
+
+Country pre-select uses IP geolocation (server + browser). On localhost the server cannot see your public IP, so the page refines Country in the browser via ipapi.co / ipinfo.io (and timezone as a last resort). Set `GEO_FALLBACK_COUNTRY=IN` (ISO2) if you want a different local default before that runs.
 
 Refresh `SHOPIFY_APP_URL` whenever `../BrandBoxApp` → `npm run dev` prints a new Cloudflare URL.
 

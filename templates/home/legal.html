@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page.title }} · BrandBox{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/legal.css' %}" />
+{% endblock %}
+
+{% block body %}
+<main class="legal-page">
+  <div class="legal-shell">
+    <header class="legal-header">
+      <a href="{% url 'home:index' %}" class="legal-logo" aria-label="BrandBox home">
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="BrandBox" width="40" height="40" />
+      </a>
+    </header>
+
+    <h1 class="legal-title">{{ page.title }}</h1>
+    {% if page_available %}
+    <p class="legal-updated">Updated {{ page.updated_at|date:"F j, Y" }}</p>
+    <article class="legal-card legal-prose">
+      {{ page.body|safe }}
+    </article>
+    {% else %}
+    <p class="legal-updated">This policy is being updated. Please check back soon.</p>
+    {% endif %}
+
+    {% include "accounts/_auth_legal_nav.html" %}
+  </div>
+</main>
+{% endblock %}

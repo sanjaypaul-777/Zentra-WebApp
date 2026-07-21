@@ -8,41 +8,68 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@600;700;800&family=Sora:wght@600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}" />
     <link rel="stylesheet" href="{% static 'css/status.css' %}" />
     <link rel="icon" href="{% static 'images/favicon.png' %}?v=5" type="image/png" />
   </head>
   <body>
-    <main class="status-page">
-      <div class="status-glow status-glow--primary" aria-hidden="true"></div>
-      <div class="status-glow status-glow--purple" aria-hidden="true"></div>
-      <div class="status-inner">
-        <a href="/" class="status-logo" aria-label="BrandBox">
+    <main class="auth-page auth-page--no-glow">
+      <div class="auth-inner">
+        <a href="{% url 'home:index' %}" class="auth-logo status-404-logo" aria-label="BrandBox home">
           <img src="{% static 'images/favicon.png' %}?v=5" alt="" width="48" height="48" />
         </a>
-        <div class="status-card">
-          <p class="status-code" aria-hidden="true">404</p>
-          <div class="status-icon" aria-hidden="true">
-            <span class="material-symbols-outlined">explore</span>
-          </div>
-          <h1>This page took a wrong turn</h1>
-          <p class="status-body">
-            We couldn't find what you're looking for. It may have been moved,
-            or the link might be outdated.
-          </p>
+
+        <h1>This page took a wrong turn</h1>
+        <p class="subtitle">
+          We couldn&apos;t find what you&apos;re looking for. It may have been moved,
+          or the link might be outdated.
+        </p>
+
+        <div class="status-404-anim" aria-hidden="true">
+          <svg class="status-404-compass" viewBox="0 0 120 120" width="120" height="120">
+            <circle class="status-404-compass__ring" cx="60" cy="60" r="46" fill="none" />
+            <circle class="status-404-compass__ring-soft" cx="60" cy="60" r="38" fill="none" />
+            <g class="status-404-compass__ticks">
+              <line x1="60" y1="16" x2="60" y2="22" />
+              <line x1="60" y1="98" x2="60" y2="104" />
+              <line x1="16" y1="60" x2="22" y2="60" />
+              <line x1="98" y1="60" x2="104" y2="60" />
+            </g>
+            <g class="status-404-compass__needle" id="status-404-needle">
+              <polygon class="status-404-compass__north" points="60,22 55,60 65,60" />
+              <polygon class="status-404-compass__south" points="60,98 55,60 65,60" />
+              <circle class="status-404-compass__pivot" cx="60" cy="60" r="3.5" />
+            </g>
+          </svg>
+        </div>
+
+        <div class="auth-card status-card">
           <div class="status-actions">
-            <a class="btn-primary" href="/dashboard/">
-              Back to Dashboard →
+            <a
+              class="btn-primary"
+              id="status-404-target"
+              href="{% url 'dashboard:home' %}"
+            >
+              Back to Dashboard
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
             </a>
-            <a class="btn-secondary" href="mailto:help@brandbox.co">
+            <a class="btn-secondary" href="{% url 'home:contact' %}">
               Contact support
             </a>
           </div>
         </div>
+
+        <nav class="auth-legal" aria-label="Legal">
+          <a href="{% url 'home:privacy' %}">Privacy Policy</a>
+          <a href="{% url 'home:terms' %}">Terms of Service</a>
+          <a href="{% url 'home:refund' %}">Refund Policy</a>
+        </nav>
       </div>
     </main>
+    <script src="{% static 'js/status-404.js' %}" defer></script>
   </body>
 </html>
