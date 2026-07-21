@@ -29,9 +29,10 @@ class NewsletterSubscriber(models.Model):
 
 
 class LegalPage(models.Model):
-    """Privacy / Terms / Refund — editable in Django admin."""
+    """About / Privacy / Terms / Refund — editable in Django admin."""
 
     class PageKey(models.TextChoices):
+        ABOUT = "about", "About Us"
         PRIVACY = "privacy", "Privacy Policy"
         TERMS = "terms", "Terms of Service"
         REFUND = "refund", "Refund Policy"

@@ -94,7 +94,7 @@ class ContactView(FormView):
 
 
 def legal_page(request, key: str):
-    """Public Privacy / Terms / Refund page (content from admin)."""
+    """Public About / Privacy / Terms / Refund page (content from admin)."""
     page = get_object_or_404(LegalPage, key=key)
     return render(
         request,

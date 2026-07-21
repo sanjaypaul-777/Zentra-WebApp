@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block" rel="stylesheet"/>
 <link rel="stylesheet" href="{% static 'css/base.css' %}"/>
-<link rel="stylesheet" href="{% static 'css/home.css' %}?v=muted-2"/>
+<link rel="stylesheet" href="{% static 'css/home.css' %}?v=launch-panel-1"/>
 <link rel="icon" href="{% static 'images/favicon.png' %}?v=5" type="image/png" />
 <link rel="apple-touch-icon" href="{% static 'images/favicon.png' %}?v=5" />
 <script>
@@ -153,7 +153,7 @@
         <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
         E-commerce made simple
       </span>
-      <h2 class="brandbox-how__title">From niche idea to Shopify store — without starting from scratch.</h2>
+      <h2 class="brandbox-how__title">Turn your niche into a Shopify store built to sell.</h2>
       <p class="brandbox-how__lede">
         Pick a niche, get an AI-built Shopify store with a theme and catalog, then import AI-chosen products from the vault — and chat with a coach when you need a hand.
       </p>
@@ -226,57 +226,59 @@
   </div>
 </section>
 <!-- Chat with Coach -->
-<section id="brandbox-features" class="brandbox-agent bg-surface-container-low/30">
-<div class="max-w-container-max mx-auto px-gutter">
-<div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-<div>
-<span class="text-on-surface font-label-caps tracking-widest uppercase mb-4 block">Coach chat</span>
-<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-6 leading-tight">Stuck? Chat with a coach — or AI when they’re offline</h2>
-<p class="font-body-lg text-body-lg text-on-surface-variant mb-8">
-  Ask about niches, store setup, product imports, or your next step. Coaches help when available; otherwise BrandBox AI replies so you keep moving.
+<section id="brandbox-features" class="brandbox-agent">
+<div class="brandbox-agent__inner max-w-container-max mx-auto">
+<div class="brandbox-agent__grid">
+<div class="brandbox-agent__copy">
+<span class="brandbox-agent__eyebrow">
+  <span class="material-symbols-outlined" aria-hidden="true">volunteer_activism</span>
+  You're not alone
+</span>
+<h2 class="brandbox-agent__title">Someone is always beside you — so you never fail midway.</h2>
+<p class="brandbox-agent__lede">
+  Building a store is hard enough without going solo. Your BrandBox coach mentors you whenever they're online — and when they're offline, our trained AI helps you set up, import products, and grow without losing momentum.
 </p>
-<div class="space-y-4 mb-10">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="text-on-surface">"Which niche fits a small budget?"</span>
+<ul class="brandbox-agent__points">
+<li class="brandbox-agent__point">
+<span class="material-symbols-outlined brandbox-agent__point-icon" aria-hidden="true">check_circle</span>
+<span>Stuck halfway through setup? Pick up exactly where you left off.</span>
+</li>
+<li class="brandbox-agent__point">
+<span class="material-symbols-outlined brandbox-agent__point-icon" aria-hidden="true">check_circle</span>
+<span>Not sure what to do next? Coach or AI guides your next move.</span>
+</li>
+<li class="brandbox-agent__point">
+<span class="material-symbols-outlined brandbox-agent__point-icon" aria-hidden="true">check_circle</span>
+<span>Building at midnight? You're still covered — never left on your own.</span>
+</li>
+</ul>
+<a href="{% url 'accounts:signup' %}" class="btn-primary brandbox-agent__cta">Start with your coach</a>
 </div>
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="text-on-surface">"How do I connect my Shopify store?"</span>
-</div>
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="text-on-surface">"Help me pick products from the vault."</span>
-</div>
-</div>
-<a href="{% url 'accounts:signup' %}" class="btn-primary">Start chatting</a>
-</div>
-<div class="relative">
-<div class="absolute inset-0 brandbox-glow-primary scale-75 blur-3xl opacity-20"></div>
-<div class="brandbox-glass rounded-2xl p-6 relative border border-[color:var(--hairline)] shadow-2xl">
-<div class="flex items-center gap-4 mb-6 pb-4 border-b border-[color:var(--hairline)]">
-<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
-<span class="material-symbols-outlined">support_agent</span>
+<div class="brandbox-agent__panel-wrap">
+<div class="brandbox-agent__panel">
+<div class="brandbox-agent__panel-head">
+<div class="brandbox-agent__avatar">
+<span class="material-symbols-outlined" aria-hidden="true">support_agent</span>
 </div>
 <div>
-<p class="font-bold text-on-surface">BrandBox Coach</p>
-<p class="text-xs text-primary">AI assistant online · Coach joins when available</p>
+<p class="brandbox-agent__panel-name">BrandBox Coach</p>
+<p class="brandbox-agent__panel-status">Coach mentoring · AI ready when offline</p>
 </div>
 </div>
-<div class="space-y-4 h-[300px] overflow-y-auto pr-2 brandbox-agent__scroll">
-<div class="bg-[color:var(--surface-container-high)] p-4 rounded-xl rounded-tl-none max-w-[85%]">
-<p class="text-sm text-on-surface-variant">Hi! I’m BrandBox AI. A coach will join if one is free — meanwhile I can help with setup. What do you need?</p>
+<div class="brandbox-agent__scroll">
+<div class="brandbox-agent__bubble brandbox-agent__bubble--in">
+<p>Hi — you're not on this alone. I'm here now, and BrandBox AI has your back when coaches are offline. What are you working on?</p>
 </div>
-<div class="bg-primary/10 p-4 rounded-xl rounded-tr-none max-w-[85%] ml-auto">
-<p class="text-sm text-on-surface">I just connected Shopify. What should I do next?</p>
+<div class="brandbox-agent__bubble brandbox-agent__bubble--out">
+<p>I connected Shopify but I'm stuck midway. What should I do next?</p>
 </div>
-<div class="bg-[color:var(--surface-container-high)] p-4 rounded-xl rounded-tl-none max-w-[85%]">
-<p class="text-sm text-on-surface-variant">Great. Open the AI Store Builder, pick a niche, then review products in the vault and import what fits your brand.</p>
+<div class="brandbox-agent__bubble brandbox-agent__bubble--in">
+<p>Perfect — open AI Store Builder, pick your niche, then import from the vault. I'll walk you through each step so you don't stall.</p>
 </div>
 </div>
-<div class="mt-6 flex gap-2">
-<input class="bg-deep-obsidian border border-outline-variant rounded-full px-6 py-3 w-full text-sm focus:border-primary outline-none transition-colors" placeholder="Ask your coach or AI…" type="text" readonly tabindex="-1"/>
-<button type="button" class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-black" tabindex="-1" aria-hidden="true">
+<div class="brandbox-agent__composer">
+<input class="brandbox-agent__input" placeholder="Ask your coach or AI…" type="text" readonly tabindex="-1"/>
+<button type="button" class="brandbox-agent__send" tabindex="-1" aria-hidden="true">
 <span class="material-symbols-outlined">send</span>
 </button>
 </div>
@@ -287,101 +289,114 @@
 </section>
 <!-- Summer offer → checkout -->
 <section id="brandbox-offer" class="brandbox-offer">
-  <div class="brandbox-offer__inner max-w-container-max mx-auto px-gutter">
+  <div class="brandbox-offer__inner">
     <div class="brandbox-offer__grid">
-      <div class="brandbox-offer__price-col">
+      <article class="brandbox-offer__card">
+        <span class="brandbox-offer__kicker">Limited-time offer</span>
         <h2 class="brandbox-offer__plan">Plus Plan</h2>
-        <p class="brandbox-offer__plan-lede">Everything you need to launch your first Shopify store — builder, vault, and coach chat — in one place.</p>
         <div class="brandbox-offer__price">
           <span class="brandbox-offer__price-was">$549</span>
-          <span class="brandbox-offer__price-now">$192<span>/year</span></span>
+          <span class="brandbox-offer__price-now">$192<span class="brandbox-offer__price-period">/ year*</span></span>
         </div>
-        <ul class="brandbox-offer__bonuses">
-          <li>AI Store Builder for niche-based Shopify setup</li>
-          <li>Product Vault with AI-chosen products to import</li>
+        <p class="brandbox-offer__includes-heading">What’s included:</p>
+        <ul class="brandbox-offer__features">
           <li>
-            Coach chat when you get stuck
-            <span class="brandbox-offer__badge">Exclusive Access</span>
+            <span class="brandbox-offer__check" aria-hidden="true">✓</span>
+            <span>AI Store Builder for your niche</span>
+          </li>
+          <li>
+            <span class="brandbox-offer__check" aria-hidden="true">✓</span>
+            <span>Product Vault imports</span>
+          </li>
+          <li>
+            <span class="brandbox-offer__check" aria-hidden="true">✓</span>
+            <span>Coach chat when you’re stuck</span>
+            <span class="brandbox-offer__chip">
+              <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+              Exclusive
+            </span>
+          </li>
+          <li>
+            <span class="brandbox-offer__check" aria-hidden="true">✓</span>
+            <span>Shopify connect &amp; push</span>
+          </li>
+          <li>
+            <span class="brandbox-offer__check" aria-hidden="true">✓</span>
+            <span>AI replies when coaches are offline</span>
           </li>
         </ul>
-      </div>
+        <p class="brandbox-offer__more">+ Dashboard, vault, and store sync</p>
+        <p class="brandbox-offer__notes">
+          *65% off Plus annual for year one. Renews at the standard rate unless canceled. Offer may change.
+        </p>
+      </article>
       <div class="brandbox-offer__value-col">
         <div class="brandbox-offer__visual" aria-hidden="true">
+          <span class="brandbox-offer__visual-glow"></span>
           <img
-            class="brandbox-offer__visual-main"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOHdkSIfjutpDa6kLqqGdQ49y4fK3ZoFogK6NKJnznZnT3OntbaG9y0gNdP25_Se-3UwqBo8UKnGicgJVv5G6oHylawRrb0b3jWin6zuXJL0iZErC27LnxUCAMpE9DvOwYMNmTV4wGDLqjVAAAA0D1jH6dHd58TGVw77HYt48E1Wh6XYG014xZem-3qQZPDANuDWcBdkMl0Ku6eUMTn22INgpk_qIbZulg6IhpPzgw73ThW49JVs810A2vvXtWycMZrI9ahuGHhbjl"
+            class="brandbox-offer__visual-phone"
+            src="{% static 'images/mockup-phone.png' %}?v=2"
             alt=""
+            width="640"
+            height="350"
             loading="lazy"
             decoding="async"
           />
-          <img
-            class="brandbox-offer__visual-avatar"
-            src="https://i.pravatar.cc/96?img=32"
-            alt=""
-            width="56"
-            height="56"
-            loading="lazy"
-          />
         </div>
-        <p class="brandbox-offer__includes-label">Includes on Plus:</p>
-        <ul class="brandbox-offer__includes">
-          <li><span class="material-symbols-outlined" aria-hidden="true">check</span> AI Store Builder</li>
-          <li><span class="material-symbols-outlined" aria-hidden="true">check</span> Product Vault imports</li>
-          <li><span class="material-symbols-outlined" aria-hidden="true">check</span> Shopify connect &amp; push</li>
-          <li><span class="material-symbols-outlined" aria-hidden="true">check</span> Coach chat + AI fallback</li>
-          <li><span class="material-symbols-outlined" aria-hidden="true">check</span> 65% off first-year annual</li>
-        </ul>
-        <a href="{% url 'checkout:index' %}" class="brandbox-offer__cta">Lock in 65% off</a>
-        <a href="#brandbox-products" class="brandbox-offer__decline">Keep browsing BrandBox</a>
+        <blockquote class="brandbox-offer__quote">
+          <p>Build your store, import scored products, and push to Shopify — with a coach beside you when you get stuck.</p>
+        </blockquote>
+        <p class="brandbox-offer__trust">Cancel anytime · Secure checkout</p>
+        <a href="{% url 'checkout:index' %}" class="btn-primary brandbox-offer__cta">Lock in 65% off</a>
       </div>
     </div>
   </div>
 </section>
 <!-- Comparison -->
 <section class="brandbox-compare">
-<div class="max-w-container-max mx-auto px-gutter">
-<h2 class="font-headline-lg text-center mb-16">The BrandBox Difference</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-<div class="brandbox-glass p-10 rounded-3xl border-[color:var(--hairline)]">
-<p class="text-label-caps font-label-caps text-on-surface-variant mb-6 uppercase">Doing it alone</p>
-<ul class="space-y-6">
-<li class="flex items-start gap-4 opacity-50">
-<span class="material-symbols-outlined text-error">cancel</span>
-<span class="text-on-surface-variant">Weeks spent designing a store from scratch</span>
+<div class="brandbox-compare__inner max-w-container-max mx-auto">
+<h2 class="brandbox-compare__title">The BrandBox Difference</h2>
+<div class="brandbox-compare__grid">
+<div class="brandbox-compare__card brandbox-compare__card--alone">
+<p class="brandbox-compare__label brandbox-compare__label--muted">Doing it alone</p>
+<ul class="brandbox-compare__list">
+<li class="brandbox-compare__item brandbox-compare__item--muted">
+<span class="material-symbols-outlined brandbox-compare__icon brandbox-compare__icon--no" aria-hidden="true">cancel</span>
+<span>Weeks spent designing a store from scratch</span>
 </li>
-<li class="flex items-start gap-4 opacity-50">
-<span class="material-symbols-outlined text-error">cancel</span>
-<span class="text-on-surface-variant">Guessing which products to list</span>
+<li class="brandbox-compare__item brandbox-compare__item--muted">
+<span class="material-symbols-outlined brandbox-compare__icon brandbox-compare__icon--no" aria-hidden="true">cancel</span>
+<span>Guessing which products to list</span>
 </li>
-<li class="flex items-start gap-4 opacity-50">
-<span class="material-symbols-outlined text-error">cancel</span>
-<span class="text-on-surface-variant">Jumping between tabs for research and setup</span>
+<li class="brandbox-compare__item brandbox-compare__item--muted">
+<span class="material-symbols-outlined brandbox-compare__icon brandbox-compare__icon--no" aria-hidden="true">cancel</span>
+<span>Jumping between tabs for research and setup</span>
 </li>
-<li class="flex items-start gap-4 opacity-50">
-<span class="material-symbols-outlined text-error">cancel</span>
-<span class="text-on-surface-variant">No guided help when you get stuck</span>
+<li class="brandbox-compare__item brandbox-compare__item--muted">
+<span class="material-symbols-outlined brandbox-compare__icon brandbox-compare__icon--no" aria-hidden="true">cancel</span>
+<span>No guided help when you get stuck</span>
 </li>
 </ul>
 </div>
-<div class="brandbox-glass p-10 rounded-3xl border-primary/20 relative">
-<div class="absolute -top-4 right-8 bg-primary text-on-primary px-4 py-1 rounded-full text-xs font-bold uppercase shadow-lg">Recommended</div>
-<p class="text-label-caps font-label-caps text-primary mb-6 uppercase">With BrandBox</p>
-<ul class="space-y-6">
-<li class="flex items-start gap-4">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="text-on-surface">AI Store Builder sets up your Shopify store by niche</span>
+<div class="brandbox-compare__card brandbox-compare__card--brandbox">
+<div class="brandbox-compare__badge">Recommended</div>
+<p class="brandbox-compare__label">With BrandBox</p>
+<ul class="brandbox-compare__list">
+<li class="brandbox-compare__item">
+<span class="material-symbols-outlined brandbox-compare__icon brandbox-compare__icon--yes" aria-hidden="true">check_circle</span>
+<span>AI Store Builder sets up your Shopify store by niche</span>
 </li>
-<li class="flex items-start gap-4">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="text-on-surface">AI-chosen products ready to import from the vault</span>
+<li class="brandbox-compare__item">
+<span class="material-symbols-outlined brandbox-compare__icon brandbox-compare__icon--yes" aria-hidden="true">check_circle</span>
+<span>AI-chosen products ready to import from the vault</span>
 </li>
-<li class="flex items-start gap-4">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="text-on-surface">Builder, vault, and Shopify push in one dashboard</span>
+<li class="brandbox-compare__item">
+<span class="material-symbols-outlined brandbox-compare__icon brandbox-compare__icon--yes" aria-hidden="true">check_circle</span>
+<span>Builder, vault, and Shopify push in one dashboard</span>
 </li>
-<li class="flex items-start gap-4">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="text-on-surface">Coach chat — with AI replies when coaches are offline</span>
+<li class="brandbox-compare__item">
+<span class="material-symbols-outlined brandbox-compare__icon brandbox-compare__icon--yes" aria-hidden="true">check_circle</span>
+<span>Coach chat — with AI replies when coaches are offline</span>
 </li>
 </ul>
 </div>
@@ -389,56 +404,79 @@
 </div>
 </section>
 <!-- Product spotlight -->
-<section id="brandbox-products" class="brandbox-products relative">
-<div class="max-w-container-max mx-auto px-gutter relative z-10">
-<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-<div class="max-w-xl">
-<span class="text-accent-pink font-label-caps tracking-widest uppercase mb-4 block">Product vault</span>
-<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg">AI-chosen products ready to import</h2>
+<section id="brandbox-products" class="brandbox-products">
+<div class="brandbox-products__inner max-w-container-max mx-auto">
+<div class="brandbox-products__header">
+<div class="brandbox-products__intro">
+<span class="brandbox-products__eyebrow">Product vault</span>
+<h2 class="brandbox-products__title">AI-chosen products vault</h2>
+<p class="brandbox-products__slogan">Ready to Import</p>
 </div>
-<a href="{% url 'accounts:signup' %}" class="border-b border-primary text-primary font-bold hover:opacity-80 transition-opacity pb-1">Explore the vault</a>
+<a href="{% url 'accounts:signup' %}" class="btn-secondary brandbox-products__cta">Explore</a>
 </div>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-<article class="group relative aspect-square rounded-2xl overflow-hidden brandbox-glass">
-<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNBfvgFY9nNMPOD1zScY-QS7yYF5QJ06Ih0rmzuJQyBij_C9QIrvYRHFQFowF7Id1Z8L0X0vBUkrdYFc8meCyjB5Af7BGphH1_qgV86a9yEbdM5k9Z0hoOkOopkCBl2cVDCVoOs0K4aM9vWvNPE43MHyp703xS8TrQXlYox5XqZ_tGxDfjDLwRqY9SKVI_FRWYKaptxAX1H2f_JNdBOuaONQtayCuh2blrsAYXGDcKkK_OCgtZ18vB3HtekqC9VocZhS2oChx-AVk3"/>
-<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
-<div class="absolute bottom-4 left-4 right-4">
-<p class="font-bold text-on-surface">Minimal Smart Watch</p>
-<p class="text-xs text-primary">Tech · Vault pick</p>
+<div class="brandbox-products__grid">
+<article class="brandbox-products__card">
+<div class="brandbox-products__media">
+<img class="brandbox-products__img" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNBfvgFY9nNMPOD1zScY-QS7yYF5QJ06Ih0rmzuJQyBij_C9QIrvYRHFQFowF7Id1Z8L0X0vBUkrdYFc8meCyjB5Af7BGphH1_qgV86a9yEbdM5k9Z0hoOkOopkCBl2cVDCVoOs0K4aM9vWvNPE43MHyp703xS8TrQXlYox5XqZ_tGxDfjDLwRqY9SKVI_FRWYKaptxAX1H2f_JNdBOuaONQtayCuh2blrsAYXGDcKkK_OCgtZ18vB3HtekqC9VocZhS2oChx-AVk3" loading="lazy" decoding="async"/>
 </div>
-</article>
-<article class="group relative aspect-square rounded-2xl overflow-hidden brandbox-glass">
-<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWj4WP3Gl1fA7dFGuki7nVfo3Sg9HJNcXFsEjecnQY0Gv3M7MugeQIP8Tlw_cBtLadozf0T_mIv7alIQtoxu7EkG1hjvD9OaPwY1eAwIQ4R_Odhi1-jmfeIck073MiBYlWwL83BlzSE0U7n6raS3wcZQMBhlo5RcS6BiwEYksmXCgLyU3x9SCzYdI4czeE_KCeMSrFLSBM3e_xDUfJq3Q2ZpymxtR1ew77pcANVdHw9fUdFxy_bD8iIHzEgqjZtNR17s9YTgXeFZrU"/>
-<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
-<div class="absolute bottom-4 left-4 right-4">
-<p class="font-bold text-on-surface">Glow Serum Duo</p>
-<p class="text-xs text-primary">Beauty · Vault pick</p>
+<div class="brandbox-products__meta">
+<p class="brandbox-products__name">Minimal Smart Watch</p>
+<p class="brandbox-products__tag">Tech · Vault pick</p>
 </div>
 </article>
-<article class="group relative aspect-square rounded-2xl overflow-hidden brandbox-glass">
-<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBpnmZmG2cXibZMfVZMtyahmdk27f-CaZYyNqiVJPvMDf0at5LEQ5_V81odh-TAkJNCCokcIiHsi7-XAdBnUHGG0K__oG5Otyimv7tN5WR7ZWRS4S7x_oNqwvKgedK-ebWcsn2GbxrH60Xxkl9w8WlsMNMiWOToxJPYb5a3tSQAi4rDA2qRA6_a5sf3X5GoiDbRlVDfVrscvg2lb46ev1kic7X9J8gwogyrNaJRHAZ5JmNFyNzQXAM5q2LS00RE1o7VnU4SA_z_dsf"/>
-<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
-<div class="absolute bottom-4 left-4 right-4">
-<p class="font-bold text-on-surface">Pro Blender Kit</p>
-<p class="text-xs text-primary">Kitchen · Vault pick</p>
+<article class="brandbox-products__card">
+<div class="brandbox-products__media">
+<img class="brandbox-products__img" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWj4WP3Gl1fA7dFGuki7nVfo3Sg9HJNcXFsEjecnQY0Gv3M7MugeQIP8Tlw_cBtLadozf0T_mIv7alIQtoxu7EkG1hjvD9OaPwY1eAwIQ4R_Odhi1-jmfeIck073MiBYlWwL83BlzSE0U7n6raS3wcZQMBhlo5RcS6BiwEYksmXCgLyU3x9SCzYdI4czeE_KCeMSrFLSBM3e_xDUfJq3Q2ZpymxtR1ew77pcANVdHw9fUdFxy_bD8iIHzEgqjZtNR17s9YTgXeFZrU" loading="lazy" decoding="async"/>
+</div>
+<div class="brandbox-products__meta">
+<p class="brandbox-products__name">Glow Serum Duo</p>
+<p class="brandbox-products__tag">Beauty · Vault pick</p>
 </div>
 </article>
-<article class="group relative aspect-square rounded-2xl overflow-hidden brandbox-glass">
-<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4GlxSUI_rg3lZFJDMQLiqhfxjPtKU1KucHqrc8t7qjXwlGGho3V3OkuZX18_0MTNmb_fBMZnvVk1ojU0BcsnLl2tvX1Uz995nEcJU1gOK2ATICjrWZ4lKIVzKcUF69t8V8k3lJZRqBSgy3PUi9UC8hmyIHGoLHfCepuHKHRC749ya07N6C3-uuZiImgVHNjHZqVUUQhr930929A6ghVSA-0TqNJpp4IUmgGcd-3z2qClpMbLRQ_rdjHyK6zcJCuTp___5Qg6aPvC"/>
-<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
-<div class="absolute bottom-4 left-4 right-4">
-<p class="font-bold text-on-surface">Recovery Massage Gun</p>
-<p class="text-xs text-primary">Fitness · Vault pick</p>
+<article class="brandbox-products__card">
+<div class="brandbox-products__media">
+<img class="brandbox-products__img" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBpnmZmG2cXibZMfVZMtyahmdk27f-CaZYyNqiVJPvMDf0at5LEQ5_V81odh-TAkJNCCokcIiHsi7-XAdBnUHGG0K__oG5Otyimv7tN5WR7ZWRS4S7x_oNqwvKgedK-ebWcsn2GbxrH60Xxkl9w8WlsMNMiWOToxJPYb5a3tSQAi4rDA2qRA6_a5sf3X5GoiDbRlVDfVrscvg2lb46ev1kic7X9J8gwogyrNaJRHAZ5JmNFyNzQXAM5q2LS00RE1o7VnU4SA_z_dsf" loading="lazy" decoding="async"/>
+</div>
+<div class="brandbox-products__meta">
+<p class="brandbox-products__name">Pro Blender Kit</p>
+<p class="brandbox-products__tag">Kitchen · Vault pick</p>
+</div>
+</article>
+<article class="brandbox-products__card">
+<div class="brandbox-products__media">
+<img class="brandbox-products__img" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4GlxSUI_rg3lZFJDMQLiqhfxjPtKU1KucHqrc8t7qjXwlGGho3V3OkuZX18_0MTNmb_fBMZnvVk1ojU0BcsnLl2tvX1Uz995nEcJU1gOK2ATICjrWZ4lKIVzKcUF69t8V8k3lJZRqBSgy3PUi9UC8hmyIHGoLHfCepuHKHRC749ya07N6C3-uuZiImgVHNjHZqVUUQhr930929A6ghVSA-0TqNJpp4IUmgGcd-3z2qClpMbLRQ_rdjHyK6zcJCuTp___5Qg6aPvC" loading="lazy" decoding="async"/>
+</div>
+<div class="brandbox-products__meta">
+<p class="brandbox-products__name">Recovery Massage Gun</p>
+<p class="brandbox-products__tag">Fitness · Vault pick</p>
+</div>
+</article>
+<article class="brandbox-products__card">
+<div class="brandbox-products__media">
+<img class="brandbox-products__img" alt="" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&amp;fit=crop&amp;w=800&amp;q=80" loading="lazy" decoding="async"/>
+</div>
+<div class="brandbox-products__meta">
+<p class="brandbox-products__name">Street Runner Sneakers</p>
+<p class="brandbox-products__tag">Fashion · Vault pick</p>
+</div>
+</article>
+<article class="brandbox-products__card">
+<div class="brandbox-products__media">
+<img class="brandbox-products__img" alt="" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&amp;fit=crop&amp;w=800&amp;q=80" loading="lazy" decoding="async"/>
+</div>
+<div class="brandbox-products__meta">
+<p class="brandbox-products__name">Studio Wireless Headphones</p>
+<p class="brandbox-products__tag">Audio · Vault pick</p>
 </div>
 </article>
 </div>
 </div>
 </section>
 <!-- Testimonials -->
-<section class="brandbox-testimonial border-y border-[color:var(--hairline)] bg-deep-obsidian">
-<div class="max-w-container-max mx-auto px-gutter mb-12 text-center">
-<span class="text-primary font-label-caps tracking-widest uppercase mb-4 block">Founders using BrandBox</span>
-<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg">What merchants say</h2>
+<section class="brandbox-testimonial">
+<div class="brandbox-testimonial__intro max-w-container-max mx-auto px-gutter">
+<span class="brandbox-testimonial__eyebrow">Founders using BrandBox</span>
+<h2 class="brandbox-testimonial__title">What merchants say</h2>
 </div>
 <div class="brandbox-testimonial__marquee" aria-label="Customer testimonials">
 <div class="brandbox-testimonial__track">
@@ -524,9 +562,9 @@
 <!-- FAQ -->
 <section id="brandbox-faq" class="brandbox-faq">
 <div class="brandbox-faq__wrap max-w-3xl mx-auto">
-<div class="brandbox-faq__intro text-center mb-12">
-<span class="text-on-surface-variant font-label-caps uppercase tracking-widest mb-4 block">Knowledge Base</span>
-<h2 class="font-headline-lg">Your questions, answered</h2>
+<div class="brandbox-faq__intro">
+<span class="brandbox-faq__eyebrow">Knowledge Base</span>
+<h2 class="brandbox-faq__title">Your questions, answered</h2>
 </div>
 <div class="brandbox-faq__list space-y-4">
 <details class="brandbox-faq__item group brandbox-glass rounded-xl">
@@ -606,19 +644,16 @@
 </section>
 <!-- Launch CTA -->
 <section id="brandbox-pricing" class="brandbox-launch relative overflow-hidden">
-<div class="brandbox-launch__glow absolute inset-0 bg-primary/5 -z-10"></div>
 <div
   id="brandbox-launch-scene"
   class="brandbox-launch__scene"
   aria-hidden="true"
 ></div>
 <div class="brandbox-launch__content max-w-container-max mx-auto text-center relative z-10">
-<div class="brandbox-launch__panel brandbox-glass p-16 rounded-[48px] border-primary/20 relative overflow-hidden">
-<div class="absolute -top-32 -left-32 w-64 h-64 brandbox-glow-primary opacity-20"></div>
-<div class="absolute -bottom-32 -right-32 w-64 h-64 brandbox-glow-purple opacity-20"></div>
-<h2 class="font-display-hero text-headline-lg-mobile md:text-headline-lg mb-8">Ready to launch your empire?</h2>
-<p class="max-w-2xl mx-auto font-body-lg text-on-surface-variant mb-12">Join 15,000+ entrepreneurs building the future of e-commerce with BrandBox AI.</p>
-<div class="brandbox-launch__actions flex flex-col sm:flex-row justify-center gap-4">
+<div class="brandbox-launch__panel relative overflow-hidden">
+<h2 class="brandbox-launch__title">Ready to launch your empire?</h2>
+<p class="brandbox-launch__lede">Join 15,000+ entrepreneurs building the future of e-commerce with BrandBox AI.</p>
+<div class="brandbox-launch__actions">
 <a href="{% url 'accounts:signup' %}" class="btn-primary">Build My Store Now <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span></a>
 <a href="{% url 'checkout:index' %}" class="btn-secondary">Claim 65% Discount</a>
 </div>
@@ -626,65 +661,76 @@
 </div>
 </section>
 <!-- Footer -->
-<footer class="brandbox-footer bg-deep-obsidian border-t border-outline-variant w-full">
-<div class="brandbox-footer__grid max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-stack-md">
-<div class="brandbox-footer__brand col-span-1 md:col-span-1">
-<a href="{% url 'home:index' %}" class="brandbox-brand brandbox-brand--footer" aria-label="BrandBox home">
-<img src="{% static 'images/home-logo.png' %}?v=1" alt="BrandBox" height="52"/>
-</a>
-<p class="text-on-surface-variant text-body-md mb-8 mt-6">The intelligent foundation for the next generation of e-commerce entrepreneurs.</p>
-<div class="brandbox-footer__social flex gap-4">
-<a class="w-10 h-10 rounded-full bg-[color:var(--surface-container-high)] flex items-center justify-center hover:bg-primary/20 transition-colors" href="#">
-<span class="material-symbols-outlined text-sm">public</span>
-</a>
-<a class="w-10 h-10 rounded-full bg-[color:var(--surface-container-high)] flex items-center justify-center hover:bg-primary/20 transition-colors" href="#">
-<span class="material-symbols-outlined text-sm">share</span>
-</a>
+<footer class="brandbox-footer w-full">
+<div class="brandbox-footer__grid">
+  <div class="brandbox-footer__brand">
+    <a href="{% url 'home:index' %}" class="brandbox-brand brandbox-brand--footer" aria-label="BrandBox home">
+      <img src="{% static 'images/home-logo.png' %}?v=1" alt="BrandBox" height="52"/>
+    </a>
+    <p class="brandbox-footer__desc">The intelligent foundation for the next generation of e-commerce entrepreneurs.</p>
+    <div class="brandbox-footer__social">
+      <a class="brandbox-footer__social-link brandbox-footer__social-link--instagram" href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+        <svg class="brandbox-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+        </svg>
+      </a>
+      <a class="brandbox-footer__social-link brandbox-footer__social-link--facebook" href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+        <svg class="brandbox-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+        </svg>
+      </a>
+      <a class="brandbox-footer__social-link brandbox-footer__social-link--tiktok" href="#" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+        <svg class="brandbox-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.73.41-1.14.1-2.48.06-4.96.07-7.44z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+  <div class="brandbox-footer__nav">
+    <div class="brandbox-footer__column">
+      <h4 class="brandbox-footer__heading">Services</h4>
+      <ul class="brandbox-footer__list">
+        <li><a href="#brandbox-how">Features</a></li>
+        <li><a href="#brandbox-pricing">Pricing</a></li>
+        <li><a href="#brandbox-features">Coach chat</a></li>
+        <li><a href="#brandbox-products">Product vault</a></li>
+      </ul>
+    </div>
+    <div class="brandbox-footer__column">
+      <h4 class="brandbox-footer__heading">Legal</h4>
+      <ul class="brandbox-footer__list">
+        <li><a href="{% url 'home:privacy' %}">Privacy Policy</a></li>
+        <li><a href="{% url 'home:terms' %}">Terms of Service</a></li>
+        <li><a href="{% url 'home:refund' %}">Refund Policy</a></li>
+        <li><a href="{% url 'home:contact' %}">Contact</a></li>
+      </ul>
+    </div>
+    <div class="brandbox-footer__column brandbox-footer__newsletter">
+      <h4 class="brandbox-footer__heading">Newsletter</h4>
+      <p class="brandbox-footer__newsletter-copy">Get the latest winning products delivered to your inbox.</p>
+      <form method="post" action="{% url 'home:newsletter' %}" class="brandbox-footer__newsletter-form">
+        {% csrf_token %}
+        <label class="sr-only" for="{{ newsletter_form.email.id_for_label }}">Email</label>
+        {{ newsletter_form.email }}
+        {# Honeypot — leave empty #}
+        <div class="brandbox-honeypot" aria-hidden="true">
+          <label for="{{ newsletter_form.website.id_for_label }}">Website</label>
+          {{ newsletter_form.website }}
+        </div>
+        <button type="submit" class="brandbox-footer__subscribe" aria-label="Subscribe">
+          <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+        </button>
+      </form>
+    </div>
+  </div>
 </div>
-</div>
-<div class="brandbox-footer__column">
-<h4 class="font-bold text-on-surface mb-6 uppercase text-sm tracking-widest">Platform</h4>
-<ul class="space-y-4">
-<li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#brandbox-how">Features</a></li>
-<li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#brandbox-pricing">Pricing</a></li>
-<li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#brandbox-features">Coach chat</a></li>
-<li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#brandbox-products">Product vault</a></li>
-</ul>
-</div>
-<div class="brandbox-footer__column">
-<h4 class="font-bold text-on-surface mb-6 uppercase text-sm tracking-widest">Company</h4>
-<ul class="space-y-4">
-<li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="#">About Us</a></li>
-<li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="{% url 'home:contact' %}">Contact</a></li>
-<li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="{% url 'home:privacy' %}">Privacy Policy</a></li>
-<li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="{% url 'home:terms' %}">Terms of Service</a></li>
-<li><a class="text-on-surface-variant hover:text-accent-pink transition-colors underline-offset-4 hover:underline" href="{% url 'home:refund' %}">Refund Policy</a></li>
-</ul>
-</div>
-<div class="brandbox-footer__column brandbox-footer__newsletter">
-<h4 class="font-bold text-on-surface mb-6 uppercase text-sm tracking-widest">Newsletter</h4>
-<p class="text-sm text-on-surface-variant mb-4">Get the latest winning products delivered to your inbox.</p>
-<form method="post" action="{% url 'home:newsletter' %}" class="brandbox-footer__newsletter-form flex gap-2 relative">
-{% csrf_token %}
-<label class="sr-only" for="{{ newsletter_form.email.id_for_label }}">Email</label>
-{{ newsletter_form.email }}
-{# Honeypot — leave empty #}
-<div class="brandbox-honeypot" aria-hidden="true">
-<label for="{{ newsletter_form.website.id_for_label }}">Website</label>
-{{ newsletter_form.website }}
-</div>
-<button type="submit" class="bg-primary text-black px-4 py-2 rounded-lg font-bold hover:scale-105 transition-transform" aria-label="Subscribe">
-<span class="material-symbols-outlined">chevron_right</span>
-</button>
-</form>
-</div>
-</div>
-<div class="brandbox-footer__bottom max-w-container-max mx-auto mt-20 pt-8 border-t border-[color:var(--hairline)] flex flex-col md:flex-row justify-between items-center gap-4">
-<p class="text-on-surface-variant text-sm">© 2024 BrandBox AI. All rights reserved.</p>
-<nav class="brandbox-footer__legal flex gap-8 text-sm text-on-surface-variant" aria-label="Footer links">
-<a class="hover:text-primary transition-colors" href="#">Affiliates</a>
-<a class="hover:text-primary transition-colors" href="#">Discord</a>
-</nav>
+<div class="brandbox-footer__bottom">
+  <p class="brandbox-footer__copy">© 2024 <a href="{% url 'home:index' %}" class="brandbox-footer__brand-link">BrandBox</a> - All rights reserved.</p>
+  <nav class="brandbox-footer__legal" aria-label="Footer links">
+    <a class="brandbox-footer__legal-link" href="{% url 'home:about' %}">About Us</a>
+    <a class="brandbox-footer__legal-link" href="#">Affiliate</a>
+    <a class="brandbox-footer__legal-link" href="#">Disclaimer</a>
+  </nav>
 </div>
 </footer>
 
@@ -719,15 +765,15 @@
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('opacity-100', 'translate-y-0');
-                        entry.target.classList.remove('opacity-0', 'translate-y-8');
+                        entry.target.classList.add('opacity-100');
+                        entry.target.classList.remove('opacity-0');
                     }
                 });
             }, observerOptions);
 
-            // Apply fade-in to major sections
+            // Fade-in only — no translate (translate fakes extra section gap)
             document.querySelectorAll('section').forEach(section => {
-                section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-8');
+                section.classList.add('transition-opacity', 'duration-1000', 'opacity-0');
                 observer.observe(section);
             });
         });

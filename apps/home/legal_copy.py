@@ -1,5 +1,26 @@
 """
-Default BrandBox legal copy for Privacy, Terms, and Refund policies.
+Default BrandBox legal copy for About, Privacy, Terms, and Refund pages.
+"""
+
+ABOUT_BODY = """
+<p><strong>Last updated:</strong> July 21, 2026</p>
+<p>BrandBox helps entrepreneurs launch and grow Shopify stores with AI Store Builder, a Product Vault of scored products, Shopify connect &amp; push, and coach chat when you need a human in the loop.</p>
+
+<h2>1. What we build</h2>
+<p>We focus on the real work of starting a store: niche setup, product selection, pushing catalogs to Shopify, and guided support so you are not stuck midway.</p>
+
+<h2>2. Who we serve</h2>
+<p>BrandBox is for first-time founders and growing merchants who want a clearer path from idea to live store — without jumping between a dozen tools.</p>
+
+<h2>3. How we work</h2>
+<ul>
+  <li><strong>AI Store Builder</strong> — niche-based Shopify setup designed to sell.</li>
+  <li><strong>Product Vault</strong> — AI-chosen products ready to import and push.</li>
+  <li><strong>Coach chat</strong> — real coaching when available, with AI replies when coaches are offline.</li>
+</ul>
+
+<h2>4. Contact</h2>
+<p>Questions about BrandBox? Reach us at <a href="mailto:help@brandbox.co">help@brandbox.co</a> or through our <a href="/contact/">contact page</a>.</p>
 """
 
 PRIVACY_BODY = """
