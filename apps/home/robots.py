@@ -16,7 +16,6 @@ def robots_txt(request):
         "Disallow: /admin/",
         "Disallow: /dashboard/",
         "Disallow: /checkout/",
-        "Disallow: /builder/",
         "Disallow: /onboarding/",
         "Disallow: /login/",
         "Disallow: /signup/",

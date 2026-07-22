@@ -16,6 +16,9 @@ PAGE_URL_NAMES: dict[str, str] = {
     "privacy": "home:privacy",
     "terms": "home:terms",
     "refund": "home:refund",
+    "disclaimer": "home:disclaimer",
+    "affiliate": "home:affiliate",
+    "affiliate_apply": "home:affiliate_register",
 }
 
 
@@ -35,7 +38,13 @@ def _sitemap_entries() -> list[dict]:
         robots__startswith="noindex"
     )
     for page in pages:
-        if page.key in ("about", "privacy", "terms", "refund") and page.key not in legal_keys:
+        if page.key in (
+            "about",
+            "privacy",
+            "terms",
+            "refund",
+            "disclaimer",
+        ) and page.key not in legal_keys:
             continue
         name = PAGE_URL_NAMES.get(page.key)
         if not name:

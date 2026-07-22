@@ -19,8 +19,8 @@
   --build-outline: #94a3b8;
   --build-outline-soft: #64748b;
   --build-primary: #4edea3;
-  --build-on-primary: #003824;
-  --build-primary-container: #10b981;
+  --build-on-primary: #fefefe;
+  --build-primary-container: #0d172f;
   --build-primary-fixed: #6ffbbe;
   --build-error: #b91c1c;
   --build-glass: #ffffff;
@@ -303,7 +303,7 @@
   font-variation-settings:"FILL" 0,"wght" 400,"GRAD" 0,"opsz" 24;
   color: inherit;
 }
-/* —— AI Store Builder wizard (/dashboard/builder/) —— */
+/* —— AI Store Builder wizard + job flow (/dashboard/builder/) —— */
 .ab {
 
   /* —— Section tokens (edit here only) —— */
@@ -317,8 +317,8 @@
   --ab-outline: #94a3b8;
   --ab-outline-soft: #64748b;
   --ab-primary: #4edea3;
-  --ab-on-primary: #003824;
-  --ab-primary-container: #10b981;
+  --ab-on-primary: #fefefe;
+  --ab-primary-container: #0d172f;
   --ab-primary-fixed: #6ffbbe;
   --ab-error: #b91c1c;
   --ab-glass: #ffffff;

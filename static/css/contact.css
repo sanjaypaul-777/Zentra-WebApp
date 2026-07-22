@@ -43,12 +43,20 @@
   margin: 0 0 20px;
   padding: 13.6px 16px;
   border-radius: 12px;
-  border: 1px solid var(--contact-success-border);
-  background: var(--contact-success-bg);
-  color: var(--contact-success-text);
+  border: 1px solid #727272;
+  background: color-mix(in srgb, #4edea3 12%, transparent);
+  color: #4edea3;
   font-size: 15.2px;
   font-weight: 600;
   text-align: left;
+}
+
+.contact-page .auth-welcome {
+  margin-bottom: 28px;
+}
+
+.contact-page .auth-card .contact-success:last-of-type {
+  margin-bottom: 24px;
 }
 
 /* Honeypot — visually hidden, still in DOM for bots */

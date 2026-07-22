@@ -24,13 +24,13 @@
   --home-hairline: rgba(15, 23, 42, 0.1);
   --home-outline: #94a3b8;
   --home-primary: #4edea3;
-  --home-on-primary: #003824;
-  --home-primary-container: #10b981;
+  --home-on-primary: #fefefe;
+  --home-primary-container: #0d172f;
   --home-primary-fixed: #6ffbbe;
   --home-purple: #0d172f;
   --home-accent: #ff00e5;
   --home-glass: #ffffff;
-  --home-logo-height: 52px;
+  --home-logo-height: 48px;
   /* Section gap = next section’s padding-top (see rhythm rules) */
   --section-gap: 120px;
 
@@ -111,13 +111,127 @@
 /* —— Fixed shells ——
    Header 80 · Hero 791 · gap after hero = How’s padding-top (120). */
 
+/* Nav + hero shared stage (store-floor grid + AI glows) */
+.brandbox-top {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #030303;
+  color: #f0f0f1;
+}
+
+.brandbox-top__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Perspective catalog / store-floor grid */
+.brandbox-top__grid {
+  position: absolute;
+  left: -18%;
+  right: -18%;
+  top: -6%;
+  bottom: -40%;
+  background-image:
+    linear-gradient(rgba(78, 222, 163, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(254, 254, 254, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  transform: perspective(900px) rotateX(56deg) translate3d(0, 0, 0) scale(1.4);
+  transform-origin: center 16%;
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.4) 42%,
+    transparent 86%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.4) 42%,
+    transparent 86%
+  );
+  opacity: 0.9;
+  will-change: transform;
+}
+
+/* Soft AI / growth glows (BrandBox primary + accent) */
+.brandbox-top__orb {
+  position: absolute;
+  filter: blur(80px);
+  will-change: transform;
+  pointer-events: none;
+}
+
+.brandbox-top__orb--a {
+  width: min(640px, 90vw);
+  height: min(300px, 44vw);
+  left: -6%;
+  top: 4%;
+  border-radius: 50% / 70%;
+  background: radial-gradient(
+    ellipse 70% 55% at 40% 45%,
+    rgba(78, 222, 163, 0.5) 0%,
+    rgba(78, 222, 163, 0.16) 48%,
+    transparent 76%
+  );
+  opacity: 0.38;
+  transform: rotate(-16deg);
+}
+
+.brandbox-top__orb--b {
+  width: min(720px, 96vw);
+  height: min(340px, 50vw);
+  right: -10%;
+  bottom: 6%;
+  border-radius: 60% / 45%;
+  background: radial-gradient(
+    ellipse 65% 50% at 55% 50%,
+    rgba(255, 0, 229, 0.42) 0%,
+    rgba(124, 58, 237, 0.22) 45%,
+    transparent 78%
+  );
+  opacity: 0.32;
+  transform: rotate(14deg);
+}
+
+/* AI product-node constellation (vault picks metaphor) */
+.brandbox-top__nodes {
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(circle at 18% 28%, rgba(78, 222, 163, 0.55) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 72% 22%, rgba(254, 254, 254, 0.35) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 84% 48%, rgba(255, 0, 229, 0.4) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 28% 62%, rgba(254, 254, 254, 0.28) 0 1.25px, transparent 2.25px),
+    radial-gradient(circle at 58% 36%, rgba(78, 222, 163, 0.4) 0 1.25px, transparent 2.25px),
+    radial-gradient(circle at 42% 18%, rgba(254, 254, 254, 0.22) 0 1px, transparent 2px),
+    radial-gradient(circle at 12% 52%, rgba(124, 58, 237, 0.35) 0 1.25px, transparent 2.25px);
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 35%, #000 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 35%, #000 20%, transparent 75%);
+  will-change: transform, opacity;
+}
+
+.brandbox-top__nav,
+.brandbox-home .brandbox-top__nav.brandbox-nav {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 .brandbox-nav {
   --nav-bg: #030303;
   --nav-border: transparent;
   --nav-text: rgba(255, 255, 255, 0.72);
   --nav-text-hover: #ffffff;
   --nav-auth-text: #F1F3F8;
-  --nav-logo-height: var(--home-logo-height);
   position: relative;
   height: 80px;
   box-sizing: border-box;
@@ -226,11 +340,13 @@
 }
 
 .brandbox-hero {
-  --hero-bg: #030303;
+  --hero-bg: transparent;
   --hero-accent: var(--home-primary);
   --hero-text: #f0f0f1;
   --hero-muted: var(--home-muted-on-dark);
   --on-surface-variant: var(--hero-muted);
+  position: relative;
+  z-index: 1;
   height: 791px;
   box-sizing: border-box;
   display: flex;
@@ -238,7 +354,7 @@
   padding: 60px 0 20px;
   margin: 0;
   overflow: hidden;
-  background: var(--hero-bg);
+  background: transparent;
   color: var(--hero-text);
 }
 
@@ -391,6 +507,7 @@
   flex: 0 0 auto;
   margin-top: 48px;
   padding-bottom: 0;
+  perspective: 1200px;
 }
 
 .brandbox-hero__themes {
@@ -401,10 +518,13 @@
   align-items: end;
   max-width: 1100px;
   margin: 0 auto;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .brandbox-hero__theme {
   margin: 0;
+  transform-style: preserve-3d;
 }
 
 .brandbox-hero__theme-frame {
@@ -415,6 +535,9 @@
   background: #111;
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
   aspect-ratio: 3 / 4;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  transition: box-shadow 0.35s ease;
 }
 
 .brandbox-hero__theme-frame img {
@@ -426,15 +549,15 @@
 
 /* Fan cards upward so they don't cover hero padding-bottom (black gap) */
 .brandbox-hero__theme:nth-child(1) .brandbox-hero__theme-frame {
-  transform: rotate(-6deg) translateY(-12px);
+  transform: rotateY(10deg) rotateX(-6deg) translate3d(0, -12px, -40px);
 }
 
 .brandbox-hero__theme:nth-child(2) .brandbox-hero__theme-frame {
-  transform: rotate(-3deg) translateY(-6px);
+  transform: rotateY(4deg) rotateX(-3deg) translate3d(0, -6px, -16px);
 }
 
 .brandbox-hero__theme:nth-child(3) .brandbox-hero__theme-frame {
-  transform: translateY(0) scale(1.04);
+  transform: translate3d(0, 0, 28px) scale(1.04);
   z-index: 2;
   border-color: rgba(78, 222, 163, 0.3);
   box-shadow:
@@ -443,11 +566,11 @@
 }
 
 .brandbox-hero__theme:nth-child(4) .brandbox-hero__theme-frame {
-  transform: rotate(3deg) translateY(-6px);
+  transform: rotateY(-4deg) rotateX(3deg) translate3d(0, -6px, -16px);
 }
 
 .brandbox-hero__theme:nth-child(5) .brandbox-hero__theme-frame {
-  transform: rotate(6deg) translateY(-12px);
+  transform: rotateY(-10deg) rotateX(6deg) translate3d(0, -12px, -40px);
 }
 
 @media (max-width: 900px) {
@@ -460,6 +583,7 @@
     grid-template-columns: repeat(5, minmax(0, 1fr));
     max-width: 100%;
     gap: 8px;
+    transform: none !important;
   }
 
   .brandbox-hero__theme:nth-child(1) .brandbox-hero__theme-frame,
@@ -467,14 +591,14 @@
   .brandbox-hero__theme:nth-child(3) .brandbox-hero__theme-frame,
   .brandbox-hero__theme:nth-child(4) .brandbox-hero__theme-frame,
   .brandbox-hero__theme:nth-child(5) .brandbox-hero__theme-frame {
-    transform: none;
+    transform: none !important;
+    opacity: 1 !important;
     border-radius: 12px;
   }
 }
 
 .brandbox-footer {
   --footer-text: #b6b6b6;
-  --footer-logo-height: var(--home-logo-height);
   --home-muted: #b6b6b6;
   --on-surface: #fefefe;
   --on-surface-variant: #b6b6b6;
@@ -500,17 +624,25 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  padding: 8px 16px;
+  min-width: 44px;
+  padding: 8px 14px;
   border: 0;
   border-radius: 8px;
   background: #0d172f;
   color: #f1f3f8;
   font-weight: 700;
   cursor: pointer;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.brandbox-footer__subscribe .material-symbols-outlined {
+  font-size: 22px;
+  line-height: 1;
 }
 
 .brandbox-footer__subscribe:hover {
-  opacity: 0.9;
+  opacity: 0.92;
+  background: #142038;
 }
 
 .brandbox-footer__grid {
@@ -636,8 +768,40 @@
 
 .brandbox-footer__newsletter-form {
   display: flex;
+  align-items: stretch;
   gap: 8px;
   position: relative;
+}
+
+.brandbox-footer__email {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid rgba(254, 254, 254, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fefefe;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  outline: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.brandbox-footer__email::placeholder {
+  color: rgba(182, 182, 182, 0.9);
+}
+
+.brandbox-footer__email:hover {
+  border-color: rgba(254, 254, 254, 0.28);
+}
+
+.brandbox-footer__email:focus {
+  border-color: rgba(254, 254, 254, 0.55);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .brandbox-footer__bottom {
@@ -723,17 +887,9 @@
 
 .brandbox-brand img {
   display: block;
-  height: var(--home-logo-height, 60px);
+  height: var(--home-logo-height);
   width: auto;
   object-fit: contain;
-}
-
-.brandbox-brand--nav img {
-  height: var(--nav-logo-height, var(--home-logo-height, 60px));
-}
-
-.brandbox-brand--footer img {
-  height: var(--footer-logo-height, var(--home-logo-height, 60px));
 }
 
 .brandbox-glass {
@@ -1057,16 +1213,17 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 24px;
-  padding: 8px 16px;
-  border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, #f1f3f8 14%, transparent);
-  background: var(--agent-accent);
-  color: #f1f3f8;
+  margin: 0 0 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: #0d172f;
   font-family: Inter, system-ui, sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .brandbox-agent__eyebrow .material-symbols-outlined {
@@ -1901,19 +2058,99 @@
   }
 }
 
-/* Scroll reveal — visible by default; JS only enhances */
+/* Scroll reveal — 3D depth; visible by default until JS enables motion */
 .brandbox-reveal {
   opacity: 1;
-  transition: opacity 0.8s ease;
+  transform: none;
+  transform-style: preserve-3d;
+  perspective: 1100px;
+  overflow: visible;
+}
+
+.brandbox-reveal [data-brandbox-reveal-child] {
+  opacity: 1;
+  transform: none;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.brandbox-compare__grid,
+.brandbox-products__grid {
+  perspective: 1400px;
+  transform-style: preserve-3d;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .brandbox-reveal:not(.is-visible) {
-    opacity: 0.01;
+  .brandbox-motion .brandbox-reveal:not(.is-visible) {
+    opacity: 0.35;
+    transform: translate3d(0, 28px, -40px);
   }
 
-  .brandbox-reveal.is-visible {
+  .brandbox-motion .brandbox-reveal.is-visible {
     opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Children reveal on their own is-visible (not gated by section) */
+  .brandbox-motion [data-brandbox-reveal-child]:not(.is-visible) {
+    opacity: 0;
+    transform: translate3d(0, 48px, -64px) rotateX(12deg) scale(0.94);
+  }
+
+  .brandbox-motion [data-brandbox-reveal-child].is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0) scale(1);
+    transition:
+      opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s);
+  }
+
+  /* Difference: cards swing in from left / right */
+  .brandbox-motion .brandbox-compare__card:not(.is-visible) {
+    opacity: 0;
+  }
+
+  .brandbox-motion .brandbox-compare__card--muted:not(.is-visible) {
+    transform: translate3d(-64px, 40px, -80px) rotateY(22deg) rotateX(6deg);
+  }
+
+  .brandbox-motion .brandbox-compare__card--brandbox:not(.is-visible) {
+    transform: translate3d(64px, 40px, -80px) rotateY(-22deg) rotateX(6deg);
+  }
+
+  .brandbox-motion .brandbox-compare__card.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateY(0) rotateX(0);
+    transition:
+      opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+      transform 1s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s);
+  }
+
+  /* Product vault: stronger rise + depth cascade */
+  .brandbox-motion .brandbox-products__card:not(.is-visible) {
+    opacity: 0;
+    transform: translate3d(0, 72px, -90px) rotateX(18deg) scale(0.88);
+  }
+
+  .brandbox-motion .brandbox-products__card.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0) scale(1);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+      transform 0.95s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s);
+  }
+
+  [data-brandbox-tilt] {
+    transform-style: preserve-3d;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  [data-brandbox-tilt].is-tilting {
+    transition: transform 0.12s ease-out;
   }
 }
 
@@ -2004,11 +2241,11 @@
 .brandbox-home a.btn-primary:visited,
 .brandbox-home button.btn-primary:hover,
 .brandbox-home button.btn-primary:focus {
-  color: #fefefe !important;
-  background: #0d172f !important;
-  border: 0 !important;
+  color: #fefefe;
+  background: #0d172f;
+  border: 0;
   overflow: visible;
-  box-shadow: none !important;
+  box-shadow: none;
   text-decoration: none;
 }
 

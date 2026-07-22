@@ -24,6 +24,9 @@ PATH_TO_SEO_KEY: dict[str, str] = {
     "/privacy/": "privacy",
     "/terms/": "terms",
     "/refund/": "refund",
+    "/disclaimer/": "disclaimer",
+    "/affiliate/": "affiliate",
+    "/affiliate/register/": "affiliate_apply",
 }
 
 # Paths that should never be indexed (auth, app, admin APIs)
@@ -31,7 +34,6 @@ PRIVATE_PREFIXES: tuple[str, ...] = (
     "/admin/",
     "/dashboard/",
     "/checkout/",
-    "/builder/",
     "/onboarding/",
     "/login/",
     "/signup/",

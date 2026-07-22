@@ -13,13 +13,12 @@
     <div class="auth-logo-wrap">
       <div class="auth-glow" aria-hidden="true"></div>
       <a href="{% url 'home:index' %}" class="auth-logo" aria-label="BrandBox home">
-        <img src="{% static 'images/favicon.png' %}?v=5" alt="" width="48" height="48" />
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="BrandBox" width="48" height="48" />
       </a>
     </div>
-    <h1>Create your account</h1>
-    <p class="subtitle">Build an AI-powered Shopify store in one click.</p>
 
     <div class="auth-card">
+      <p class="auth-welcome">Get Started</p>
       {% include "accounts/_social_auth.html" %}
       <form method="post" class="auth-form" novalidate>
         {% csrf_token %}
@@ -56,7 +55,7 @@
           <p class="error">{{ form.password.errors|striptags }}</p>
         {% endif %}
 
-        <button type="submit" class="auth-submit">
+        <button type="submit" class="btn-primary auth-submit">
           Create Account
           <span class="material-symbols-outlined">auto_awesome</span>
         </button>
@@ -65,7 +64,10 @@
 
     <p class="auth-footer">
       Already a member?
-      <a href="{% url 'accounts:login' %}">Sign in</a>
+      <a href="{% url 'accounts:login' %}">
+        Sign in
+        <span class="material-symbols-outlined" aria-hidden="true">login</span>
+      </a>
     </p>
 
     <nav class="auth-legal" aria-label="Legal">

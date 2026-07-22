@@ -140,7 +140,9 @@ def derive_store_row(connection: ShopConnection, latest_job: BuildJob | None) ->
         theme_name=theme,
         connected_at=connected,
         progress_line="",
-        primary_url=reverse("builder:retry", kwargs={"job_id": latest_job.pk}),
+        primary_url=reverse(
+                "dashboard:builder:retry", kwargs={"job_id": latest_job.pk}
+            ),
         primary_label="Retry build",
         primary_external=False,
         detail_url=detail_url,

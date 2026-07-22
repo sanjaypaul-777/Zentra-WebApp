@@ -67,9 +67,9 @@ AFTER LOGIN (merchants)
   /dashboard/create-store/  create store guide
   /dashboard/install/       redirect to Node OAuth
   /dashboard/builder/       AI Store Builder niche wizard
-  /builder/start/           start build job
-  /builder/building/<id>/   build progress
-  /builder/success/<id>/    build success
+  /dashboard/builder/start/ start build job
+  /dashboard/builder/building/<id>/   build progress
+  /dashboard/builder/success/<id>/    build success
   /dashboard/product-hunter/  Winning Product Vault browse + Import
   /dashboard/imports/         My Imports edit / remove / Push
   /dashboard/stores/          My Stores
@@ -87,9 +87,9 @@ STATUS / ERRORS
   (With DEBUG=True, unknown URLs show Django’s yellow page — not the custom template)
 
 STAFF / SUPERUSER (development)
-  Bypass onboarding gate — open any /dashboard/* and /builder/* URL
+  Bypass onboarding gate — open any /dashboard/* URL
   /onboarding/?step=1…4     preview any step anytime
-  /builder/building/<id>/   open any build job (not only own)
+  /dashboard/builder/building/<id>/   open any build job (not only own)
   /dashboard/imports/       preview shop allowed for staff QA
   /admin/                   full CRUD on all models (profiles, shops, jobs, vault, …)
 ```
@@ -133,12 +133,13 @@ Merchant journey URLs — use this as the product flow checklist.
 | `/dashboard/install/` | OAuth handoff | Redirect to Node | Missing shop / Node URL |
 | `/dashboard/connect/error/` | OAuth fail | Retry message | Cancel / OAuth error |
 | `/dashboard/builder/` | Builder wizard | Niche selected | No connected shop (customers) |
-| `/builder/start/` | Start build | Creates job → building | No shop / validation |
-| `/builder/building/<id>/` | Build running | Progress poll | Failed → retry / support |
-| `/builder/building/<id>/status/` | Build poll | JSON progress | Not found / forbidden |
-| `/builder/building/<id>/retry/` | Build retry | Restarts failed job | Not failed / forbidden |
-| `/builder/success/<id>/` | Build done | Store ready links | — |
-| `/builder/status/` | Builder API | JSON status | Login required |
+| `/dashboard/builder/start/` | Start build | Creates job → building | No shop / validation |
+| `/dashboard/builder/building/<id>/` | Build running | Progress poll | Failed → retry / support |
+| `/dashboard/builder/building/<id>/status/` | Build poll | JSON progress | Not found / forbidden |
+| `/dashboard/builder/building/<id>/retry/` | Build retry | Restarts failed job | Not failed / forbidden |
+| `/dashboard/builder/success/<id>/` | Build done | Store ready links | — |
+| `/dashboard/builder/status/` | Builder API | JSON status | Login required |
+| `/onboarding/` | Merchant setup | Profile + shop connect | Incomplete profile |
 | `/dashboard/product-hunter/` | Vault browse | Product cards | Empty vault / filters |
 | `/dashboard/imports/` | My Imports | Drafts + push | No shop / Node publish error |
 | `/dashboard/stores/` | My Stores | Rows + retry / open | Disconnect confirm |
@@ -162,7 +163,7 @@ Merchant journey URLs — use this as the product flow checklist.
 | `/500/` | Status preview (DEBUG) | Custom 500 template | Only when `DEBUG=True` |
 | `404` / `500` | Status (production) | Custom pages via handlers | `DEBUG=False`; `BBX-500-…` ref (500) |
 
-**Onboarding gate:** any `/dashboard/*` or `/builder/*` request for a logged-in merchant with `MerchantProfile.onboarding_completed=False` redirects to `/onboarding/`. **Staff and superusers are not gated** — they can open any URL or wizard step for development/QA.
+**Onboarding gate:** any `/dashboard/*` request for a logged-in merchant with `MerchantProfile.onboarding_completed=False` redirects to `/onboarding/`. **Staff and superusers are not gated** — they can open any URL or wizard step for development/QA.
 
 ## Project tree
 
@@ -193,7 +194,7 @@ BrandBoxWeb/
 │   │   ├── niches.py                  # niche metadata + Node niche sync
 │   │   ├── services.py                # start/poll/retry remote build
 │   │   ├── wizard.py / views.py
-│   │   └── urls.py                    # /builder/*
+│   │   └── urls.py                    # /dashboard/builder/* jobs
 │   ├── catalog/                       # vault + imports + Product Hunter
 │   │   ├── models.py                  # CatalogProduct, ShopImport, ScrapeRun
 │   │   ├── services/
@@ -303,14 +304,14 @@ flowchart TD
   Preview -->|Yes admin-preview-*| Sim[Local timed simulator]
   Preview -->|No real shop| NodeStart[Node POST /api/build/start]
   NodeStart --> Eng[(Node build engine<br/>theme + products)]
-  Eng --> Building[/builder/building/id/]
+  Eng --> Building[/dashboard/builder/building/id/]
 
   Sim --> Building
   Building --> Poll[Poll Node GET /api/build/status]
   Poll --> Sync[(DB UPDATE BuildJob<br/>progress / label / step)]
   Sync --> Done{Outcome?}
 
-  Done -->|completed| Success[/builder/success/id/<br/>BuildJob=done]
+  Done -->|completed| Success[/dashboard/builder/success/id/<br/>BuildJob=done]
   Done -->|failed| Fail[build_failed UI<br/>BuildJob=failed]
   Done -->|still running| Building
 
@@ -478,10 +479,10 @@ If Node/tunnel is down → show “product count unavailable”, never invent `0
 2. Start build → apps/builder/services.py
      → Node POST /api/build/start
      → DB WRITE BuildJob (status running, brandbox_build_id=…)
-3. /builder/building/<id>/ polls:
+3. /dashboard/builder/building/<id>/ polls:
      → Node GET /api/build/status
      → DB UPDATE BuildJob progress / status
-4. Success → /builder/success/<id>/   (BuildJob.status=done)
+4. Success → /dashboard/builder/success/<id>/   (BuildJob.status=done)
    Fail    → build_failed UI
    Retry   → Node POST /api/build/retry → new/linked job
 ```

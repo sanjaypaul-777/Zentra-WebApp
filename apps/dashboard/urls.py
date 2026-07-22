@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 
 from . import views
 
@@ -6,7 +6,9 @@ app_name = "dashboard"
 
 urlpatterns = [
     path("", views.dashboard_home, name="home"),
+    # Wizard at /dashboard/builder/; job flow at /dashboard/builder/start|building|success/
     path("builder/", views.builder_page, name="builder"),
+    path("builder/", include("apps.builder.urls")),
     path("product-hunter/", views.product_finder_page, name="product_hunter"),
     # Legacy URLs — redirect to Product Hunter
     path("product-finder/", views.winning_products_page, name="product_finder"),

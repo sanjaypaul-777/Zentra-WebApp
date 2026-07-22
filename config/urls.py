@@ -37,7 +37,6 @@ urlpatterns = [
     path("api/geo/cities/", geo_cities, name="geo_cities"),
     path("dashboard/", include("apps.dashboard.urls")),
     path("checkout/", include("apps.checkout.urls")),
-    path("builder/", include("apps.builder.urls")),
 ]
 
 handler404 = error_views.page_not_found

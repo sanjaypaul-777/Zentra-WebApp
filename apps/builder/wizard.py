@@ -156,7 +156,7 @@ def wizard(request):
             )
             request.session.pop(SESSION_NICHE, None)
             _session_clear_products(request)
-            return redirect("builder:building", job_id=job.pk)
+            return redirect("dashboard:builder:building", job_id=job.pk)
 
     niche = _get_selected_niche(request)
     if not niche and step == 1 and SESSION_NICHE not in request.session:

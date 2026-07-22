@@ -12,15 +12,13 @@
     <div class="auth-logo-wrap">
       <div class="auth-glow" aria-hidden="true"></div>
       <a href="{% url 'home:index' %}" class="auth-logo" aria-label="BrandBox home">
-        <img src="{% static 'images/favicon.png' %}?v=5" alt="" width="48" height="48" />
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="BrandBox" width="48" height="48" />
       </a>
     </div>
-    <h1>Reset your password</h1>
-    <p class="subtitle">
-      Enter the email for your account and we&apos;ll send a reset link.
-    </p>
 
     <div class="auth-card">
+      <p class="auth-welcome">Account recovery</p>
+
       {% if sent %}
         <p class="ok">
           <span class="material-symbols-outlined">mark_email_read</span>
@@ -35,9 +33,9 @@
           {% csrf_token %}
           <label class="label" for="email">Email Address</label>
           <input id="email" name="email" type="email" required placeholder="name@company.com" />
-          <button type="submit" class="auth-submit">
+          <button type="submit" class="btn-primary auth-submit">
             Send reset link
-            <span class="material-symbols-outlined">mail</span>
+            <span class="material-symbols-outlined" aria-hidden="true">lock_reset</span>
           </button>
         </form>
       {% endif %}
@@ -45,7 +43,10 @@
 
     <p class="auth-footer">
       Remembered it?
-      <a href="{% url 'accounts:login' %}">Sign in</a>
+      <a href="{% url 'accounts:login' %}">
+        Sign in
+        <span class="material-symbols-outlined" aria-hidden="true">login</span>
+      </a>
     </p>
 
     <nav class="auth-legal" aria-label="Legal">

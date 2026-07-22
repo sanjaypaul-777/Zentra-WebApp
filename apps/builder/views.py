@@ -111,7 +111,7 @@ def start_build(request):
         product_ids=[],
         skip_products=skip or not niche.has_products,
     )
-    return redirect("builder:building", job_id=job.pk)
+    return redirect("dashboard:builder:building", job_id=job.pk)
 
 
 @login_required
@@ -119,7 +119,7 @@ def building(request, job_id: int):
     job = _job_for_request(request, job_id)
     advance_build_job(job)
     if job.status == BuildJob.Status.DONE:
-        return redirect("builder:success", job_id=job.pk)
+        return redirect("dashboard:builder:success", job_id=job.pk)
 
     if job.status == BuildJob.Status.FAILED:
         copy = build_failure_copy(job)
@@ -140,7 +140,7 @@ def building(request, job_id: int):
                 "job": job,
                 "build_error_headline": copy["headline"],
                 "build_error_body": copy["body"],
-                "retry_url": reverse("builder:retry", kwargs={"job_id": job.pk}),
+                "retry_url": reverse("dashboard:builder:retry", kwargs={"job_id": job.pk}),
                 "support_email": getattr(settings, "CONTACT_NOTIFY_EMAIL", "help@brandbox.co"),
             },
         )
@@ -151,7 +151,7 @@ def building(request, job_id: int):
         {
             "job": job,
             "labels": job.progress_labels(),
-            "status_url": reverse("builder:job_status", kwargs={"job_id": job.pk}),
+            "status_url": reverse("dashboard:builder:job_status", kwargs={"job_id": job.pk}),
         },
     )
 
@@ -163,7 +163,7 @@ def retry_build(request, job_id: int):
     job = _job_for_request(request, job_id)
     if job.status == BuildJob.Status.FAILED:
         retry_failed_step(job)
-    return redirect("builder:building", job_id=job.pk)
+    return redirect("dashboard:builder:building", job_id=job.pk)
 
 
 @login_required
@@ -172,9 +172,9 @@ def job_status(request, job_id: int):
     job = _job_for_request(request, job_id)
     payload = build_status_payload(job)
     if payload["done"]:
-        payload["redirect"] = reverse("builder:success", kwargs={"job_id": job.pk})
+        payload["redirect"] = reverse("dashboard:builder:success", kwargs={"job_id": job.pk})
     if payload["failed"]:
-        payload["redirect"] = reverse("builder:building", kwargs={"job_id": job.pk})
+        payload["redirect"] = reverse("dashboard:builder:building", kwargs={"job_id": job.pk})
     return JsonResponse(payload)
 
 
@@ -183,7 +183,7 @@ def success(request, job_id: int):
     job = _job_for_request(request, job_id)
     advance_build_job(job)
     if job.status != BuildJob.Status.DONE:
-        return redirect("builder:building", job_id=job.pk)
+        return redirect("dashboard:builder:building", job_id=job.pk)
 
     # Prefer the job's shop; fall back to viewer's active shop
     store_url = f"https://{job.shop}" if job.shop else ""

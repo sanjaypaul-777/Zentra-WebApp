@@ -30,13 +30,14 @@ class NewsletterSubscriber(models.Model):
 
 
 class LegalPage(models.Model):
-    """About / Privacy / Terms / Refund — editable in Django admin."""
+    """About / Privacy / Terms / Refund / Disclaimer — editable in Django admin."""
 
     class PageKey(models.TextChoices):
         ABOUT = "about", "About Us"
         PRIVACY = "privacy", "Privacy Policy"
         TERMS = "terms", "Terms of Service"
         REFUND = "refund", "Refund Policy"
+        DISCLAIMER = "disclaimer", "Disclaimer"
 
     key = models.CharField(
         max_length=32,
@@ -145,6 +146,9 @@ class SeoPage(models.Model):
         PRIVACY = "privacy", "Privacy Policy"
         TERMS = "terms", "Terms of Service"
         REFUND = "refund", "Refund Policy"
+        DISCLAIMER = "disclaimer", "Disclaimer"
+        AFFILIATE = "affiliate", "Affiliate"
+        AFFILIATE_APPLY = "affiliate_apply", "Affiliate Register"
 
     class RobotsChoice(models.TextChoices):
         INDEX_FOLLOW = "index, follow", "Index + follow (default)"
@@ -248,3 +252,115 @@ class SeoPage(models.Model):
     @property
     def description_length(self) -> int:
         return len(self.meta_description or "")
+
+
+class AffiliateApplication(models.Model):
+    """Public affiliate program application (not an account signup)."""
+
+    class AudienceSize(models.TextChoices):
+        UNDER_1K = "under_1k", "Under 1K"
+        FROM_1K = "1k_10k", "1K–10K"
+        FROM_10K = "10k_50k", "10K–50K"
+        FROM_50K = "50k_plus", "50K+"
+
+    class PrimaryPlatform(models.TextChoices):
+        INSTAGRAM = "instagram", "Instagram"
+        YOUTUBE = "youtube", "YouTube"
+        TIKTOK = "tiktok", "TikTok"
+        BLOG = "blog", "Blog/Website"
+        EMAIL = "email", "Email newsletter"
+        COMMUNITY = "community", "Community/Discord"
+        OTHER = "other", "Other"
+
+    class ContentFocus(models.TextChoices):
+        ECOMMERCE = "ecommerce", "Ecommerce/dropshipping"
+        BUSINESS = "business", "Business/marketing"
+        FINANCE = "finance", "Personal finance"
+        LIFESTYLE = "lifestyle", "General lifestyle"
+        OTHER = "other", "Other"
+
+    class PromotionPlan(models.TextChoices):
+        CONTENT = "content", "Content/reviews"
+        ADS = "ads", "Paid ads"
+        EMAIL = "email", "Email list"
+        COMMUNITY = "community", "Community/group"
+        OTHER = "other", "Other"
+
+    class CurrentActivity(models.TextChoices):
+        STUDENT = "student", "Student"
+        FREELANCER = "freelancer", "Freelancer"
+        INFLUENCER = "influencer", "Influencer / Creator"
+        BLOGGER = "blogger", "Blogger"
+        MARKETER = "marketer", "Marketer"
+        AGENCY = "agency", "Agency owner"
+        ENTREPRENEUR = "entrepreneur", "Entrepreneur / Founder"
+        COACH = "coach", "Coach / Educator"
+        EMPLOYEE = "employee", "In-house employee"
+        OTHER = "other", "Other"
+
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending"
+        REVIEWING = "reviewing", "Reviewing"
+        APPROVED = "approved", "Approved"
+        REJECTED = "rejected", "Rejected"
+
+    name = models.CharField(max_length=120)
+    email = models.EmailField()
+    current_activity = models.CharField(
+        max_length=32,
+        choices=CurrentActivity.choices,
+        default=CurrentActivity.FREELANCER,
+    )
+    activity_other = models.CharField(
+        max_length=120,
+        blank=True,
+        help_text="Required when current activity is Other.",
+    )
+    primary_platform = models.CharField(
+        max_length=32,
+        choices=PrimaryPlatform.choices,
+        default=PrimaryPlatform.OTHER,
+    )
+    promo_url = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="Link to profile or site.",
+    )
+    audience_size = models.CharField(
+        max_length=32,
+        choices=AudienceSize.choices,
+        default=AudienceSize.UNDER_1K,
+    )
+    content_focus = models.CharField(
+        max_length=32,
+        choices=ContentFocus.choices,
+        default=ContentFocus.ECOMMERCE,
+    )
+    promotion_plan = models.CharField(
+        max_length=32,
+        choices=PromotionPlan.choices,
+        default=PromotionPlan.CONTENT,
+    )
+    promotion_other = models.TextField(
+        blank=True,
+        help_text="Required when promotion plan is Other — describe the strategy.",
+    )
+    has_affiliate_experience = models.BooleanField(default=False)
+    notes = models.TextField(blank=True)
+    status = models.CharField(
+        max_length=32,
+        choices=Status.choices,
+        default=Status.PENDING,
+        db_index=True,
+    )
+    admin_notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Affiliate application"
+        verbose_name_plural = "Affiliate applications"
+
+    def __str__(self) -> str:
+        return f"{self.name} <{self.email}> — {self.status}"

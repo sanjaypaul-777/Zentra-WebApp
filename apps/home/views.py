@@ -1,5 +1,5 @@
 """
-Home — marketing landing, contact, newsletter, legal pages (public).
+Home — marketing landing, contact, newsletter, legal, affiliate (public).
 """
 
 from django.conf import settings
@@ -11,7 +11,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import FormView, TemplateView
 
-from .forms import ContactForm, NewsletterForm
+from .forms import AffiliateApplicationForm, ContactForm, NewsletterForm
 from .models import LegalPage
 
 
@@ -37,7 +37,6 @@ class NewsletterSubscribeView(View):
             messages.error(request, "Enter a valid email address.")
             return redirect("home:index")
 
-        # Honeypot filled → silent fake success (no DB write)
         if form.is_honeypot_triggered():
             return HttpResponseRedirect(thanks)
 
@@ -54,7 +53,6 @@ class ContactView(FormView):
     success_url = reverse_lazy("home:contact")
 
     def form_valid(self, form):
-        # Honeypot filled → silent fake success (no DB / no email)
         if form.is_honeypot_triggered():
             messages.success(
                 self.request,
@@ -93,8 +91,72 @@ class ContactView(FormView):
         email.send(fail_silently=True)
 
 
+class AffiliateLandingView(TemplateView):
+    template_name = "home/affiliate.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["newsletter_form"] = NewsletterForm()
+        return ctx
+
+
+class AffiliateRegisterView(FormView):
+    """Public registration — not account signup; approved partners use /login/ later."""
+
+    template_name = "home/affiliate_apply.html"
+    form_class = AffiliateApplicationForm
+    success_url = reverse_lazy("home:affiliate_register")
+
+    def form_valid(self, form):
+        if form.is_honeypot_triggered():
+            messages.success(
+                self.request,
+                "Registration received. We’ll email you after review.",
+            )
+            return HttpResponseRedirect(self.get_success_url())
+
+        application = form.save()
+        self._send_notification(application)
+        messages.success(
+            self.request,
+            "Registration received. We’ll email you after review.",
+        )
+        return super().form_valid(form)
+
+    def _send_notification(self, application):
+        inbox = getattr(
+            settings,
+            "CONTACT_NOTIFY_EMAIL",
+            "help@brandbox.co",
+        )
+        body = (
+            f"New affiliate registration\n\n"
+            f"Name: {application.name}\n"
+            f"Email: {application.email}\n"
+            f"Activity: {application.get_current_activity_display()}"
+            f"{(' — ' + application.activity_other) if application.activity_other else ''}\n"
+            f"Platform: {application.get_primary_platform_display()}\n"
+            f"Profile/site: {application.promo_url or '—'}\n"
+            f"Audience: {application.get_audience_size_display()}\n"
+            f"Content focus: {application.get_content_focus_display()}\n"
+            f"Promotion plan: {application.get_promotion_plan_display()}\n"
+            f"Other strategy: {application.promotion_other or '—'}\n"
+            f"Prior affiliate experience: "
+            f"{'Yes' if application.has_affiliate_experience else 'No'}\n\n"
+            f"Notes:\n{application.notes or '—'}\n"
+        )
+        email = EmailMessage(
+            subject=f"[BrandBox Affiliate] {application.name}",
+            body=body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[inbox],
+            reply_to=[application.email],
+        )
+        email.send(fail_silently=True)
+
+
 def legal_page(request, key: str):
-    """Public About / Privacy / Terms / Refund page (content from admin)."""
+    """Public About / Privacy / Terms / Refund / Disclaimer (content from admin)."""
     page = get_object_or_404(LegalPage, key=key)
     return render(
         request,

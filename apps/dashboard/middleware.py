@@ -13,7 +13,7 @@ from apps.dashboard.access import is_dev_admin
 class OnboardingRequiredMiddleware:
     """
     Authenticated users with onboarding_completed=False cannot use
-    /dashboard/ or /builder/ until they finish /onboarding/.
+    /dashboard/ (including builder) until they finish /onboarding/.
 
     Staff/superuser skip this gate so they can open any URL/step for development.
     """
@@ -32,7 +32,6 @@ class OnboardingRequiredMiddleware:
 
     GATED_PREFIXES = (
         "/dashboard",
-        "/builder",
     )
 
     def __init__(self, get_response):

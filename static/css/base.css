@@ -47,17 +47,19 @@
   --outline: #64748b;
   --outline-variant: #94a3b8;
 
-  /* —— Button / brand accents (reusable .btn-primary, links) —— */
-  --primary: #4edea3;
-  --on-primary: #003824;
-  --primary-container: #10b981;
-  --on-primary-container: #00422b;
-  --primary-fixed: #6ffbbe;
-  --primary-fixed-dim: #4edea3;
-  --surface-tint: #4edea3;
-  --inverse-primary: #006c49;
+  /* —— Button / brand accents (reusable .btn-primary)
+     Rule: primary button background = midnight blue #0d172f */
+  --primary: #0d172f;
+  --on-primary: #fefefe;
+  --primary-container: #0d172f;
+  --on-primary-container: #fefefe;
+  --primary-fixed: #1a2740;
+  --primary-fixed-dim: #0d172f;
+  --surface-tint: #0d172f;
+  --inverse-primary: #c5d0e8;
   --inverse-surface: #06101a;
   --inverse-on-surface: #dde4dd;
+  --accent-mint: #4edea3;
 
   --secondary: #c3c0ff;
   --on-secondary: #1f00a5;
@@ -258,9 +260,11 @@ button.btn-secondary {
 .btn-primary,
 a.btn-primary,
 button.btn-primary {
-  color: var(--on-primary);
-  background: var(--primary-container);
-  border: 3px solid transparent;
+  color: #fefefe;
+  background: #0d172f;
+  border: 0;
+  overflow: visible;
+  box-shadow: none;
 }
 
 .btn-secondary,
@@ -279,9 +283,11 @@ button.btn-secondary {
 a.btn-primary:hover,
 a.btn-primary:focus,
 a.btn-primary:visited {
-  color: var(--on-primary);
-  background: var(--primary-container);
+  color: #fefefe;
+  background: #0d172f;
   text-decoration: none;
+  border: 0;
+  box-shadow: none;
 }
 
 .btn-secondary:hover,
@@ -298,11 +304,12 @@ a.btn-secondary:visited {
   border-color: transparent;
 }
 
+/* Midnight fill + inset rings; hover = magenta↔mint animated ring */
 .btn-primary::before {
-  content:"";
+  content: "";
   position: absolute;
   inset: -3px;
-  z-index: -1;
+  z-index: -2;
   border-radius: inherit;
   background: linear-gradient(120deg, #ff00e5, #4edea3, #ff00e5, #4edea3);
   background-size: 300% 300%;
@@ -312,13 +319,16 @@ a.btn-secondary:visited {
 }
 
 .btn-primary::after {
-  content:"";
+  content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   border-radius: inherit;
-  background: var(--primary-container);
+  background: #0d172f;
   pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, #000000 45%, transparent),
+    inset 0 0 0 3px #212121;
 }
 
 .btn-secondary::before {
@@ -345,9 +355,9 @@ a.btn-secondary:visited {
 
 .btn-primary .material-symbols-outlined,
 .btn-secondary .material-symbols-outlined {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  font-size: 21.6px;
+  width: 21.6px;
+  height: 21.6px;
   color: inherit;
   flex-shrink: 0;
   transition: transform 0.25s ease;
@@ -361,9 +371,10 @@ a.btn-secondary:visited {
 }
 
 .btn-primary:hover::before,
+.btn-primary:focus-visible::before,
 .btn-secondary:hover::before {
   opacity: 1;
-  animation: btn-border-spin 2.2s ease infinite;
+  animation: btn-primary-border 2.2s ease infinite;
 }
 
 .btn--sm {
@@ -380,6 +391,19 @@ a.btn-secondary:visited {
   width: 100%;
 }
 
+@keyframes btn-primary-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Alias for older selectors still using this name */
 @keyframes btn-border-spin {
   0% {
     background-position: 0% 50%;
@@ -394,6 +418,7 @@ a.btn-secondary:visited {
 
 @media (prefers-reduced-motion: reduce) {
   .btn-primary:hover::before,
+  .btn-primary:focus-visible::before,
   .btn-secondary:hover::before {
     animation: none;
     background: linear-gradient(120deg, #ff00e5, #4edea3);

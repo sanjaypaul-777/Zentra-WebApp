@@ -13,13 +13,14 @@
     <div class="auth-logo-wrap">
       <div class="auth-glow" aria-hidden="true"></div>
       <a href="{% url 'home:index' %}" class="auth-logo" aria-label="BrandBox home">
-        <img src="{% static 'images/favicon.png' %}?v=5" alt="" width="48" height="48" />
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="BrandBox" width="48" height="48" />
       </a>
     </div>
-    <h1>Welcome back</h1>
-    <p class="subtitle">Sign in to build and manage your AI store.</p>
 
     <div class="auth-card">
+      {% if show_welcome_back %}
+        <p class="auth-welcome">Welcome back</p>
+      {% endif %}
       {% include "accounts/_social_auth.html" %}
       <form method="post" class="auth-form">
         {% csrf_token %}
@@ -33,7 +34,7 @@
           <a href="{% url 'accounts:forgot' %}">Forgot?</a>
         </div>
         {{ form.password }}
-        <button type="submit" class="auth-submit">
+        <button type="submit" class="btn-primary auth-submit">
           Sign In
           <span class="material-symbols-outlined">login</span>
         </button>
@@ -42,7 +43,10 @@
 
     <p class="auth-footer">
       Not a member yet?
-      <a href="{% url 'accounts:signup' %}">Get started</a>
+      <a href="{% url 'accounts:signup' %}">
+        Get started
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+      </a>
     </p>
 
     <nav class="auth-legal" aria-label="Legal">

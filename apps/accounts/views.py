@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
@@ -19,15 +20,47 @@ SOCIAL_PROVIDERS = {
     "facebook": "Facebook",
 }
 
+# Browser cookie: user has signed in on this device before (survives logout).
+RETURNING_USER_COOKIE = "bb_returning_user"
+RETURNING_USER_MAX_AGE = 60 * 60 * 24 * 365  # 1 year
+
+
+def _mark_returning_user(response):
+    response.set_cookie(
+        RETURNING_USER_COOKIE,
+        "1",
+        max_age=RETURNING_USER_MAX_AGE,
+        samesite="Lax",
+        httponly=False,
+    )
+    return response
+
 
 class BrandBoxLoginView(LoginView):
     template_name = "accounts/login.html"
     redirect_authenticated_user = True
     authentication_form = BrandBoxAuthenticationForm
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["show_welcome_back"] = (
+            self.request.COOKIES.get(RETURNING_USER_COOKIE) == "1"
+        )
+        return ctx
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        return _mark_returning_user(response)
+
 
 class BrandBoxLogoutView(LogoutView):
-    next_page = reverse_lazy("home:index")
+    next_page = reverse_lazy("accounts:login")
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        if isinstance(response, HttpResponseRedirect):
+            return _mark_returning_user(response)
+        return response
 
 
 class SignupView(View):
@@ -43,7 +76,7 @@ class SignupView(View):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect("dashboard:home")
+            return _mark_returning_user(redirect("dashboard:home"))
         return render(request, self.template_name, {"form": form})
 
 

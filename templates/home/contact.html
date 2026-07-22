@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}Contact · BrandBox{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}" />
 <link rel="stylesheet" href="{% static 'css/contact.css' %}" />
@@ -12,19 +13,19 @@
     <div class="auth-logo-wrap">
       <div class="auth-glow" aria-hidden="true"></div>
       <a href="{% url 'home:index' %}" class="auth-logo" aria-label="BrandBox home">
-        <img src="{% static 'images/favicon.png' %}?v=5" alt="" width="48" height="48" />
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="BrandBox" width="48" height="48" />
       </a>
     </div>
-    <h1>Contact us</h1>
-    <p class="subtitle">Whether you need clarity on billing, guidance for your store, or a hand getting started — our team is here.</p>
-
-    {% if messages %}
-      {% for message in messages %}
-        <p class="contact-success" role="status">{{ message }}</p>
-      {% endfor %}
-    {% endif %}
 
     <div class="auth-card">
+      <p class="auth-welcome">Contact us</p>
+
+      {% if messages %}
+        {% for message in messages %}
+          <p class="contact-success" role="status">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+
       <form method="post" class="auth-form contact-form" novalidate>
         {% csrf_token %}
         {% if form.non_field_errors %}
@@ -66,19 +67,25 @@
           {{ form.website }}
         </div>
 
-        <button type="submit" class="auth-submit">
+        <button type="submit" class="btn-primary auth-submit">
           Send message
-          <span class="material-symbols-outlined" aria-hidden="true">send</span>
+          <span class="material-symbols-outlined" aria-hidden="true">chat</span>
         </button>
       </form>
     </div>
 
     <p class="auth-footer">
       Or email
-      <a href="mailto:help@brandbox.co">help@brandbox.co</a>
+      <a href="mailto:help@brandbox.co">
+        help@brandbox.co
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+      </a>
     </p>
-    <nav class="auth-legal" aria-label="Back">
-      <a href="{% url 'home:index' %}">← Back to home</a>
+
+    <nav class="auth-legal" aria-label="Legal">
+      <a href="{% url 'home:privacy' %}">Privacy Policy</a>
+      <a href="{% url 'home:terms' %}">Terms of Service</a>
+      <a href="{% url 'home:refund' %}">Refund Policy</a>
     </nav>
   </div>
 </main>

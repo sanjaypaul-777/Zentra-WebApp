@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Register · BrandBox Affiliate{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}" />
+<link rel="stylesheet" href="{% static 'css/contact.css' %}" />
+<link rel="stylesheet" href="{% static 'css/affiliate.css' %}?v=25" />
+{% endblock %}
+
+{% block body %}
+<main class="auth-page contact-page aff-apply-page">
+  <div class="auth-inner auth-inner--wide">
+    <div class="auth-logo-wrap">
+      <div class="auth-glow" aria-hidden="true"></div>
+      <a href="{% url 'home:index' %}" class="auth-logo" aria-label="BrandBox home">
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="BrandBox" width="48" height="48" />
+      </a>
+    </div>
+
+    <div class="auth-card">
+      <p class="auth-welcome">Affiliate Registration</p>
+
+      {% if messages %}
+        {% for message in messages %}
+          <p class="contact-success" role="status">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" class="auth-form contact-form" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <p class="error">{{ form.non_field_errors|striptags }}</p>
+        {% endif %}
+
+        <div class="contact-form__row">
+          <div class="contact-form__field">
+            <label class="label" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+            {{ form.name }}
+            {% if form.name.errors %}<p class="error">{{ form.name.errors|striptags }}</p>{% endif %}
+          </div>
+          <div class="contact-form__field">
+            <label class="label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+            {{ form.email }}
+            {% if form.email.errors %}<p class="error">{{ form.email.errors|striptags }}</p>{% endif %}
+          </div>
+        </div>
+
+        <label class="label" for="{{ form.current_activity.id_for_label }}">{{ form.current_activity.label }}</label>
+        {{ form.current_activity }}
+        {% if form.current_activity.errors %}<p class="error">{{ form.current_activity.errors|striptags }}</p>{% endif %}
+
+        <div
+          class="aff-apply__other{% if form.current_activity.value == 'other' or form.activity_other.errors %} is-open{% endif %}"
+          data-aff-other-panel="activity"
+          {% if form.current_activity.value != 'other' and not form.activity_other.errors %}hidden{% endif %}
+        >
+          <label class="label" for="{{ form.activity_other.id_for_label }}">{{ form.activity_other.label }}</label>
+          {{ form.activity_other }}
+          {% if form.activity_other.errors %}<p class="error">{{ form.activity_other.errors|striptags }}</p>{% endif %}
+        </div>
+
+        <label class="label" for="{{ form.primary_platform.id_for_label }}">{{ form.primary_platform.label }}</label>
+        {{ form.primary_platform }}
+        {% if form.primary_platform.errors %}<p class="error">{{ form.primary_platform.errors|striptags }}</p>{% endif %}
+
+        <label class="label" for="{{ form.promo_url.id_for_label }}">{{ form.promo_url.label }}</label>
+        {{ form.promo_url }}
+        {% if form.promo_url.errors %}<p class="error">{{ form.promo_url.errors|striptags }}</p>{% endif %}
+
+        <div class="contact-form__row">
+          <div class="contact-form__field">
+            <label class="label" for="{{ form.audience_size.id_for_label }}">{{ form.audience_size.label }}</label>
+            {{ form.audience_size }}
+            {% if form.audience_size.errors %}<p class="error">{{ form.audience_size.errors|striptags }}</p>{% endif %}
+          </div>
+          <div class="contact-form__field">
+            <label class="label" for="{{ form.content_focus.id_for_label }}">{{ form.content_focus.label }}</label>
+            {{ form.content_focus }}
+            {% if form.content_focus.errors %}<p class="error">{{ form.content_focus.errors|striptags }}</p>{% endif %}
+          </div>
+        </div>
+
+        <label class="label" for="{{ form.promotion_plan.id_for_label }}">{{ form.promotion_plan.label }}</label>
+        {{ form.promotion_plan }}
+        {% if form.promotion_plan.errors %}<p class="error">{{ form.promotion_plan.errors|striptags }}</p>{% endif %}
+
+        <div
+          class="aff-apply__other{% if form.promotion_plan.value == 'other' or form.promotion_other.errors %} is-open{% endif %}"
+          data-aff-other-panel="promotion"
+          {% if form.promotion_plan.value != 'other' and not form.promotion_other.errors %}hidden{% endif %}
+        >
+          <label class="label" for="{{ form.promotion_other.id_for_label }}">{{ form.promotion_other.label }}</label>
+          {{ form.promotion_other }}
+          {% if form.promotion_other.errors %}<p class="error">{{ form.promotion_other.errors|striptags }}</p>{% endif %}
+        </div>
+
+        <fieldset class="aff-apply__yesno">
+          <legend class="label">{{ form.has_affiliate_experience.label }}</legend>
+          <div class="aff-apply__choice" role="presentation">
+            {% for radio in form.has_affiliate_experience %}
+              <label class="aff-apply__choice-option" for="{{ radio.id_for_label }}">
+                {{ radio.tag }}
+                <span>{{ radio.choice_label }}</span>
+              </label>
+            {% endfor %}
+          </div>
+          {% if form.has_affiliate_experience.errors %}
+            <p class="error">{{ form.has_affiliate_experience.errors|striptags }}</p>
+          {% endif %}
+        </fieldset>
+
+        <label class="label" for="{{ form.notes.id_for_label }}">{{ form.notes.label }}</label>
+        {{ form.notes }}
+        {% if form.notes.errors %}<p class="error">{{ form.notes.errors|striptags }}</p>{% endif %}
+
+        <label class="aff-apply__agree" for="{{ form.agree_terms.id_for_label }}">
+          {{ form.agree_terms }}
+          <span>
+            I agree to the
+            <a href="{% url 'home:terms' %}" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+            and
+            <a href="{% url 'home:privacy' %}" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
+          </span>
+        </label>
+        {% if form.agree_terms.errors %}
+          <p class="error">{{ form.agree_terms.errors|striptags }}</p>
+        {% endif %}
+
+        <div class="brandbox-honeypot" aria-hidden="true">
+          <label for="{{ form.website.id_for_label }}">Website</label>
+          {{ form.website }}
+        </div>
+
+        <button type="submit" class="btn-primary auth-submit">
+          Submit registration →
+        </button>
+      </form>
+    </div>
+
+    <p class="auth-footer">
+      Learn more
+      <a href="{% url 'home:affiliate' %}">
+        Affiliate program
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+      </a>
+    </p>
+
+    <nav class="auth-legal" aria-label="Legal">
+      <a href="{% url 'home:privacy' %}">Privacy Policy</a>
+      <a href="{% url 'home:terms' %}">Terms of Service</a>
+      <a href="{% url 'home:disclaimer' %}">Disclaimer</a>
+    </nav>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/auth-glow.js' %}" defer></script>
+<script src="{% static 'js/affiliate-register.js' %}?v=2" defer></script>
+{% endblock %}

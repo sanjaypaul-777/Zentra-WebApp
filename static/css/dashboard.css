@@ -27,8 +27,8 @@
   --dash-hairline: rgba(15, 23, 42, 0.1);
   --dash-outline: #cbd5e1;
   --dash-primary: #4edea3;
-  --dash-on-primary: #003824;
-  --dash-primary-container: #10b981;
+  --dash-on-primary: #fefefe;
+  --dash-primary-container: #0d172f;
   --dash-primary-fixed: #6ffbbe;
   --dash-error: #b91c1c;
   --dash-glass: #ffffff;
@@ -1405,8 +1405,8 @@
   --flow-hairline: rgba(15, 23, 42, 0.12);
   --flow-outline: #cbd5e1;
   --flow-primary: #4edea3;
-  --flow-on-primary: #003824;
-  --flow-primary-container: #10b981;
+  --flow-on-primary: #fefefe;
+  --flow-primary-container: #0d172f;
   --flow-glass: #ffffff;
 
   --background: var(--flow-bg);

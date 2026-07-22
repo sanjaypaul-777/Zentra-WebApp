@@ -2,7 +2,14 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .models import ContactMessage, LegalPage, NewsletterSubscriber, SeoPage, SiteSeoSettings
+from .models import (
+    AffiliateApplication,
+    ContactMessage,
+    LegalPage,
+    NewsletterSubscriber,
+    SeoPage,
+    SiteSeoSettings,
+)
 
 
 @admin.register(ContactMessage)
@@ -12,6 +19,53 @@ class ContactMessageAdmin(admin.ModelAdmin):
     search_fields = ("name", "email", "subject", "message")
     readonly_fields = ("created_at",)
     list_editable = ("is_read",)
+
+
+@admin.register(AffiliateApplication)
+class AffiliateApplicationAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "email",
+        "primary_platform",
+        "audience_size",
+        "status",
+        "created_at",
+    )
+    list_filter = (
+        "status",
+        "current_activity",
+        "primary_platform",
+        "audience_size",
+        "content_focus",
+        "has_affiliate_experience",
+        "created_at",
+    )
+    search_fields = ("name", "email", "promo_url", "notes", "activity_other")
+    readonly_fields = ("created_at", "updated_at")
+    list_editable = ("status",)
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "status",
+                    "name",
+                    "email",
+                    "current_activity",
+                    "activity_other",
+                    "primary_platform",
+                    "promo_url",
+                    "audience_size",
+                    "content_focus",
+                    "promotion_plan",
+                    "promotion_other",
+                    "has_affiliate_experience",
+                )
+            },
+        ),
+        ("Notes", {"fields": ("notes",)}),
+        ("Internal", {"fields": ("admin_notes", "created_at", "updated_at")}),
+    )
 
 
 @admin.register(NewsletterSubscriber)
