@@ -286,7 +286,7 @@ flowchart TD
 
   Auth -->|No| Login[Signup / Login]
   Login -->|Fail| Login
-  Login -->|OK| Dash[/dashboard/]
+  Login -->|OK| Dash["/dashboard/"]
   Auth -->|Yes| Dash
 
   Dash --> State{Shopify ↔ BrandBox status}
@@ -296,20 +296,20 @@ flowchart TD
   Partner --> Back[Come back with *.myshopify.com]
   Back --> ConnectCard
 
-  State -->|Has Shopify store<br/>but NOT connected| ConnectCard[Connect Shopify]
+  State -->|Has Shopify store<br>but NOT connected| ConnectCard[Connect Shopify]
   ConnectCard --> Paste[Paste yourstorename.myshopify.com]
-  Paste --> Pending[(DB: ShopConnection<br/>PENDING app_installed=false)]
+  Paste --> Pending[(DB: ShopConnection<br>PENDING app_installed=false)]
   Pending --> InstallUI[Install BrandBox guide]
 
-  State -->|Domain saved<br/>pending install| InstallUI
+  State -->|Domain saved<br>pending install| InstallUI
   InstallUI --> OAuth[Redirect → Node OAuth]
   OAuth --> NodeSession[(Node: Shopify Session)]
   NodeSession --> Check[GET /api/install-status]
   Check -->|Not installed| InstallUI
-  Check -->|Installed| Active[(DB: ShopConnection<br/>ACTIVE app_installed=true)]
+  Check -->|Installed| Active[(DB: ShopConnection<br>ACTIVE app_installed=true)]
   Active --> Dash
 
-  State -->|Already connected<br/>app_installed=true| Hub{Choose work}
+  State -->|Already connected<br>app_installed=true| Hub{Choose work}
 
   Hub --> Overview[Overview]
   Hub --> Builder[AI Store Builder]
@@ -323,8 +323,8 @@ flowchart TD
 ```mermaid
 flowchart LR
   A[No Shopify store] --> B[Has Shopify store]
-  B --> C[Pending in BrandBox<br/>domain saved only]
-  C --> D[Active in BrandBox<br/>OAuth + app installed]
+  B --> C[Pending in BrandBox<br>domain saved only]
+  C --> D[Active in BrandBox<br>OAuth + app installed]
 
   A -.->|Create account| B
   B -.->|Connect + paste domain| C
@@ -344,27 +344,27 @@ Requires **Active** connection (`app_installed=true`).
 
 ```mermaid
 flowchart TD
-  Hub[Connected shop] --> Builder[/dashboard/builder/]
+  Hub[Connected shop] --> Builder["/dashboard/builder/"]
 
   Builder --> Niche[Pick niche NichePack]
   Niche --> Opt{Options?}
   Opt --> Start[Start build]
 
-  Start --> Job[(DB WRITE BuildJob<br/>status=running)]
+  Start --> Job[(DB WRITE BuildJob<br>status=running)]
   Job --> Preview{Staff preview shop?}
 
   Preview -->|Yes admin-preview-*| Sim[Local timed simulator]
   Preview -->|No real shop| NodeStart[Node POST /api/build/start]
-  NodeStart --> Eng[(Node build engine<br/>theme + products)]
-  Eng --> Building[/dashboard/builder/building/id/]
+  NodeStart --> Eng[(Node build engine<br>theme + products)]
+  Eng --> Building["/dashboard/builder/building/id/"]
 
   Sim --> Building
   Building --> Poll[Poll Node GET /api/build/status]
-  Poll --> Sync[(DB UPDATE BuildJob<br/>progress / label / step)]
+  Poll --> Sync[(DB UPDATE BuildJob<br>progress / label / step)]
   Sync --> Done{Outcome?}
 
-  Done -->|completed| Success[/dashboard/builder/success/id/<br/>BuildJob=done]
-  Done -->|failed| Fail[build_failed UI<br/>BuildJob=failed]
+  Done -->|completed| Success["Success page<br>BuildJob=done"]
+  Done -->|failed| Fail[build_failed UI<br>BuildJob=failed]
   Done -->|still running| Building
 
   Fail --> Retry[Retry]
