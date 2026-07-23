@@ -3,16 +3,16 @@
  */
 
 .ob {
-  --ob-bg: #eef2f8;
-  --ob-text: #06101a;
-  --ob-muted: #475569;
-  --ob-surface: #ffffff;
-  --ob-hairline: rgba(15, 23, 42, 0.1);
-  --ob-primary: #4edea3;
+  --ob-bg: #000000;
+  --ob-text: #fefefe;
+  --ob-muted: #b6b6b6;
+  --ob-surface: #111111;
+  --ob-hairline: rgba(254, 254, 254, 0.12);
+  --ob-primary: #0d172f;
   --ob-primary-container: #0d172f;
   --ob-on-primary: #fefefe;
-  --ob-navy: #06101a;
-  --ob-error: #b91c1c;
+  --ob-navy: #0d172f;
+  --ob-error: #ff6b6b;
   --ob-max: 720px;
 
   --background: var(--ob-bg);
@@ -378,7 +378,7 @@
 
 .addr-suggest__item:hover,
 .addr-suggest__item.is-active {
-  background: color-mix(in srgb, #4edea3 16%, #fff);
+  background: color-mix(in srgb, #fefefe 16%, #fff);
 }
 
 .addr-combo__control {
@@ -418,8 +418,8 @@
 }
 
 .phone-input:focus-within {
-  border-color: color-mix(in srgb, #4edea3 55%, #94a3b8);
-  box-shadow: 0 0 0 3px color-mix(in srgb, #4edea3 22%, transparent);
+  border-color: color-mix(in srgb, #fefefe 55%, #94a3b8);
+  box-shadow: 0 0 0 3px color-mix(in srgb, #fefefe 22%, transparent);
 }
 
 .phone-input__dial {

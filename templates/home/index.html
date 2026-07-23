@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block" rel="stylesheet"/>
 <link rel="stylesheet" href="{% static 'css/base.css' %}"/>
-<link rel="stylesheet" href="{% static 'css/home.css' %}?v=hero-texture-2"/>
+<link rel="stylesheet" href="{% static 'css/home.css' %}?v=footer-center-1"/>
 <link rel="icon" href="{% static 'images/favicon.png' %}?v=5" type="image/png" />
 <link rel="apple-touch-icon" href="{% static 'images/favicon.png' %}?v=5" />
 <script>
@@ -59,10 +59,15 @@
     <img src="{% static 'images/home-logo.png' %}?v=1" alt="BrandBox" height="48"/>
   </a>
   <div class="brandbox-nav__auth">
-    <a href="{% url 'accounts:login' %}" class="brandbox-nav__login font-body-md text-body-md transition-colors duration-300">
-      <span class="brandbox-nav__login-icon" aria-hidden="true">
-        <span class="brandbox-nav__login-icon-emoji">👤</span>
-      </span>
+    <a href="{% url 'accounts:login' %}" class="brandbox-nav__login">
+      <img
+        class="brandbox-nav__login-icon"
+        src="{% static 'images/nav-login-icon.png' %}?v=1"
+        alt=""
+        width="22"
+        height="22"
+        decoding="async"
+      />
       Log In
     </a>
     <a href="{% url 'accounts:signup' %}" class="btn-secondary btn--nav brandbox-nav__signup">Get Started</a>
@@ -78,7 +83,7 @@
       data-brandbox-offer-countdown
       data-end="2026-07-31T23:59:59+05:30"
     >
-      <span class="brandbox-hero__offer-badge">65% Off</span>
+      <span class="brandbox-hero__offer-badge">{{ product.offer_badge }}</span>
       <span class="brandbox-hero__offer-timer">
         <span class="material-symbols-outlined brandbox-hero__offer-bolt" aria-hidden="true">bolt</span>
         <span class="brandbox-hero__offer-label">Offer ends in</span>
@@ -97,7 +102,7 @@
       No design. No guesswork. Just a few minutes between you and your AI-built store — pick a niche and bring your brand live.
     </p>
     <div class="brandbox-hero__actions">
-      <a href="{% url 'accounts:signup' %}" class="btn-primary">
+      <a href="{% url 'dashboard:builder' %}" class="btn-primary">
         Build My AI Store
         <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
       </a>
@@ -105,8 +110,9 @@
   </div>
 
   <div class="brandbox-hero__spotlight" aria-label="Theme samples">
-    <div class="brandbox-hero__themes" data-brandbox-hero-stage>
-      <article class="brandbox-hero__theme">
+    <div class="brandbox-hero__carousel-glow" aria-hidden="true"></div>
+    <div class="brandbox-hero__themes" data-brandbox-hero-carousel data-brandbox-hero-stage>
+      <article class="brandbox-hero__theme" tabindex="0">
         <div class="brandbox-hero__theme-frame">
           <img
             src="{% static 'images/theme_sample1.jpg' %}"
@@ -119,7 +125,7 @@
           />
         </div>
       </article>
-      <article class="brandbox-hero__theme">
+      <article class="brandbox-hero__theme" tabindex="0">
         <div class="brandbox-hero__theme-frame">
           <img
             src="{% static 'images/theme_sample2.jpg' %}"
@@ -131,7 +137,7 @@
           />
         </div>
       </article>
-      <article class="brandbox-hero__theme">
+      <article class="brandbox-hero__theme" tabindex="0">
         <div class="brandbox-hero__theme-frame">
           <img
             src="{% static 'images/theme_sample3.jpg' %}"
@@ -143,7 +149,7 @@
           />
         </div>
       </article>
-      <article class="brandbox-hero__theme">
+      <article class="brandbox-hero__theme" tabindex="0">
         <div class="brandbox-hero__theme-frame">
           <img
             src="{% static 'images/theme_sample4.jpg' %}"
@@ -155,7 +161,7 @@
           />
         </div>
       </article>
-      <article class="brandbox-hero__theme">
+      <article class="brandbox-hero__theme" tabindex="0">
         <div class="brandbox-hero__theme-frame">
           <img
             src="{% static 'images/theme_sample5.jpg' %}"
@@ -285,7 +291,7 @@
 <span>Building at midnight? You're still covered — never left on your own.</span>
 </li>
 </ul>
-<a href="{% url 'accounts:signup' %}" class="btn-primary brandbox-agent__cta">Start with your coach</a>
+<a href="{% url 'dashboard:coach' %}" class="btn-primary brandbox-agent__cta">Start with your coach</a>
 </div>
 <div class="brandbox-agent__panel-wrap" data-brandbox-reveal-child>
 <div class="brandbox-agent__panel" data-brandbox-tilt>
@@ -310,10 +316,21 @@
 </div>
 </div>
 <div class="brandbox-agent__composer">
-<input class="brandbox-agent__input" placeholder="Ask your coach or AI…" type="text" readonly tabindex="-1"/>
-<button type="button" class="brandbox-agent__send" tabindex="-1" aria-hidden="true">
-<span class="material-symbols-outlined">send</span>
+<form class="brandbox-agent__composer-form" action="{% url 'dashboard:coach' %}" method="get" data-brandbox-home-coach>
+<label class="visually-hidden" for="brandbox-home-coach-q">Ask your coach or AI</label>
+<input
+  id="brandbox-home-coach-q"
+  class="brandbox-agent__input"
+  name="q"
+  type="text"
+  placeholder="Ask your coach or AI…"
+  autocomplete="off"
+  maxlength="500"
+/>
+<button type="submit" class="brandbox-agent__send" aria-label="Send to BrandBox Coach">
+<span class="material-symbols-outlined" aria-hidden="true">send</span>
 </button>
+</form>
 </div>
 </div>
 </div>
@@ -324,6 +341,21 @@
 <section id="brandbox-offer" class="brandbox-offer brandbox-reveal">
   <div class="brandbox-offer__inner">
     <div class="brandbox-offer__grid">
+      <div class="brandbox-offer__visual" data-brandbox-reveal-child>
+        <span class="brandbox-offer__visual-glow" aria-hidden="true"></span>
+        <img
+          class="brandbox-offer__visual-img"
+          src="{% static 'images/offer.png' %}?v=blend-1"
+          alt="BrandBox dashboard linked to a trending product and coach chat"
+          width="1376"
+          height="768"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <blockquote class="brandbox-offer__quote" data-brandbox-reveal-child>
+        <p>Build your store, import scored products, and push to Shopify — with a coach beside you when you get stuck.</p>
+      </blockquote>
       <article class="brandbox-offer__card" data-brandbox-reveal-child data-brandbox-tilt>
         <span class="brandbox-offer__kicker">Limited-time offer</span>
         <h2 class="brandbox-offer__plan">Plus Plan</h2>
@@ -360,28 +392,13 @@
         </ul>
         <p class="brandbox-offer__more">+ Dashboard, vault, and store sync</p>
         <p class="brandbox-offer__notes">
-          *65% off Plus annual for year one. Renews at the standard rate unless canceled. Offer may change.
+          {{ product.offer_footnote }}
         </p>
-      </article>
-      <div class="brandbox-offer__value-col">
-        <div class="brandbox-offer__visual">
-          <span class="brandbox-offer__visual-glow" aria-hidden="true"></span>
-          <img
-            class="brandbox-offer__visual-img"
-            src="{% static 'images/offer.png' %}?v=blend-1"
-            alt="BrandBox dashboard linked to a trending product and coach chat"
-            width="1376"
-            height="768"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="brandbox-offer__actions">
+          <a href="{% url 'checkout:index' %}" class="btn-primary brandbox-offer__cta">{{ product.offer_cta_lock_in }}</a>
+          <p class="brandbox-offer__trust">Cancel anytime · Secure checkout</p>
         </div>
-        <blockquote class="brandbox-offer__quote">
-          <p>Build your store, import scored products, and push to Shopify — with a coach beside you when you get stuck.</p>
-        </blockquote>
-        <p class="brandbox-offer__trust">Cancel anytime · Secure checkout</p>
-        <a href="{% url 'checkout:index' %}" class="btn-primary brandbox-offer__cta">Lock in 65% off</a>
-      </div>
+      </article>
     </div>
   </div>
 </section>
@@ -445,12 +462,12 @@
 <h2 class="brandbox-products__title">AI-chosen products vault</h2>
 <p class="brandbox-products__slogan">Ready to Import</p>
 </div>
-<a href="{% url 'accounts:signup' %}" class="btn-secondary brandbox-products__cta">Explore</a>
+<a href="{% url 'dashboard:product_hunter' %}" class="btn-secondary brandbox-products__cta">Explore</a>
 </div>
 <div class="brandbox-products__grid">
 <article class="brandbox-products__card" data-brandbox-reveal-child data-brandbox-tilt>
 <div class="brandbox-products__media">
-<img class="brandbox-products__img" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNBfvgFY9nNMPOD1zScY-QS7yYF5QJ06Ih0rmzuJQyBij_C9QIrvYRHFQFowF7Id1Z8L0X0vBUkrdYFc8meCyjB5Af7BGphH1_qgV86a9yEbdM5k9Z0hoOkOopkCBl2cVDCVoOs0K4aM9vWvNPE43MHyp703xS8TrQXlYox5XqZ_tGxDfjDLwRqY9SKVI_FRWYKaptxAX1H2f_JNdBOuaONQtayCuh2blrsAYXGDcKkK_OCgtZ18vB3HtekqC9VocZhS2oChx-AVk3" loading="lazy" decoding="async"/>
+<img class="brandbox-products__img" alt="Minimal smart watch on a charging stand" src="{% static 'images/vault/watch.jpg' %}?v=1" width="800" height="800" loading="lazy" decoding="async"/>
 </div>
 <div class="brandbox-products__meta">
 <p class="brandbox-products__name">Minimal Smart Watch</p>
@@ -459,7 +476,7 @@
 </article>
 <article class="brandbox-products__card" data-brandbox-reveal-child data-brandbox-tilt>
 <div class="brandbox-products__media">
-<img class="brandbox-products__img" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWj4WP3Gl1fA7dFGuki7nVfo3Sg9HJNcXFsEjecnQY0Gv3M7MugeQIP8Tlw_cBtLadozf0T_mIv7alIQtoxu7EkG1hjvD9OaPwY1eAwIQ4R_Odhi1-jmfeIck073MiBYlWwL83BlzSE0U7n6raS3wcZQMBhlo5RcS6BiwEYksmXCgLyU3x9SCzYdI4czeE_KCeMSrFLSBM3e_xDUfJq3Q2ZpymxtR1ew77pcANVdHw9fUdFxy_bD8iIHzEgqjZtNR17s9YTgXeFZrU" loading="lazy" decoding="async"/>
+<img class="brandbox-products__img" alt="Glow serum duo dropper bottles" src="{% static 'images/vault/serum.jpg' %}?v=1" width="800" height="800" loading="lazy" decoding="async"/>
 </div>
 <div class="brandbox-products__meta">
 <p class="brandbox-products__name">Glow Serum Duo</p>
@@ -468,7 +485,7 @@
 </article>
 <article class="brandbox-products__card" data-brandbox-reveal-child data-brandbox-tilt>
 <div class="brandbox-products__media">
-<img class="brandbox-products__img" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBpnmZmG2cXibZMfVZMtyahmdk27f-CaZYyNqiVJPvMDf0at5LEQ5_V81odh-TAkJNCCokcIiHsi7-XAdBnUHGG0K__oG5Otyimv7tN5WR7ZWRS4S7x_oNqwvKgedK-ebWcsn2GbxrH60Xxkl9w8WlsMNMiWOToxJPYb5a3tSQAi4rDA2qRA6_a5sf3X5GoiDbRlVDfVrscvg2lb46ev1kic7X9J8gwogyrNaJRHAZ5JmNFyNzQXAM5q2LS00RE1o7VnU4SA_z_dsf" loading="lazy" decoding="async"/>
+<img class="brandbox-products__img" alt="Pro blender kit with green smoothie" src="{% static 'images/vault/blender.jpg' %}?v=1" width="800" height="800" loading="lazy" decoding="async"/>
 </div>
 <div class="brandbox-products__meta">
 <p class="brandbox-products__name">Pro Blender Kit</p>
@@ -477,7 +494,7 @@
 </article>
 <article class="brandbox-products__card" data-brandbox-reveal-child data-brandbox-tilt>
 <div class="brandbox-products__media">
-<img class="brandbox-products__img" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4GlxSUI_rg3lZFJDMQLiqhfxjPtKU1KucHqrc8t7qjXwlGGho3V3OkuZX18_0MTNmb_fBMZnvVk1ojU0BcsnLl2tvX1Uz995nEcJU1gOK2ATICjrWZ4lKIVzKcUF69t8V8k3lJZRqBSgy3PUi9UC8hmyIHGoLHfCepuHKHRC749ya07N6C3-uuZiImgVHNjHZqVUUQhr930929A6ghVSA-0TqNJpp4IUmgGcd-3z2qClpMbLRQ_rdjHyK6zcJCuTp___5Qg6aPvC" loading="lazy" decoding="async"/>
+<img class="brandbox-products__img" alt="Recovery massage gun on studio backdrop" src="{% static 'images/vault/massage-gun.jpg' %}?v=1" width="800" height="800" loading="lazy" decoding="async"/>
 </div>
 <div class="brandbox-products__meta">
 <p class="brandbox-products__name">Recovery Massage Gun</p>
@@ -486,7 +503,7 @@
 </article>
 <article class="brandbox-products__card" data-brandbox-reveal-child data-brandbox-tilt>
 <div class="brandbox-products__media">
-<img class="brandbox-products__img" alt="" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&amp;fit=crop&amp;w=800&amp;q=80" loading="lazy" decoding="async"/>
+<img class="brandbox-products__img" alt="Street runner sneakers" src="{% static 'images/vault/sneakers.jpg' %}?v=1" width="800" height="800" loading="lazy" decoding="async"/>
 </div>
 <div class="brandbox-products__meta">
 <p class="brandbox-products__name">Street Runner Sneakers</p>
@@ -495,7 +512,7 @@
 </article>
 <article class="brandbox-products__card" data-brandbox-reveal-child data-brandbox-tilt>
 <div class="brandbox-products__media">
-<img class="brandbox-products__img" alt="" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&amp;fit=crop&amp;w=800&amp;q=80" loading="lazy" decoding="async"/>
+<img class="brandbox-products__img" alt="Studio wireless headphones on yellow backdrop" src="{% static 'images/vault/headphones.jpg' %}?v=1" width="800" height="800" loading="lazy" decoding="async"/>
 </div>
 <div class="brandbox-products__meta">
 <p class="brandbox-products__name">Studio Wireless Headphones</p>
@@ -685,7 +702,7 @@
 <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
 </summary>
 <div class="brandbox-faq__answer px-6 pb-6 text-on-surface-variant">
-  Eligible customers can get 65% off Plus Annual for the first year. Check checkout for the current price and what’s included on your plan.
+  {{ product.offer_faq_blurb }}
 </div>
 </details>
 <details class="brandbox-faq__item group brandbox-glass rounded-xl" data-brandbox-reveal-child>
@@ -707,86 +724,14 @@
 <h2 class="brandbox-launch__title">Ready to launch your empire?</h2>
 <p class="brandbox-launch__lede">Join 15,000+ entrepreneurs building the future of e-commerce with BrandBox AI.</p>
 <div class="brandbox-launch__actions">
-<a href="{% url 'accounts:signup' %}" class="btn-primary">Build My Store Now <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span></a>
-<a href="{% url 'checkout:index' %}" class="btn-secondary">Claim 65% Discount</a>
+<a href="{% url 'dashboard:builder' %}" class="btn-primary">Build My Store Now <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span></a>
+<a href="{% url 'checkout:index' %}" class="btn-secondary">{{ product.offer_cta_claim }}</a>
 </div>
 </div>
 </div>
 </section>
 <!-- Footer -->
-<footer class="brandbox-footer w-full">
-<div class="brandbox-footer__grid">
-  <div class="brandbox-footer__brand">
-    <a href="{% url 'home:index' %}" class="brandbox-brand brandbox-brand--footer" aria-label="BrandBox home">
-      <img src="{% static 'images/home-logo.png' %}?v=1" alt="BrandBox" height="48"/>
-    </a>
-    <p class="brandbox-footer__desc">The intelligent foundation for the next generation of e-commerce entrepreneurs.</p>
-    <div class="brandbox-footer__social">
-      <a class="brandbox-footer__social-link brandbox-footer__social-link--instagram" href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-        <svg class="brandbox-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-        </svg>
-      </a>
-      <a class="brandbox-footer__social-link brandbox-footer__social-link--facebook" href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
-        <svg class="brandbox-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
-        </svg>
-      </a>
-      <a class="brandbox-footer__social-link brandbox-footer__social-link--tiktok" href="#" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
-        <svg class="brandbox-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.73.41-1.14.1-2.48.06-4.96.07-7.44z"/>
-        </svg>
-      </a>
-    </div>
-  </div>
-  <div class="brandbox-footer__nav">
-    <div class="brandbox-footer__column">
-      <h4 class="brandbox-footer__heading">Services</h4>
-      <ul class="brandbox-footer__list">
-        <li><a href="#brandbox-how">How it works</a></li>
-        <li><a href="#brandbox-offer">Pricing</a></li>
-        <li><a href="#brandbox-coach">Coach chat</a></li>
-        <li><a href="#brandbox-products">Product vault</a></li>
-      </ul>
-    </div>
-    <div class="brandbox-footer__column">
-      <h4 class="brandbox-footer__heading">Legal</h4>
-      <ul class="brandbox-footer__list">
-        <li><a href="{% url 'home:privacy' %}">Privacy Policy</a></li>
-        <li><a href="{% url 'home:terms' %}">Terms of Service</a></li>
-        <li><a href="{% url 'home:refund' %}">Refund Policy</a></li>
-        <li><a href="{% url 'home:disclaimer' %}">Disclaimer</a></li>
-        <li><a href="{% url 'home:contact' %}">Contact</a></li>
-      </ul>
-    </div>
-    <div class="brandbox-footer__column brandbox-footer__newsletter">
-      <h4 class="brandbox-footer__heading">Newsletter</h4>
-      <p class="brandbox-footer__newsletter-copy">Get the latest winning products delivered to your inbox.</p>
-      <form method="post" action="{% url 'home:newsletter' %}" class="brandbox-footer__newsletter-form">
-        {% csrf_token %}
-        <label class="sr-only" for="{{ newsletter_form.email.id_for_label }}">Email</label>
-        {{ newsletter_form.email }}
-        {# Honeypot — leave empty #}
-        <div class="brandbox-honeypot" aria-hidden="true">
-          <label for="{{ newsletter_form.website.id_for_label }}">Website</label>
-          {{ newsletter_form.website }}
-        </div>
-        <button type="submit" class="brandbox-footer__subscribe" aria-label="Subscribe">
-          <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
-        </button>
-      </form>
-    </div>
-  </div>
-</div>
-<div class="brandbox-footer__bottom">
-  <p class="brandbox-footer__copy">© 2026 <a href="{% url 'home:index' %}" class="brandbox-footer__brand-link">BrandBox</a> - All rights reserved.</p>
-  <nav class="brandbox-footer__legal" aria-label="Footer links">
-    <a class="brandbox-footer__legal-link" href="{% url 'home:about' %}">About Us</a>
-    <a class="brandbox-footer__legal-link" href="{% url 'home:affiliate' %}">Affiliate</a>
-    <a class="brandbox-footer__legal-link" href="{% url 'home:disclaimer' %}">Disclaimer</a>
-  </nav>
-</div>
-</footer>
+{% include "home/_site_footer.html" %}
 
 {% if show_newsletter_thanks %}
 <div
@@ -807,9 +752,10 @@
 {% endif %}
 
 <script src="{% static 'js/brandbox-hero-typed.js' %}"></script>
+<script src="{% static 'js/brandbox-hero-carousel.js' %}?v=5"></script>
 <script src="{% static 'js/brandbox-offer-countdown.js' %}?v=5"></script>
 <script src="{% static 'js/brandbox-newsletter-modal.js' %}"></script>
-<script src="{% static 'js/brandbox-home-scroll.js' %}?v=3" defer></script>
+<script src="{% static 'js/brandbox-home-scroll.js' %}?v=4" defer></script>
 
 </body>
 </html>

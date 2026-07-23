@@ -1,0 +1,336 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block dash_title %}BrandBox Coach{% endblock %}
+
+{% block dash_content %}
+<div class="coach-page">
+  <section class="ov-glass ov-coach ov-coach--page" aria-label="BrandBox Coach chat">
+    <header class="ov-coach__head">
+      <div class="ov-coach__identity">
+        <span class="ov-coach__avatar" aria-hidden="true">
+          <span class="material-symbols-outlined">support_agent</span>
+        </span>
+        <div>
+          <p class="ov-coach__name" id="ov-coach-name">BrandBox Coach</p>
+          <p class="ov-coach__status" id="ov-coach-status">{{ coach_session.status_label }}</p>
+        </div>
+      </div>
+      {% if is_coach_user %}
+      <a class="coach-desk-link" href="{% url 'coach:desk' %}">Coach desk</a>
+      {% endif %}
+      <button type="button" class="coach-close-btn" id="ov-coach-close" title="End chat">End chat</button>
+    </header>
+
+    <div class="ov-coach__messages" id="ov-coach-messages" role="log" aria-live="polite">
+      {% for msg in coach_messages %}
+      <div class="ov-coach__bubble ov-coach__bubble--{% if msg.role == 'merchant' %}user{% elif msg.role == 'system' %}system{% else %}coach{% endif %}{% if forloop.first and msg.role == 'agent' %} ov-coach__bubble--welcome{% endif %}" data-msg-id="{{ msg.id }}">
+        {% if msg.role == 'coach' and msg.author_name %}
+        <span class="ov-coach__who">{{ msg.author_name }}</span>
+        {% elif msg.role == 'agent' %}
+        <span class="ov-coach__who">Coach Agent</span>
+        {% endif %}
+        <p>{{ msg.body }}</p>
+        {% if msg.guide_url %}
+        <a class="ov-coach__guide" href="{{ msg.guide_url }}" target="_blank" rel="noopener">
+          Read full guide{% if msg.guide_title %}: {{ msg.guide_title }}{% endif %}
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+        </a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <form class="ov-coach__form" id="ov-coach-form" autocomplete="off"
+      data-session-url="{% url 'coach:api_session' %}"
+      data-send-url="{% url 'coach:api_send' %}"
+      data-close-url="{% url 'coach:api_close' %}"
+      data-can-transfer="{% if can_transfer %}1{% else %}0{% endif %}"
+      data-upgrade-url="{% url 'dashboard:upgrade' %}"
+      data-help-url="{% url 'help:home' %}"
+      data-session-id="{{ coach_session.id }}"
+    >
+      {% csrf_token %}
+      <label class="visually-hidden" for="ov-coach-input">Message BrandBox Coach</label>
+      <input
+        id="ov-coach-input"
+        class="ov-coach__input"
+        type="text"
+        name="message"
+        placeholder="Ask your coach…"
+        maxlength="2000"
+        required
+      />
+      <button class="ov-coach__send" type="submit" aria-label="Send message">
+        <span class="material-symbols-outlined" aria-hidden="true">send</span>
+      </button>
+    </form>
+  </section>
+
+  <aside class="coach-kb" aria-label="Knowledge base">
+    <header class="coach-kb__head">
+      <div class="coach-kb__head-row">
+        <div>
+          <p class="coach-kb__eyebrow">Knowledge Base</p>
+          <h2 class="coach-kb__title">Browse guides</h2>
+        </div>
+        <a class="coach-kb__browse" href="{% url 'help:home' %}">
+          <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
+          All topics
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+        </a>
+      </div>
+    </header>
+
+    <div class="coach-kb__scroll">
+      {% for group in knowledge_groups %}
+      <section class="coach-kb__group">
+        <h3 class="coach-kb__group-title">
+          <span class="material-symbols-outlined" aria-hidden="true">{{ group.icon }}</span>
+          {{ group.name }}
+        </h3>
+        <ul class="coach-kb__links">
+          {% for item in group.articles %}
+          <li>
+            <a class="coach-kb__link" href="{{ item.url }}">
+              <span class="coach-kb__link-text">{{ item.title }}</span>
+              <span class="material-symbols-outlined coach-kb__chevron" aria-hidden="true">chevron_right</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% empty %}
+      <p class="coach-kb__empty">No guides yet. Ask in chat and I’ll look things up for you.</p>
+      {% endfor %}
+    </div>
+
+    <footer class="coach-kb__foot">
+      <p>Can’t find it? Ask in chat — we’ll walk you through it.</p>
+    </footer>
+  </aside>
+</div>
+{% endblock %}
+
+{% block dash_extra_js %}
+<script>
+(function () {
+  var form = document.getElementById("ov-coach-form");
+  var input = document.getElementById("ov-coach-input");
+  var log = document.getElementById("ov-coach-messages");
+  var statusEl = document.getElementById("ov-coach-status");
+  var nameEl = document.getElementById("ov-coach-name");
+  if (!form || !input || !log) return;
+
+  var sessionUrl = form.getAttribute("data-session-url") || "";
+  var sendUrl = form.getAttribute("data-send-url") || "";
+  var closeUrl = form.getAttribute("data-close-url") || "";
+  var canTransfer = form.getAttribute("data-can-transfer") === "1";
+  var upgradeUrl = form.getAttribute("data-upgrade-url") || "/dashboard/upgrade/";
+  var helpUrl = form.getAttribute("data-help-url") || "/help/";
+  var csrf = (document.querySelector("[name=csrfmiddlewaretoken]") || {}).value || "";
+  var closeBtn = document.getElementById("ov-coach-close");
+  var lastId = 0;
+  log.querySelectorAll("[data-msg-id]").forEach(function (el) {
+    var id = parseInt(el.getAttribute("data-msg-id"), 10);
+    if (id > lastId) lastId = id;
+  });
+  var baseTitle = document.title;
+  var unread = 0;
+  var audioCtx = null;
+
+  function ensureAudio() {
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+    }
+    return audioCtx;
+  }
+
+  function playTone(freq, dur, type) {
+    var ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      var o = ctx.createOscillator();
+      var g = ctx.createGain();
+      o.type = type || "sine";
+      o.frequency.value = freq;
+      g.gain.value = 0.04;
+      o.connect(g);
+      g.connect(ctx.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+      o.stop(ctx.currentTime + dur);
+    } catch (e) {}
+  }
+
+  function notifyIncoming(preview) {
+    playTone(880, 0.12, "sine");
+    if (document.hidden) {
+      unread += 1;
+      document.title = "(" + unread + ") " + baseTitle;
+      if (window.Notification && Notification.permission === "granted") {
+        try { new Notification("BrandBox Coach", { body: preview || "New message", tag: "coach-chat" }); } catch (e) {}
+      } else if (window.Notification && Notification.permission === "default") {
+        Notification.requestPermission();
+      }
+    }
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) {
+      unread = 0;
+      document.title = baseTitle;
+    }
+  });
+
+  function bubbleFromMsg(msg) {
+    if (!msg || !msg.id) return;
+    if (log.querySelector('[data-msg-id="' + msg.id + '"]')) return;
+    var role = msg.role === "merchant" ? "user" : (msg.role === "system" ? "system" : "coach");
+    var el = document.createElement("div");
+    el.className = "ov-coach__bubble ov-coach__bubble--" + role;
+    el.setAttribute("data-msg-id", String(msg.id));
+    if (msg.role === "agent") {
+      var whoA = document.createElement("span");
+      whoA.className = "ov-coach__who";
+      whoA.textContent = msg.author_name || "Coach Agent";
+      el.appendChild(whoA);
+    } else if (msg.role === "coach" && msg.author_name) {
+      var whoC = document.createElement("span");
+      whoC.className = "ov-coach__who";
+      whoC.textContent = msg.author_name;
+      el.appendChild(whoC);
+    }
+    var p = document.createElement("p");
+    p.style.whiteSpace = "pre-wrap";
+    p.textContent = msg.body || "";
+    el.appendChild(p);
+    if (msg.guide_url) {
+      var a = document.createElement("a");
+      a.className = "ov-coach__guide";
+      a.href = msg.guide_url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "Read full guide" + (msg.guide_title ? ": " + msg.guide_title : "");
+      el.appendChild(a);
+    }
+    log.appendChild(el);
+    log.scrollTop = log.scrollHeight;
+    if (msg.id > lastId) lastId = msg.id;
+    if (msg.role !== "merchant") {
+      notifyIncoming((msg.body || "").slice(0, 80));
+    }
+  }
+
+  function applySession(session) {
+    if (!session) return;
+    if (statusEl) statusEl.textContent = session.status_label || "";
+    if (nameEl) nameEl.textContent = "BrandBox Coach";
+  }
+
+  function poll() {
+    if (!sessionUrl) return;
+    var url = sessionUrl + (sessionUrl.indexOf("?") >= 0 ? "&" : "?") + "after_id=" + lastId;
+    fetch(url, { credentials: "same-origin", headers: { "X-Requested-With": "XMLHttpRequest" } })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data || !data.ok) return;
+        applySession(data.session);
+        (data.messages || []).forEach(bubbleFromMsg);
+      })
+      .catch(function () {});
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var text = (input.value || "").trim();
+    if (!text) return;
+    input.value = "";
+    playTone(520, 0.08, "triangle");
+
+    fetch(sendUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": csrf,
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({ message: text }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data || !data.ok) {
+          bubbleFromMsg({
+            id: Date.now(),
+            role: "system",
+            body: "Couldn’t send. Try again or open Help: " + helpUrl,
+          });
+          return;
+        }
+        applySession(data.session);
+        (data.messages || []).forEach(bubbleFromMsg);
+        if (data.needs_upgrade) {
+          /* soft nudge already in agent message */
+        }
+      })
+      .catch(function () {
+        bubbleFromMsg({
+          id: Date.now(),
+          role: "system",
+          body: "Something went wrong. Browse Help: " + helpUrl,
+        });
+      });
+  });
+
+  if (closeBtn && closeUrl) {
+    closeBtn.addEventListener("click", function () {
+      if (!confirm("End this chat?")) return;
+      fetch(closeUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRFToken": csrf,
+        },
+        credentials: "same-origin",
+        body: "{}",
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data && data.session) applySession(data.session);
+          (data.messages || []).forEach(bubbleFromMsg);
+          if (data && data.session && data.session.status === "closed") {
+            window.location.reload();
+          }
+        });
+    });
+  }
+
+  setInterval(poll, 2500);
+  if (window.Notification && Notification.permission === "default") {
+    /* request on first interaction */
+    document.addEventListener("click", function once() {
+      Notification.requestPermission();
+      document.removeEventListener("click", once);
+    });
+  }
+
+  /* Prefill + send from homepage chat (?q=...) */
+  try {
+    var params = new URLSearchParams(window.location.search || "");
+    var seed = (params.get("q") || "").trim();
+    if (seed) {
+      input.value = seed;
+      if (window.history && window.history.replaceState) {
+        params.delete("q");
+        var next = window.location.pathname + (params.toString() ? "?" + params.toString() : "") + (window.location.hash || "");
+        window.history.replaceState({}, "", next);
+      }
+      window.setTimeout(function () {
+        form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+      }, 120);
+    }
+  } catch (e) {}
+})();
+</script>
+{% endblock %}

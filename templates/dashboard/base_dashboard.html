@@ -4,84 +4,131 @@
 {% block title %}{% block dash_title %}Dashboard{% endblock %} · BrandBox{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}?v=sidebar-2" />
 {% block dash_extra_css %}{% endblock %}
 {% endblock %}
 
 {% block body %}
 {% csrf_token %}
-<div class="dash">
+<div class="dash" id="dash-shell">
   <aside class="dash-sidebar" id="dash-sidebar" aria-label="Workspace">
-    <a href="{% url 'home:index' %}" class="dash-sidebar__brand" aria-label="BrandBox home">
-      <img
-        class="dash-sidebar__mark-img"
-        src="{% static 'images/favicon.png' %}?v=5"
-        alt="BrandBox"
-        width="36"
-        height="36"
-      />
-      <span class="dash-sidebar__brand-copy">
-        <span class="dash-sidebar__name">BrandBox AI</span>
-        <span class="dash-sidebar__tagline">Merchant Dashboard</span>
-      </span>
-    </a>
+    <div class="dash-sidebar__top">
+      <a href="{% url 'home:index' %}" class="dash-sidebar__brand" aria-label="BrandBox home">
+        <img
+          class="dash-sidebar__mark-img"
+          src="{% static 'images/favicon.png' %}?v=5"
+          alt="BrandBox"
+          width="36"
+          height="36"
+        />
+        <span class="dash-sidebar__brand-copy">
+          <span class="dash-sidebar__name">BrandBox AI</span>
+          <span class="dash-sidebar__tagline">Merchant Dashboard</span>
+        </span>
+      </a>
+      <button
+        type="button"
+        class="dash-sidebar__collapse"
+        id="dash-sidebar-collapse"
+        aria-label="Collapse sidebar"
+        aria-expanded="true"
+        aria-controls="dash-sidebar"
+        title="Collapse sidebar"
+      >
+        <span class="material-symbols-outlined dash-sidebar__collapse-icon" aria-hidden="true">left_panel_close</span>
+      </button>
+    </div>
 
     <nav class="dash-sidebar__nav" aria-label="Primary">
       <a
         class="dash-nav-item {% if nav_active == 'overview' %}is-active{% endif %}"
         href="{% url 'dashboard:home' %}"
+        title="Overview"
       >
         <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
-        Overview
+        <span class="dash-nav-label">Overview</span>
       </a>
       <a
         class="dash-nav-item {% if nav_active == 'builder' %}is-active{% endif %}"
         href="{% url 'dashboard:builder' %}"
+        title="AI Store Builder"
       >
         <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
-        AI Store Builder
+        <span class="dash-nav-label">AI Store Builder</span>
       </a>
       <a
         class="dash-nav-item {% if nav_active == 'product_hunter' %}is-active{% endif %}"
         href="{% url 'dashboard:product_hunter' %}"
+        title="Product Hunter"
       >
         <span class="material-symbols-outlined" aria-hidden="true">search</span>
-        Product Hunter
+        <span class="dash-nav-label">Product Hunter</span>
       </a>
       <a
         class="dash-nav-item {% if nav_active == 'ai_picks' %}is-active{% endif %}"
         href="{% url 'dashboard:product_hunter' %}?picks=1"
+        title="AI Picks Product"
       >
         <span class="material-symbols-outlined" aria-hidden="true">trending_up</span>
-        AI Picks Product
+        <span class="dash-nav-label">AI Picks Product</span>
       </a>
       <a
         class="dash-nav-item {% if nav_active == 'imports' %}is-active{% endif %}"
         href="{% url 'dashboard:imports' %}"
+        title="My Imports"
       >
         <span class="material-symbols-outlined" aria-hidden="true">download</span>
-        My Imports
+        <span class="dash-nav-label">My Imports</span>
       </a>
       <a
         class="dash-nav-item {% if nav_active == 'stores' %}is-active{% endif %}"
         href="{% url 'dashboard:stores' %}"
+        title="My Stores"
       >
         <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
-        My Stores
+        <span class="dash-nav-label">My Stores</span>
       </a>
       <a
         class="dash-nav-item {% if nav_active == 'schedule' %}is-active{% endif %}"
         href="{% url 'dashboard:schedule' %}"
+        title="Schedule"
       >
         <span class="material-symbols-outlined" aria-hidden="true">event_available</span>
-        Schedule
+        <span class="dash-nav-label">Schedule</span>
       </a>
+      <a
+        class="dash-nav-item {% if nav_active == 'coach' %}is-active{% endif %}"
+        href="{% url 'dashboard:coach' %}"
+        title="Coach"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">support_agent</span>
+        <span class="dash-nav-label">Coach</span>
+      </a>
+      {% if user_is_coach %}
+      <a
+        class="dash-nav-item {% if nav_active == 'coach_desk' %}is-active{% endif %}"
+        href="{% url 'coach:desk' %}"
+        title="Coach desk"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">headset_mic</span>
+        <span class="dash-nav-label">Coach desk</span>
+      </a>
+      {% endif %}
       <a
         class="dash-nav-item {% if nav_active == 'training' %}is-active{% endif %}"
         href="{% url 'dashboard:training' %}"
+        title="Training"
       >
         <span class="material-symbols-outlined" aria-hidden="true">school</span>
-        Training
+        <span class="dash-nav-label">Training</span>
+      </a>
+      <a
+        class="dash-nav-item {% if nav_active == 'affiliate' %}is-active{% endif %}"
+        href="{% url 'home:affiliate' %}"
+        title="Affiliate"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">handshake</span>
+        <span class="dash-nav-label">Affiliate</span>
       </a>
     </nav>
 
@@ -89,22 +136,24 @@
       <a
         class="dash-nav-item {% if nav_active == 'contact' %}is-active{% endif %}"
         href="{% url 'home:contact' %}"
+        title="Contact Us"
       >
         <span class="material-symbols-outlined" aria-hidden="true">headset_mic</span>
-        Contact Us
+        <span class="dash-nav-label">Contact Us</span>
       </a>
       <a
         class="dash-nav-item {% if nav_active == 'settings' %}is-active{% endif %}"
         href="{% url 'dashboard:settings' %}"
+        title="Settings"
       >
         <span class="material-symbols-outlined" aria-hidden="true">settings</span>
-        Settings
+        <span class="dash-nav-label">Settings</span>
       </a>
       <form method="post" action="{% url 'accounts:logout' %}" class="dash-sidebar__logout">
         {% csrf_token %}
-        <button type="submit" class="dash-nav-item dash-nav-item--btn">
+        <button type="submit" class="dash-nav-item dash-nav-item--btn" title="Log out">
           <span class="material-symbols-outlined" aria-hidden="true">logout</span>
-          Log out
+          <span class="dash-nav-label">Log out</span>
         </button>
       </form>
     </div>
@@ -113,15 +162,26 @@
   <div class="dash-backdrop" id="dash-backdrop" hidden></div>
 
   <div class="dash-body">
-    <button
-      type="button"
-      class="dash-menu-btn"
-      id="dash-menu"
-      aria-label="Open menu"
-      aria-controls="dash-sidebar"
-    >
-      <span class="material-symbols-outlined" aria-hidden="true">menu</span>
-    </button>
+    <header class="dash-mobile-bar" id="dash-mobile-bar">
+      <button
+        type="button"
+        class="dash-menu-btn"
+        id="dash-menu"
+        aria-label="Open menu"
+        aria-controls="dash-sidebar"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+      </button>
+      <a href="{% url 'home:index' %}" class="dash-mobile-bar__brand" aria-label="BrandBox home">
+        <img
+          src="{% static 'images/favicon.png' %}?v=5"
+          alt=""
+          width="28"
+          height="28"
+        />
+        <span>BrandBox</span>
+      </a>
+    </header>
 
     <main class="dash-main">
       {% if messages %}
@@ -139,15 +199,108 @@
 
 <script>
   (function () {
+    var shell = document.getElementById("dash-shell");
     var menu = document.getElementById("dash-menu");
     var sidebar = document.getElementById("dash-sidebar");
     var backdrop = document.getElementById("dash-backdrop");
-    if (!menu || !sidebar) return;
+    var collapseBtn = document.getElementById("dash-sidebar-collapse");
+    var collapseIcon = collapseBtn
+      ? collapseBtn.querySelector(".dash-sidebar__collapse-icon")
+      : null;
+    if (!menu || !sidebar || !shell) return;
+
+    var STORAGE_KEY = "brandbox.dashSidebarCollapsed";
+    var AUTO_BREAKPOINT = 1100;
+    var MOBILE_BREAKPOINT = 960;
+
+    function isMobile() {
+      return window.matchMedia("(max-width: " + MOBILE_BREAKPOINT + "px)").matches;
+    }
+
+    function isAutoNarrow() {
+      return window.matchMedia("(max-width: " + AUTO_BREAKPOINT + "px)").matches;
+    }
+
+    function readPref() {
+      try {
+        return localStorage.getItem(STORAGE_KEY);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writePref(collapsed) {
+      try {
+        localStorage.setItem(STORAGE_KEY, collapsed ? "1" : "0");
+      } catch (e) {}
+    }
+
+    function setCollapsed(collapsed) {
+      if (isMobile()) {
+        shell.classList.remove("is-sidebar-collapsed");
+        shell.style.removeProperty("--dash-sidebar-w");
+        if (collapseBtn) {
+          collapseBtn.setAttribute("aria-label", "Close menu");
+          collapseBtn.setAttribute("title", "Close menu");
+          collapseBtn.setAttribute("aria-expanded", "true");
+        }
+        if (collapseIcon) collapseIcon.textContent = "close";
+        return;
+      }
+      shell.classList.toggle("is-sidebar-collapsed", collapsed);
+      shell.style.setProperty("--dash-sidebar-w", collapsed ? "72px" : "240px");
+      if (collapseBtn) {
+        collapseBtn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        collapseBtn.setAttribute(
+          "aria-label",
+          collapsed ? "Expand sidebar" : "Collapse sidebar"
+        );
+        collapseBtn.setAttribute(
+          "title",
+          collapsed ? "Expand sidebar" : "Collapse sidebar"
+        );
+      }
+      if (collapseIcon) {
+        collapseIcon.textContent = collapsed ? "left_panel_open" : "left_panel_close";
+      }
+    }
+
+    function applySidebarState() {
+      if (isMobile()) {
+        setCollapsed(false);
+        return;
+      }
+      var pref = readPref();
+      if (pref === "1") {
+        setCollapsed(true);
+        return;
+      }
+      if (pref === "0") {
+        setCollapsed(false);
+        return;
+      }
+      setCollapsed(isAutoNarrow());
+    }
+
+    if (collapseBtn) {
+      collapseBtn.addEventListener("click", function () {
+        if (isMobile()) {
+          setOpen(false);
+          return;
+        }
+        var next = !shell.classList.contains("is-sidebar-collapsed");
+        writePref(next);
+        setCollapsed(next);
+      });
+    }
 
     function setOpen(open) {
       document.body.classList.toggle("dash-nav-open", open);
       if (backdrop) backdrop.hidden = !open;
-      menu.setAttribute("aria-label", open ?"Close menu" :"Open menu");
+      menu.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      if (isMobile() && collapseIcon) {
+        collapseIcon.textContent = "close";
+      }
     }
 
     menu.addEventListener("click", function () {
@@ -158,6 +311,12 @@
         setOpen(false);
       });
     }
+
+    applySidebarState();
+    window.addEventListener("resize", function () {
+      applySidebarState();
+      if (!isMobile()) setOpen(false);
+    });
   })();
 </script>
 {% block dash_extra_js %}{% endblock %}

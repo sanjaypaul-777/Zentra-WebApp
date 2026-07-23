@@ -79,7 +79,7 @@
       <div class="ov-hero__actions">
         <a href="{% url 'dashboard:builder' %}" class="btn-primary">
           Build Another Store
-          <span class="material-symbols-outlined" aria-hidden="true">add</span>
+          <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
         </a>
         {% if storefront_url %}
         <a
@@ -102,8 +102,8 @@
     {% endif %}
     </section>
 
-  {# 2. Analytics + Activity | Coach chat #}
-  <div class="ov-split">
+  {# 2. Analytics + Activity #}
+  <div class="ov-split ov-split--single">
     <div class="ov-col">
       <section class="ov-glass ov-analytics" aria-label="Analytics">
         <h3 class="ov-card-title">Analytics</h3>
@@ -178,44 +178,6 @@
         {% endif %}
       </section>
     </div>
-
-    <section class="ov-glass ov-coach" aria-label="Coach chat">
-      <header class="ov-coach__head">
-        <div class="ov-coach__identity">
-          <span class="ov-coach__avatar" aria-hidden="true">
-            <span class="material-symbols-outlined">support_agent</span>
-          </span>
-          <div>
-            <h3 class="ov-card-title ov-card-title--flush">BrandBox Coach</h3>
-            <p class="ov-coach__status">Online · Ask anything about your store</p>
-          </div>
-        </div>
-      </header>
-
-      <div class="ov-coach__messages" id="ov-coach-messages" role="log" aria-live="polite">
-        {% for msg in coach_messages %}
-        <div class="ov-coach__bubble ov-coach__bubble--{{ msg.role }}">
-          <p>{{ msg.text }}</p>
-        </div>
-        {% endfor %}
-      </div>
-
-      <form class="ov-coach__form" id="ov-coach-form" autocomplete="off">
-            <label class="visually-hidden" for="ov-coach-input">Message the coach</label>
-        <input
-          id="ov-coach-input"
-          class="ov-coach__input"
-          type="text"
-          name="message"
-          placeholder="Ask your coach…"
-          maxlength="500"
-          required
-        />
-        <button class="ov-coach__send" type="submit" aria-label="Send message">
-          <span class="material-symbols-outlined" aria-hidden="true">send</span>
-        </button>
-      </form>
-    </section>
   </div>
 
   {# Spotlight #}
@@ -244,44 +206,5 @@
   </section>
 
 </div>
-{% endif %}
-{% endblock %}
-
-{% block dash_extra_js %}
-{% if is_connected %}
-<script>
-(function () {
-  var form = document.getElementById("ov-coach-form");
-  var input = document.getElementById("ov-coach-input");
-  var log = document.getElementById("ov-coach-messages");
-  if (!form || !input || !log) return;
-
-  var replies = ["Nice question — start with AI Store Builder and pick a niche that matches your ads.","Check Analytics readiness above. Finish theme, products, then menu & policy.","Browse AI Picks for products in your niche, then import and push to Shopify.","If Live Products shows unavailable, reconnect your store under Settings.",
-  ];
-  var replyIdx = 0;
-
-  function bubble(role, text) {
-    var el = document.createElement("div");
-    el.className = "ov-coach__bubble ov-coach__bubble--" + role;
-    var p = document.createElement("p");
-    p.textContent = text;
-    el.appendChild(p);
-    log.appendChild(el);
-    log.scrollTop = log.scrollHeight;
-  }
-
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var text = (input.value || "").trim();
-    if (!text) return;
-    bubble("user", text);
-    input.value ="";
-    window.setTimeout(function () {
-      bubble("coach", replies[replyIdx % replies.length]);
-      replyIdx += 1;
-    }, 450);
-  });
-})();
-</script>
 {% endif %}
 {% endblock %}

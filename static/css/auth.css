@@ -56,13 +56,16 @@
 
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
   background: var(--auth-bg);
   color: var(--auth-text);
-  overflow: hidden;
+  /* Avoid overflow:hidden — it mispositions browser autofill on mobile */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .auth-page--app {
@@ -565,7 +568,7 @@
   background: rgba(0, 0, 0, 0.35);
   color: #fefefe;
   font: inherit;
-  font-size: 15px;
+  font-size: 16px;
   box-sizing: border-box;
   transition:
     border-color 0.2s ease,
@@ -733,5 +736,18 @@
 @media (min-width: 480px) {
   .auth-card {
     padding: 36px 32px 40px;
+  }
+}
+
+/* Mobile: top-align so keyboard + browser autofill stay near the fields */
+@media (max-width: 767px) {
+  .auth-page {
+    align-items: flex-start;
+    padding-top: 28px;
+    padding-bottom: 56px;
+  }
+
+  .auth-card {
+    overflow: visible;
   }
 }

@@ -39,7 +39,9 @@
     var max = 7;
 
     function onMove(e) {
-      var face = root.querySelector(".aff-tilt-card__face, .aff-earn__panel-face");
+      var face = root.querySelector(
+        ".aff-tilt-card__face, .aff-earn-card__face, .aff-earn__panel-face"
+      );
       if (!face) return;
       var rect = root.getBoundingClientRect();
       var x = (e.clientX - rect.left) / rect.width;
@@ -56,7 +58,9 @@
     }
 
     function onLeave() {
-      var face = root.querySelector(".aff-tilt-card__face, .aff-earn__panel-face");
+      var face = root.querySelector(
+        ".aff-tilt-card__face, .aff-earn-card__face, .aff-earn__panel-face"
+      );
       root.classList.remove("is-tilting");
       if (face) face.style.transform = "";
     }

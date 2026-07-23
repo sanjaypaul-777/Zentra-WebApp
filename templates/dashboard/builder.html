@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block dash_extra_css %}
-<link rel="stylesheet" href="{% static 'css/builder.css' %}" />
+<link rel="stylesheet" href="{% static 'css/builder.css' %}?v=dark-3" />
 {% endblock %}
 
 {% block dash_title %}AI Store Builder{% endblock %}
@@ -45,7 +45,15 @@
         aria-selected="{% if selected_niche and selected_niche.slug == n.slug %}true{% else %}false{% endif %}"
         data-slug="{{ n.slug }}"
       >
-        <span class="ab-niche__thumb" style="--ab-accent: {{ n.accent }}"></span>
+        <span class="ab-niche__thumb">
+          <img
+            src="{% static n.thumb_static %}"
+            alt="{{ n.display_theme }} theme preview"
+            width="480"
+            height="360"
+            loading="lazy"
+          />
+        </span>
         <span class="ab-niche__meta">
           <span class="ab-niche__code">{{ n.display_codename }}</span>
           <span class="ab-niche__cat">{{ n.name }}</span>

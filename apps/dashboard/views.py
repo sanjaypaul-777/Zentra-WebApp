@@ -948,6 +948,63 @@ def schedule_page(request):
     )
 
 
+@login_required
+@require_GET
+def coach_page(request):
+    """BrandBox Coach — chat (left) + Help Center shortcuts (right)."""
+    from apps.coach import services as coach_services
+    from apps.coach.permissions import user_is_coach
+    from apps.help.models import HelpArticle, HelpCategory
+
+    plan = get_or_create_plan(request.user)
+    can_transfer = plan.is_pro
+    transfer_gate = "pro" if can_transfer else "free"
+    transfer_requested = (request.GET.get("transfer") or "") in {"1", "true", "yes"}
+
+    session = coach_services.get_or_create_open_session(request.user)
+    if transfer_requested and can_transfer and session.status == session.STATUS_BOT:
+        coach_services.request_human_coach(session=session)
+        session.refresh_from_db()
+
+    knowledge_groups = []
+    for cat in HelpCategory.objects.filter(is_published=True).order_by("sort_order")[:8]:
+        articles = list(
+            HelpArticle.objects.filter(
+                category=cat,
+                is_published=True,
+                is_coming_soon=False,
+            ).order_by("sort_order")[:4]
+        )
+        if not articles:
+            continue
+        knowledge_groups.append(
+            {
+                "name": cat.name,
+                "icon": cat.icon or "help",
+                "articles": [
+                    {"title": a.title, "url": a.get_absolute_url()} for a in articles
+                ],
+            }
+        )
+
+    messages = [
+        coach_services.serialize_message(m) for m in session.messages.all()[:200]
+    ]
+
+    return _page(
+        request,
+        "dashboard/coach.html",
+        "coach",
+        can_transfer=can_transfer,
+        transfer_gate=transfer_gate,
+        transfer_requested=transfer_requested,
+        knowledge_groups=knowledge_groups,
+        coach_session=coach_services.serialize_session(session),
+        coach_messages=messages,
+        is_coach_user=user_is_coach(request.user),
+    )
+
+
 def _ensure_open_call_slots() -> None:
     """Keep a few weekday slots ahead so calendar booking stays usable pre-integration."""
     from datetime import datetime, time, timedelta

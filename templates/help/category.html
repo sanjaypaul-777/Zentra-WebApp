@@ -1,0 +1,57 @@
+{% extends "help/base_help.html" %}
+{% load static %}
+
+{% block title %}{{ category.name }} — Help — BrandBox{% endblock %}
+
+{% block help_body %}
+<main class="help-page">
+  <div class="help-shell">
+    <header class="help-top">
+      <a href="{% url 'home:index' %}" class="help-logo" aria-label="BrandBox home">
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="BrandBox" width="36" height="36" />
+        <span>BrandBox Help</span>
+      </a>
+      <div class="help-top__actions">
+        <a class="help-top__link" href="{% url 'dashboard:coach' %}">
+          <span class="material-symbols-outlined" aria-hidden="true">support_agent</span>
+          Ask BrandBox Coach
+        </a>
+        <a class="help-top__link" href="{% url 'help:home' %}">
+          <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
+          All topics
+        </a>
+      </div>
+    </header>
+
+    <nav class="help-crumb" aria-label="Breadcrumb">
+      <a href="{% url 'help:home' %}">Help</a>
+      <span aria-hidden="true">/</span>
+      <span>{{ category.name }}</span>
+    </nav>
+
+    <header class="help-cat-head">
+      <span class="help-cat-head__icon material-symbols-outlined" aria-hidden="true">{{ category.icon|default:"help" }}</span>
+      <div class="help-cat-head__copy">
+        <h1 class="help-hero__title">{{ category.name }}</h1>
+        {% if category.description %}<p class="help-cat-head__desc">{{ category.description }}</p>{% endif %}
+      </div>
+    </header>
+
+    <ul class="help-article-list">
+      {% for a in articles %}
+      <li>
+        <a class="help-article-link" href="{{ a.get_absolute_url }}">
+          <span class="help-article-link__icon material-symbols-outlined" aria-hidden="true">{{ category.icon|default:"article" }}</span>
+          <span class="help-article-link__body">
+            <span class="help-article-link__title">{{ a.title }}{% if a.is_coming_soon %} <em>(Coming soon)</em>{% endif %}</span>
+            {% if a.summary %}<span class="help-article-link__sum">{{ a.summary }}</span>{% endif %}
+          </span>
+        </a>
+      </li>
+      {% empty %}
+      <li><p class="help-empty">No published articles in this category yet.</p></li>
+      {% endfor %}
+    </ul>
+  </div>
+</main>
+{% endblock %}

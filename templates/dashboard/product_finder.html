@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block dash_extra_css %}
-<link rel="stylesheet" href="{% static 'css/catalog.css' %}" />
+<link rel="stylesheet" href="{% static 'css/catalog.css' %}?v=mobile-grid-3" />
 {% endblock %}
 
 {% block dash_title %}{% if is_ai_picks %}AI Picks Product{% else %}Product Hunter{% endif %}{% endblock %}
@@ -159,7 +159,7 @@
       {% if p.image_fallbacks %}data-images="{{ p.image_url }}|{% for u in p.image_fallbacks %}{{ u }}{% if not forloop.last %}|{% endif %}{% endfor %}"{% elif p.image_url %}data-images="{{ p.image_url }}"{% endif %}
       style="--cat-hue: {{ p.image_hue }}"
     >
-      <div class="cat-card__media{% if p.image_url %} has-image{% endif %}" aria-hidden="true">
+      <div class="cat-card__media{% if p.image_url %} has-image{% endif %}" data-open-details role="button" tabindex="0" aria-label="View details for {{ p.title }}">
         {% if p.image_url %}
         <img
           src="{{ p.image_url }}"
@@ -172,7 +172,9 @@
         {% endif %}
       </div>
       <div class="cat-card__body">
-        <h3 class="cat-card__title">{{ p.title }}</h3>
+        <button type="button" class="cat-card__title" data-open-details>
+          {{ p.title }}
+        </button>
         <p class="cat-card__meta">{{ p.niche }} · {{ p.country }}</p>
         <div class="cat-card__prices">
           <div class="cat-price">
@@ -185,10 +187,6 @@
           </div>
         </div>
         <div class="cat-card__actions">
-          <button type="button" class="btn-text" data-open-details>
-            View details
-            <span class="material-symbols-outlined btn-text__arrow" aria-hidden="true">arrow_outward</span>
-          </button>
           {% if p.status == "imported" %}
           <a class="cat-badge cat-badge--imported" href="{% url 'dashboard:imports' %}">
             Added to My Imports

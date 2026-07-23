@@ -14,6 +14,13 @@ def brandbox_settings(request):
     }
 
 
+def product_settings(request):
+    """Homepage offer % and affiliate % — edit config/product.py."""
+    from config.product import as_template_context
+
+    return {"product": as_template_context()}
+
+
 def seo_meta(request):
     """Admin-editable SEO tags for the current path."""
     from apps.home.seo import resolve_seo

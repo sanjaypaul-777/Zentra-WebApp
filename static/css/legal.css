@@ -123,13 +123,14 @@
 }
 
 .legal-prose a {
-  color: #0f766e;
+  color: #2563eb;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.legal-prose a:hover {
-  color: var(--legal-navy);
+.legal-prose a:hover,
+.legal-prose a:focus-visible {
+  color: #1d4ed8;
 }
 
 .legal-prose strong {
@@ -153,7 +154,8 @@
   font-weight: 500;
 }
 
-.legal-page .auth-legal a:hover {
+.legal-page .auth-legal a:hover,
+.legal-page .auth-legal a:focus-visible {
   color: var(--legal-navy);
 }
 

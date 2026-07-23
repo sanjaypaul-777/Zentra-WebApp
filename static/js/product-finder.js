@@ -286,8 +286,18 @@
   }
 
   root.addEventListener("click", function (e) {
+    if (e.target.closest("[data-import-product], .cat-badge, a")) return;
     var trigger = e.target.closest("[data-open-details]");
     if (!trigger) return;
+    var card = trigger.closest("[data-product-card]");
+    if (card) openModal(card);
+  });
+
+  root.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var trigger = e.target.closest("[data-open-details]");
+    if (!trigger || trigger.tagName === "BUTTON") return;
+    e.preventDefault();
     var card = trigger.closest("[data-product-card]");
     if (card) openModal(card);
   });

@@ -26,6 +26,10 @@ class BrandBoxAuthenticationForm(AuthenticationForm):
             {
                 "placeholder": "Email or username",
                 "autocomplete": "username",
+                "autocapitalize": "none",
+                "autocorrect": "off",
+                "spellcheck": "false",
+                "inputmode": "email",
             }
         )
         self.fields["password"].widget.attrs.update(

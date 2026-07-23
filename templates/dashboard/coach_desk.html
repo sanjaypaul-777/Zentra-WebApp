@@ -1,0 +1,409 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block dash_title %}Coach desk{% endblock %}
+
+{% block dash_content %}
+  <div class="coach-desk" id="coach-desk"
+  data-user-id="{{ user.id }}"
+  data-state-url="{% url 'coach:desk_state' %}"
+  data-presence-url="{% url 'coach:desk_presence' %}"
+  data-session-url-template="{% url 'coach:desk_session' session_id=0 %}"
+  data-claim-url-template="{% url 'coach:desk_claim' session_id=0 %}"
+  data-reassign-url-template="{% url 'coach:desk_reassign' session_id=0 %}"
+  data-leave-url-template="{% url 'coach:desk_leave' session_id=0 %}"
+  data-close-url-template="{% url 'coach:desk_close' session_id=0 %}"
+  data-send-url-template="{% url 'coach:desk_send' session_id=0 %}"
+>
+  {% csrf_token %}
+  <header class="coach-desk__top">
+    <div>
+      <p class="coach-desk__eyebrow">Staff</p>
+      <h1 class="coach-desk__title">Coach desk</h1>
+      <p class="coach-desk__sub">Claim waiting merchants · exclusive assignment · reassign hands off</p>
+    </div>
+    <label class="coach-desk__presence">
+      <input type="checkbox" id="coach-available" {% if profile.is_available %}checked{% endif %} />
+      Available for new chats
+    </label>
+  </header>
+
+  <div class="coach-desk__grid">
+    <aside class="coach-desk__queue" aria-label="Queues">
+      <section>
+        <h2>Waiting <span id="waiting-count">{{ waiting_sessions|length }}</span></h2>
+        <ul class="coach-desk__list" id="waiting-list">
+          {% for s in waiting_sessions %}
+          <li>
+            <button type="button" class="coach-desk__item" data-session-id="{{ s.id }}" data-kind="waiting">
+              <strong>{{ s.merchant.get_username }}</strong>
+              <span>{{ s.merchant.email }}</span>
+            </button>
+          </li>
+          {% empty %}
+          <li class="coach-desk__empty" id="waiting-empty">No merchants waiting</li>
+          {% endfor %}
+        </ul>
+      </section>
+      <section>
+        <h2>My live chats <span id="mine-count">{{ my_sessions|length }}</span></h2>
+        <ul class="coach-desk__list" id="mine-list">
+          {% for s in my_sessions %}
+          <li>
+            <button type="button" class="coach-desk__item" data-session-id="{{ s.id }}" data-kind="mine">
+              <strong>{{ s.merchant.get_username }}</strong>
+              <span>{{ s.merchant.email }}</span>
+            </button>
+          </li>
+          {% empty %}
+          <li class="coach-desk__empty" id="mine-empty">No live chats yet</li>
+          {% endfor %}
+        </ul>
+      </section>
+    </aside>
+
+    <section class="coach-desk__chat ov-glass" aria-label="Active chat">
+      <header class="coach-desk__chat-head">
+        <div>
+          <p class="coach-desk__chat-title" id="desk-chat-title">Select a session</p>
+          <p class="coach-desk__chat-meta" id="desk-chat-meta"></p>
+        </div>
+        <div class="coach-desk__actions" id="desk-actions" hidden>
+          <button type="button" class="btn btn-secondary" id="btn-claim" hidden>Claim</button>
+          <label class="coach-desk__reassign">
+            Reassign
+            <select id="reassign-select">
+              <option value="">Choose coach…</option>
+              {% for c in other_coaches %}
+              <option value="{{ c.user_id }}">{{ c.public_name }}{% if not c.is_available %} (away){% endif %}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <button type="button" class="btn btn-secondary" id="btn-leave">Leave</button>
+          <button type="button" class="btn btn-secondary" id="btn-close">End chat</button>
+        </div>
+      </header>
+      <div class="ov-coach__messages coach-desk__messages" id="desk-messages" role="log"></div>
+      <form class="ov-coach__form" id="desk-form" hidden autocomplete="off">
+        <label class="visually-hidden" for="desk-input">Reply as coach</label>
+        <input id="desk-input" class="ov-coach__input" type="text" maxlength="2000" placeholder="Reply to merchant…" />
+        <button class="ov-coach__send" type="submit" aria-label="Send">
+          <span class="material-symbols-outlined" aria-hidden="true">send</span>
+        </button>
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock %}
+
+{% block dash_extra_js %}
+<script>
+(function () {
+  var root = document.getElementById("coach-desk");
+  if (!root) return;
+  var csrf = (document.querySelector("[name=csrfmiddlewaretoken]") || {}).value || "";
+  var myUserId = parseInt(root.getAttribute("data-user-id") || "0", 10);
+  var stateUrl = root.getAttribute("data-state-url");
+  var presenceUrl = root.getAttribute("data-presence-url");
+  function tpl(attr, id) {
+    return (root.getAttribute(attr) || "").replace("/0/", "/" + id + "/");
+  }
+  var activeId = null;
+  var lastId = 0;
+  var isMine = false;
+  var baseTitle = document.title;
+  var unread = 0;
+  var audioCtx = null;
+
+  var waitingList = document.getElementById("waiting-list");
+  var mineList = document.getElementById("mine-list");
+  var messagesEl = document.getElementById("desk-messages");
+  var titleEl = document.getElementById("desk-chat-title");
+  var metaEl = document.getElementById("desk-chat-meta");
+  var actions = document.getElementById("desk-actions");
+  var btnClaim = document.getElementById("btn-claim");
+  var btnLeave = document.getElementById("btn-leave");
+  var btnClose = document.getElementById("btn-close");
+  var form = document.getElementById("desk-form");
+  var input = document.getElementById("desk-input");
+  var reassignSelect = document.getElementById("reassign-select");
+  var available = document.getElementById("coach-available");
+
+  function ensureAudio() {
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+    }
+    return audioCtx;
+  }
+  function playTone(freq, dur) {
+    var ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      var o = ctx.createOscillator();
+      var g = ctx.createGain();
+      o.frequency.value = freq;
+      g.gain.value = 0.05;
+      o.connect(g); g.connect(ctx.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+      o.stop(ctx.currentTime + dur);
+    } catch (e) {}
+  }
+  function notify(preview) {
+    playTone(760, 0.14);
+    if (document.hidden) {
+      unread += 1;
+      document.title = "(" + unread + ") " + baseTitle;
+      if (window.Notification && Notification.permission === "granted") {
+        try { new Notification("Coach desk", { body: preview || "New message", tag: "coach-desk" }); } catch (e) {}
+      }
+    }
+  }
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) { unread = 0; document.title = baseTitle; }
+  });
+
+  function postJSON(url, body) {
+    return fetch(url, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrf,
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      body: JSON.stringify(body || {}),
+    }).then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); });
+  }
+
+  function renderList(ul, items, kind, emptyId) {
+    if (!ul) return;
+    ul.innerHTML = "";
+    if (!items.length) {
+      var li = document.createElement("li");
+      li.className = "coach-desk__empty";
+      li.id = emptyId;
+      li.textContent = kind === "waiting" ? "No merchants waiting" : "No live chats yet";
+      ul.appendChild(li);
+      return;
+    }
+    items.forEach(function (s) {
+      var li = document.createElement("li");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "coach-desk__item" + (activeId === s.id ? " is-active" : "") + (s.needs_attention ? " is-attention" : "");
+      btn.setAttribute("data-session-id", String(s.id));
+      btn.setAttribute("data-kind", kind);
+      var badge = s.needs_attention ? '<span class="coach-desk__dot" aria-label="Needs reply"></span>' : "";
+      btn.innerHTML = badge + "<strong>" + (s.merchant_username || "Merchant") + "</strong><span>" + (s.merchant_email || "") + "</span>";
+      btn.addEventListener("click", function () { openSession(s.id, kind === "mine"); });
+      li.appendChild(btn);
+      ul.appendChild(li);
+    });
+  }
+
+  function bubble(msg, announce) {
+    if (!msg || !msg.id) return;
+    if (messagesEl.querySelector('[data-msg-id="' + msg.id + '"]')) return;
+    var role = msg.role === "merchant" ? "user" : (msg.role === "system" ? "system" : "coach");
+    var el = document.createElement("div");
+    el.className = "ov-coach__bubble ov-coach__bubble--" + role;
+    el.setAttribute("data-msg-id", String(msg.id));
+    if (msg.author_name && msg.role !== "merchant") {
+      var who = document.createElement("span");
+      who.className = "ov-coach__who";
+      who.textContent = msg.author_name;
+      el.appendChild(who);
+    }
+    var p = document.createElement("p");
+    p.style.whiteSpace = "pre-wrap";
+    p.textContent = msg.body || "";
+    el.appendChild(p);
+    messagesEl.appendChild(el);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    if (msg.id > lastId) lastId = msg.id;
+    if (announce && msg.role === "merchant") notify((msg.body || "").slice(0, 80));
+  }
+
+  function openSession(id, mine) {
+    activeId = id;
+    isMine = !!mine;
+    lastId = 0;
+    messagesEl.innerHTML = "";
+    actions.hidden = false;
+    btnClaim.hidden = !!mine;
+    form.hidden = !mine;
+    titleEl.textContent = "Session #" + id;
+    metaEl.textContent = mine ? "You are assigned" : "Waiting — claim to reply";
+    fetch(tpl("data-session-url-template", id) + "?after_id=0", {
+      credentials: "same-origin",
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data.ok) return;
+        metaEl.textContent = data.session.status_label + " · " + (data.session.merchant_email || data.session.merchant_username || "");
+        isMine = data.session.assigned_coach_id === myUserId && data.session.status === "live";
+        form.hidden = !isMine;
+        btnClaim.hidden = data.session.status !== "waiting";
+        (data.messages || []).forEach(function (m) { bubble(m, false); });
+      });
+    refreshState();
+  }
+
+  function refreshState() {
+    fetch(stateUrl, { credentials: "same-origin", headers: { "X-Requested-With": "XMLHttpRequest" } })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data.ok) return;
+        renderList(waitingList, data.waiting || [], "waiting", "waiting-empty");
+        renderList(mineList, data.mine || [], "mine", "mine-empty");
+        document.getElementById("waiting-count").textContent = String((data.waiting || []).length);
+        document.getElementById("mine-count").textContent = String((data.mine || []).length);
+        if (available) available.checked = !!data.is_available;
+        // Update reassign options
+        if (reassignSelect && data.coaches) {
+          var cur = reassignSelect.value;
+          reassignSelect.innerHTML = '<option value="">Choose coach…</option>';
+          data.coaches.forEach(function (c) {
+            var opt = document.createElement("option");
+            opt.value = String(c.id);
+            opt.textContent = c.name + (c.available ? "" : " (away)") + " · " + c.live_count + "/" + c.max_concurrent;
+            reassignSelect.appendChild(opt);
+          });
+          reassignSelect.value = cur;
+        }
+        if (activeId) {
+          var mineHit = (data.mine || []).some(function (s) { return s.id === activeId; });
+          form.hidden = !mineHit;
+          btnClaim.hidden = mineHit;
+          isMine = mineHit;
+        }
+      });
+  }
+
+  function pollMessages() {
+    if (!activeId) return;
+    fetch(tpl("data-session-url-template", activeId) + "?after_id=" + lastId, {
+      credentials: "same-origin",
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data.ok) return;
+        (data.messages || []).forEach(function (m) { bubble(m, true); });
+        if (data.session) metaEl.textContent = data.session.status_label + " · " + (data.session.merchant_email || "");
+      });
+  }
+
+  waitingList.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-session-id]");
+    if (!btn) return;
+    openSession(parseInt(btn.getAttribute("data-session-id"), 10), false);
+  });
+  mineList.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-session-id]");
+    if (!btn) return;
+    openSession(parseInt(btn.getAttribute("data-session-id"), 10), true);
+  });
+
+  btnClaim.addEventListener("click", function () {
+    if (!activeId) return;
+    postJSON(tpl("data-claim-url-template", activeId), {}).then(function (res) {
+      if (!res.data.ok) {
+        alert(res.data.reason === "already_assigned"
+          ? "Another coach already claimed this chat."
+          : ("Could not claim: " + (res.data.reason || "error")));
+        refreshState();
+        return;
+      }
+      openSession(activeId, true);
+      playTone(660, 0.1);
+    });
+  });
+
+  btnLeave.addEventListener("click", function () {
+    if (!activeId) return;
+    postJSON(tpl("data-leave-url-template", activeId), { return_to_waiting: false }).then(function () {
+      activeId = null;
+      messagesEl.innerHTML = "";
+      actions.hidden = true;
+      form.hidden = true;
+      titleEl.textContent = "Select a session";
+      metaEl.textContent = "";
+      refreshState();
+    });
+  });
+
+  if (btnClose) {
+    btnClose.addEventListener("click", function () {
+      if (!activeId) return;
+      if (!confirm("End this merchant chat?")) return;
+      postJSON(tpl("data-close-url-template", activeId), {}).then(function (res) {
+        if (!res.data.ok) {
+          alert("Could not end chat: " + (res.data.reason || "error"));
+          return;
+        }
+        activeId = null;
+        messagesEl.innerHTML = "";
+        actions.hidden = true;
+        form.hidden = true;
+        titleEl.textContent = "Select a session";
+        metaEl.textContent = "";
+        refreshState();
+      });
+    });
+  }
+
+  reassignSelect.addEventListener("change", function () {
+    var coachId = parseInt(reassignSelect.value, 10);
+    if (!activeId || !coachId) return;
+    if (!confirm("Reassign this merchant? You will leave the chat.")) {
+      reassignSelect.value = "";
+      return;
+    }
+    postJSON(tpl("data-reassign-url-template", activeId), { coach_id: coachId }).then(function (res) {
+      reassignSelect.value = "";
+      if (!res.data.ok) {
+        alert("Reassign failed: " + (res.data.reason || "error"));
+        return;
+      }
+      activeId = null;
+      messagesEl.innerHTML = "";
+      actions.hidden = true;
+      form.hidden = true;
+      titleEl.textContent = "Select a session";
+      refreshState();
+    });
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!activeId || !isMine) return;
+    var text = (input.value || "").trim();
+    if (!text) return;
+    input.value = "";
+    playTone(520, 0.08);
+    postJSON(tpl("data-send-url-template", activeId), { message: text }).then(function (res) {
+      if (!res.data.ok) {
+        alert(res.data.error === "not_assignee"
+          ? "You are no longer assigned to this chat."
+          : ("Send failed: " + (res.data.error || "error")));
+        refreshState();
+        return;
+      }
+      (res.data.messages || []).forEach(function (m) { bubble(m, false); });
+    });
+  });
+
+  if (available) {
+    available.addEventListener("change", function () {
+      postJSON(presenceUrl, { available: available.checked });
+    });
+  }
+
+  setInterval(refreshState, 4000);
+  setInterval(pollMessages, 2500);
+  refreshState();
+})();
+</script>
+{% endblock %}

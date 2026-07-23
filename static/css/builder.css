@@ -18,10 +18,10 @@
   --build-hairline: rgba(15, 23, 42, 0.1);
   --build-outline: #94a3b8;
   --build-outline-soft: #64748b;
-  --build-primary: #4edea3;
+  --build-primary: #0d172f;
   --build-on-primary: #fefefe;
   --build-primary-container: #0d172f;
-  --build-primary-fixed: #6ffbbe;
+  --build-primary-fixed: #f1f3f8;
   --build-error: #b91c1c;
   --build-glass: #ffffff;
   --build-navy: #06101a;
@@ -316,10 +316,10 @@
   --ab-hairline: rgba(15, 23, 42, 0.1);
   --ab-outline: #94a3b8;
   --ab-outline-soft: #64748b;
-  --ab-primary: #4edea3;
+  --ab-primary: #0d172f;
   --ab-on-primary: #fefefe;
   --ab-primary-container: #0d172f;
-  --ab-primary-fixed: #6ffbbe;
+  --ab-primary-fixed: #f1f3f8;
   --ab-error: #b91c1c;
   --ab-glass: #ffffff;
   --ab-navy: #06101a;
@@ -327,7 +327,7 @@
   --ab-midnight: #0d172f;
   --ab-accent: #ff00e5;
   --ab-purple: #ad7bff;
-  --ab-mint: #4edea3;
+  --ab-mint: #0d172f;
   --ab-magenta: #ff00e5;
   --ab-font-display: Inter, var(--font-body), sans-serif;
   --ab-font-body:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -493,7 +493,16 @@
   aspect-ratio: 4 / 3;
   min-height: 140px;
   height: auto;
-  background: color-mix(in srgb, var(--ab-accent) 28%, #e8eef5);
+  overflow: hidden;
+  background: #e8eef5;
+}
+
+.ab-niche__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
 }
 
 .ab span.ab-niche__meta {
@@ -629,7 +638,7 @@
 .ab-product.is-checked .ab-product__check {
   background: var(--ab-mint);
   border-color: transparent;
-  color: #003824;
+  color: #fefefe;
 }
 
 .ab-product__check .material-symbols-outlined {
@@ -812,7 +821,7 @@
 }
 
 .btn-primary {
-  color: #003824;
+  color: #fefefe;
   background: var(--ab-mint);
   box-shadow: 0 8px 22px color-mix(in srgb, var(--ab-mint) 28%, transparent);
 }
@@ -851,7 +860,7 @@
   transform: none;
   filter: none;
   box-shadow: none;
-  color: #003824;
+  color: #fefefe;
 }
 
 .btn-primary:hover:not(:disabled)::before {
@@ -1010,7 +1019,7 @@
 }
 
 .build-progress__bar span {
-  background: linear-gradient(90deg, #4edea3, #ff00e5, #4edea3);
+  background: linear-gradient(90deg, #f1f3f8, #ff00e5, #f1f3f8);
   background-size: 200% 100%;
   animation: build-bar-shift 2.4s linear infinite;
 }
@@ -1062,7 +1071,7 @@
 
 .ab-choice:hover {
   transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--ab-mint, #4edea3) 40%, rgba(15, 23, 42, 0.1));
+  border-color: color-mix(in srgb, var(--ab-mint, #fefefe) 40%, rgba(15, 23, 42, 0.1));
 }
 
 .ab-choice__icon {
@@ -1080,7 +1089,7 @@
 }
 
 .ab-choice__icon--mint {
-  background: color-mix(in srgb, var(--ab-mint, #4edea3) 18%, transparent);
+  background: color-mix(in srgb, var(--ab-mint, #fefefe) 18%, transparent);
   box-shadow: none;
 }
 
@@ -1132,7 +1141,7 @@
 
 .pf-search input[type="search"]:focus {
   outline: none;
-  border-color: var(--ab-mint, #4edea3);
+  border-color: var(--ab-mint, #fefefe);
 }
 
 @media (max-width: 720px) {
@@ -1217,7 +1226,7 @@ button.btn-secondary {
   inset: -3px;
   z-index: -1;
   border-radius: inherit;
-  background: linear-gradient(120deg, #ff00e5, #4edea3, #ff00e5, #4edea3);
+  background: linear-gradient(120deg, #ff00e5, #f1f3f8, #ff00e5, #f1f3f8);
   background-size: 300% 300%;
   opacity: 0;
   pointer-events: none;
@@ -1239,7 +1248,7 @@ button.btn-secondary {
   z-index: -1;
   border-radius: inherit;
   padding: 3px;
-  background: linear-gradient(120deg, #ff00e5, #4edea3, #ff00e5, #4edea3);
+  background: linear-gradient(120deg, #ff00e5, #f1f3f8, #ff00e5, #f1f3f8);
   background-size: 300% 300%;
   opacity: 0;
   pointer-events: none;

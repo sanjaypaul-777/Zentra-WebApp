@@ -1,0 +1,79 @@
+{% extends "help/base_help.html" %}
+{% load static %}
+
+{% block title %}Help Center — BrandBox{% endblock %}
+
+{% block help_body %}
+<main class="help-page">
+  <div class="help-shell">
+    <header class="help-top">
+      <a href="{% url 'home:index' %}" class="help-logo" aria-label="BrandBox home">
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="BrandBox" width="36" height="36" />
+        <span>BrandBox Help</span>
+      </a>
+      <a class="help-top__link" href="{% url 'dashboard:coach' %}">
+        <span class="material-symbols-outlined" aria-hidden="true">support_agent</span>
+        Ask BrandBox Coach
+      </a>
+    </header>
+
+    <section class="help-hero">
+      <p class="help-hero__eyebrow">Knowledge Base</p>
+      <h1 class="help-hero__title">How can we help?</h1>
+      <form class="help-search" method="get" action="{% url 'help:home' %}" role="search">
+        <label class="visually-hidden" for="help-q">Search help articles</label>
+        <input
+          id="help-q"
+          class="help-search__input"
+          type="search"
+          name="q"
+          value="{{ q }}"
+          placeholder="Search articles…"
+          autocomplete="off"
+        />
+        <button class="btn-primary help-search__btn" type="submit">Search</button>
+      </form>
+    </section>
+
+    {% if q %}
+    <section class="help-results" aria-label="Search results">
+      <h2 class="help-section-title">{{ result_count }} result{{ result_count|pluralize }} for “{{ q }}”</h2>
+      {% if results %}
+      <ul class="help-article-list">
+        {% for a in results %}
+        <li>
+          <a class="help-article-link" href="{{ a.get_absolute_url }}">
+            <span class="help-article-link__icon material-symbols-outlined" aria-hidden="true">{{ a.category.icon|default:"help" }}</span>
+            <span class="help-article-link__body">
+              <span class="help-article-link__cat">{{ a.category.name }}</span>
+              <span class="help-article-link__title">{{ a.title }}</span>
+              {% if a.summary %}<span class="help-article-link__sum">{{ a.summary }}</span>{% endif %}
+            </span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="help-empty">No articles matched. Try another keyword, or browse categories below.</p>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    <section class="help-cats" aria-label="Help categories">
+      <h2 class="help-section-title">Browse by topic</h2>
+      <div class="help-cat-grid">
+        {% for c in categories %}
+        <a class="help-cat-card" href="{{ c.get_absolute_url }}">
+          <span class="help-cat-card__icon material-symbols-outlined" aria-hidden="true">{{ c.icon|default:"help" }}</span>
+          <span class="help-cat-card__name">{{ c.name }}</span>
+          <span class="help-cat-card__count">{{ c.article_count }} article{{ c.article_count|pluralize }}</span>
+          {% if c.description %}<span class="help-cat-card__desc">{{ c.description }}</span>{% endif %}
+        </a>
+        {% empty %}
+        <p class="help-empty">Help articles are being published. Check back soon.</p>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</main>
+{% endblock %}

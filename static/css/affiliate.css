@@ -21,6 +21,18 @@
   font-family: Inter, system-ui, sans-serif;
 }
 
+@media (max-width: 1024px) {
+  .brandbox-affiliate-page {
+    --aff-band: 80px;
+  }
+}
+
+@media (max-width: 767px) {
+  .brandbox-affiliate-page {
+    --aff-band: 60px;
+  }
+}
+
 @media (min-width: 768px) {
   .brandbox-affiliate-page {
     --aff-gutter: 24px;
@@ -50,6 +62,44 @@
 .brandbox-affiliate-page .brandbox-nav__inner {
   max-width: calc(var(--aff-lg) + 2 * var(--aff-gutter));
   padding-inline: var(--aff-gutter);
+}
+
+@media (max-width: 767px) {
+  .brandbox-affiliate-page .brandbox-nav,
+  .brandbox-affiliate-page .brandbox-nav__inner {
+    height: 64px;
+  }
+
+  .brandbox-affiliate-page .brandbox-nav__inner {
+    gap: 10px;
+  }
+
+  .brandbox-affiliate-page .brandbox-brand--nav {
+    flex-shrink: 1;
+    min-width: 0;
+    max-width: min(180px, 48vw);
+  }
+
+  .brandbox-affiliate-page .brandbox-brand--nav img {
+    height: 38px;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .brandbox-affiliate-page .brandbox-brand--footer img {
+    height: 38px;
+  }
+
+  .brandbox-affiliate-page .brandbox-nav__auth {
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .brandbox-affiliate-page .brandbox-nav__signup.btn-secondary {
+    padding-inline: 12px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
 }
 
 /* —— Type —— */
@@ -309,7 +359,7 @@
   overflow: visible;
   background: transparent;
   color: #f0f0f1;
-  padding: 120px 0 120px;
+  padding: var(--aff-band) 0;
   text-align: center;
 }
 
@@ -324,11 +374,17 @@
 
 .aff-hero__title {
   margin: 0 0 28px;
-  font-size: clamp(28px, 4.4vw, 44px);
+  font-size: clamp(38px, 4.4vw, 44px);
   font-weight: 700;
   letter-spacing: -0.035em;
   line-height: 1.1;
   color: #fefefe;
+}
+
+@media (max-width: 767px) {
+  .aff-hero__title {
+    font-size: 38px;
+  }
 }
 
 .aff-hero__lede {
@@ -526,6 +582,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 14px;
+  perspective: 1400px;
 }
 
 @media (min-width: 768px) {
@@ -536,11 +593,31 @@
 }
 
 .aff-earn-card {
+  transform-style: preserve-3d;
+}
+
+.aff-earn-card__face {
+  height: 100%;
   padding: 24px 20px;
   border-radius: 16px;
   background: #ffffff;
   border: 1px solid rgba(13, 23, 47, 0.08);
   text-align: center;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  transform: translateZ(0);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s ease,
+    border-color 0.3s ease;
+  will-change: transform;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .aff-earn-card:hover .aff-earn-card__face,
+  .aff-earn-card.is-tilting .aff-earn-card__face {
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+    border-color: rgba(13, 23, 47, 0.14);
+  }
 }
 
 .aff-earn-card__value {
@@ -825,7 +902,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .aff-tilt-card__face {
+  .aff-tilt-card__face,
+  .aff-earn-card__face {
     transition: none !important;
     transform: none !important;
   }

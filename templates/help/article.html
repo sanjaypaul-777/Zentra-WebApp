@@ -1,0 +1,127 @@
+{% extends "help/base_help.html" %}
+{% load static %}
+
+{% block title %}{{ article.title }} — Help — BrandBox{% endblock %}
+
+{% block help_body %}
+<main class="help-page">
+  <div class="help-shell help-shell--article">
+    <header class="help-top">
+      <a href="{% url 'home:index' %}" class="help-logo" aria-label="BrandBox home">
+        <img src="{% static 'images/favicon.png' %}?v=5" alt="BrandBox" width="36" height="36" />
+        <span>BrandBox Help</span>
+      </a>
+      <div class="help-top__actions">
+        <a class="help-top__link" href="{% url 'dashboard:coach' %}">
+          <span class="material-symbols-outlined" aria-hidden="true">support_agent</span>
+          Ask BrandBox Coach
+        </a>
+        <a class="help-top__link" href="{% url 'help:home' %}">
+          <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
+          All topics
+        </a>
+      </div>
+    </header>
+
+    <nav class="help-crumb" aria-label="Breadcrumb">
+      <a href="{% url 'help:home' %}">Help</a>
+      <span aria-hidden="true">/</span>
+      <a href="{{ article.category.get_absolute_url }}">{{ article.category.name }}</a>
+      <span aria-hidden="true">/</span>
+      <span>{{ article.title }}</span>
+    </nav>
+
+    <article class="help-article">
+      <h1 class="help-article__title">{{ article.title }}</h1>
+      <p class="help-article__meta">Updated {{ article.updated_at|date:"F j, Y" }}</p>
+
+      {% if article.is_coming_soon %}
+      <p class="help-badge">Coming soon — some details may still be rolling out in the product.</p>
+      {% endif %}
+
+      {% if article.hero_image %}
+      <figure class="help-article__hero">
+        <img src="{{ article.hero_image.url }}" alt="" />
+      </figure>
+      {% endif %}
+
+      {% if article.video_url or article.video_file %}
+      <div class="help-article__video">
+        {% if article.video_file %}
+        <video controls preload="metadata" src="{{ article.video_file.url }}"></video>
+        {% elif article.video_url %}
+        <p><a href="{{ article.video_url }}" target="_blank" rel="noopener noreferrer">Watch video</a></p>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <div class="help-prose">
+        {{ article.body|safe }}
+      </div>
+
+      {% if article.attachments.all %}
+      <div class="help-shots">
+        {% for att in article.attachments.all %}
+        <figure class="help-shot">
+          <img src="{{ att.image.url }}" alt="{{ att.caption|default:'' }}" />
+          {% if att.caption %}<figcaption>{{ att.caption }}</figcaption>{% endif %}
+        </figure>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </article>
+
+    <section class="help-feedback" aria-label="Was this helpful?">
+      <h2 class="help-feedback__title">Was this helpful?</h2>
+      {% if request.GET.feedback %}
+      <p class="help-feedback__thanks">Thanks — your feedback was saved.</p>
+      {% else %}
+      <form class="help-feedback__form" method="post" action="{% url 'help:feedback' article.category.slug article.slug %}">
+        {% csrf_token %}
+        <button class="btn-secondary" type="submit" name="helpful" value="yes">Yes</button>
+        <button class="btn-secondary" type="submit" name="helpful" value="no">No</button>
+      </form>
+      {% endif %}
+    </section>
+
+    <section class="help-still" aria-label="Still need help">
+      <h2 class="help-still__title">Still need help? Chat with us</h2>
+      <p class="help-still__lede">
+        Get a clear next step from BrandBox Coach — answers grounded in this Help Center.
+      </p>
+      {% if chat_gate == "pro" %}
+      <a class="btn-secondary" href="{{ coach_url }}?transfer=1">
+        <span class="material-symbols-outlined" aria-hidden="true">support_agent</span>
+        Ask BrandBox Coach
+      </a>
+      {% elif chat_gate == "free" %}
+      <a class="btn-secondary" href="{{ coach_url }}">
+        <span class="material-symbols-outlined" aria-hidden="true">support_agent</span>
+        Ask BrandBox Coach
+      </a>
+      {% else %}
+      <a class="btn-secondary" href="{{ login_url }}?next={{ coach_url|urlencode }}">
+        <span class="material-symbols-outlined" aria-hidden="true">support_agent</span>
+        Ask BrandBox Coach
+      </a>
+      {% endif %}
+    </section>
+
+    {% if related %}
+    <section class="help-related" aria-label="Related articles">
+      <h2 class="help-section-title">Related articles</h2>
+      <ul class="help-article-list">
+        {% for a in related %}
+        <li>
+          <a class="help-article-link" href="{{ a.get_absolute_url }}">
+            <span class="help-article-link__title">{{ a.title }}</span>
+            {% if a.summary %}<span class="help-article-link__sum">{{ a.summary }}</span>{% endif %}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+  </div>
+</main>
+{% endblock %}

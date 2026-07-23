@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     "apps.checkout",
     "apps.builder",
     "apps.catalog",
+    "apps.help",
+    "apps.coach",
 ]
 
 MIDDLEWARE = [
@@ -61,7 +63,9 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "config.context_processors.brandbox_settings",
+                "config.context_processors.product_settings",
                 "config.context_processors.seo_meta",
+                "apps.coach.context_processors.coach_flags",
             ],
         },
     },

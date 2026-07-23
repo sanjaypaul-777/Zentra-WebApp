@@ -18,16 +18,16 @@
   --ms-hairline: rgba(15, 23, 42, 0.1);
   --ms-outline: #94a3b8;
   --ms-outline-soft: #64748b;
-  --ms-primary: #4edea3;
+  --ms-primary: #0d172f;
   --ms-on-primary: #fefefe;
   --ms-primary-container: #0d172f;
-  --ms-primary-fixed: #6ffbbe;
+  --ms-primary-fixed: #f1f3f8;
   --ms-error: #b91c1c;
   --ms-glass: #ffffff;
   --ms-navy: #06101a;
   --ms-accent: #ff00e5;
   --ms-purple: #ad7bff;
-  --ms-mint: #4edea3;
+  --ms-mint: #0d172f;
   --ms-magenta: #ff00e5;
   --ms-max: 1280px;
 
@@ -596,7 +596,7 @@ a.btn-secondary:visited {
   inset: -3px;
   z-index: -1;
   border-radius: inherit;
-  background: linear-gradient(120deg, #ff00e5, #4edea3, #ff00e5, #4edea3);
+  background: linear-gradient(120deg, #ff00e5, #f1f3f8, #ff00e5, #f1f3f8);
   background-size: 300% 300%;
   opacity: 0;
   pointer-events: none;
@@ -620,7 +620,7 @@ a.btn-secondary:visited {
   z-index: -1;
   border-radius: inherit;
   padding: 3px;
-  background: linear-gradient(120deg, #ff00e5, #4edea3, #ff00e5, #4edea3);
+  background: linear-gradient(120deg, #ff00e5, #f1f3f8, #ff00e5, #f1f3f8);
   background-size: 300% 300%;
   opacity: 0;
   pointer-events: none;
@@ -668,7 +668,7 @@ a.btn-secondary:visited {
   .btn-primary:hover::before,
   .btn-secondary:hover::before {
     animation: none;
-    background: linear-gradient(120deg, #ff00e5, #4edea3);
+    background: linear-gradient(120deg, #ff00e5, #f1f3f8);
     background-size: 100% 100%;
   }
 }

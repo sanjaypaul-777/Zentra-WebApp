@@ -35,7 +35,9 @@ urlpatterns = [
     path("api/geo/phone-meta/", geo_phone_meta, name="geo_phone_meta"),
     path("api/geo/states/", geo_states, name="geo_states"),
     path("api/geo/cities/", geo_cities, name="geo_cities"),
+    path("help/", include("apps.help.urls")),
     path("dashboard/", include("apps.dashboard.urls")),
+    path("dashboard/", include("apps.coach.urls")),
     path("checkout/", include("apps.checkout.urls")),
 ]
 

@@ -49,6 +49,11 @@ class NichePack(models.Model):
         }.get(self.slug, "auto_awesome")
 
     @property
+    def thumb_static(self) -> str:
+        """Static path for niche Shopify theme mockup thumbnail."""
+        return f"images/niches/{self.slug}.jpg"
+
+    @property
     def display_theme(self) -> str:
         if self.theme_name:
             return self.theme_name

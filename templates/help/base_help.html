@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}?v=footer-center-1" />
+<link rel="stylesheet" href="{% static 'css/help.css' %}?v=header-icons-1" />
+{% endblock %}
+
+{% block body %}
+<div class="help-layout">
+  {% block help_body %}{% endblock %}
+  {% include "home/_site_footer.html" %}
+</div>
+{% endblock %}

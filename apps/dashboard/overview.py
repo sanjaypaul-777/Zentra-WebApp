@@ -415,18 +415,4 @@ def build_overview_context(user) -> dict:
         "readiness": readiness,
         "spotlight": spotlight_niches(),
         "pro_features": PRO_FEATURES,
-        "coach_messages": [
-            {
-                "role": "coach",
-                "text": "Hi — I’m your BrandBox coach. Ask me about builds, products, or readiness.",
-            },
-            {
-                "role": "coach",
-                "text": (
-                    f"You’re at {readiness_pct}% store readiness"
-                    if snapshot
-                    else "Build your first AI store and I’ll help you score readiness."
-                ),
-            },
-        ],
     }
