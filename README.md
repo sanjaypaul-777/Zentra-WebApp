@@ -6,12 +6,14 @@ This is a **separate** app from the Shopify embedded app in `../BrandBoxApp` (No
 
 | Surface | Role | Typical URL |
 |---------|------|-------------|
-| **Marketing** (this repo) | Landing, contact, legal, login, signup, checkout | `brandbox.co` |
-| **Dashboard** (this repo) | After login — connect → build → finder → imports | `app.brandbox.co` |
-| **Admin** (this repo) | Staff editor — vault, Product Hunter, users | `/admin/` |
+| **Marketing** (this repo) | Landing, affiliate, Help Center, legal, login, signup, checkout | `brandbox.co` |
+| **Dashboard** (this repo) | After login — connect → builder → vault → imports → coach | `app.brandbox.co` |
+| **Admin** (this repo) | Staff editor — vault, Product Hunter, Help, Coach profiles | `/admin/` |
 | **BrandBox** (sibling Node) | Shopify OAuth, Admin API, push, live store | Cloudflare tunnel / deploy |
 
 They share **one Shopify Partner app**. In production they should share **one Postgres**; local Django defaults to SQLite.
+
+**Display knobs** (offer %, affiliate %, coach copy): edit only [`config/product.py`](config/product.py). Deploy notes: [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 ## How folders work
 
@@ -29,10 +31,12 @@ They share **one Shopify Partner app**. In production they should share **one Po
 | Page | CSS file | Section root → tokens |
 |------|----------|----------------------|
 | Homepage | `static/css/home.css` | `.brandbox-home` → `--home-*`; `.brandbox-hero` → `--hero-*` |
+| Affiliate landing | `static/css/affiliate.css` (+ `home.css` footer) | `.brandbox-affiliate-page` → `--aff-*` |
+| Help Center | `static/css/help.css` (+ `home.css` footer) | `.help-page` → `--help-*` |
 | Login / signup / legal shell | `static/css/auth.css` | `.auth-page` → `--auth-*` |
-| Legal (privacy / terms / refund) | `static/css/legal.css` | `.legal-page` → `--legal-*` |
+| Legal (privacy / terms / refund / disclaimer / about) | `static/css/legal.css` | `.legal-page` → `--legal-*` |
 | Dashboard shell | `static/css/dashboard.css` | `.dash` → `--dash-*`; `.dash-sidebar` → `--sidebar-*` |
-| Overview / Connect | `static/css/dashboard.css` | `.ov` → `--ov-*`; `.nc` → `--nc-*`; `.flow-wrap` → `--flow-*` |
+| Overview / Connect / Coach | `static/css/dashboard.css` | `.ov` → `--ov-*`; `.nc` → `--nc-*`; `.ov-coach` / `.coach-kb` |
 | Product Hunter / Imports | `static/css/catalog.css` | `.catalog` → `--cat-*` |
 | My Stores | `static/css/stores.css` | `.ms` → `--ms-*` |
 | Settings | `static/css/settings.css` | `.st` → `--st-*` |
@@ -48,11 +52,18 @@ Example: left panel background → `--sidebar-bg` on `.dash-sidebar` in `dashboa
 
 ```text
 PUBLIC
-  /                         marketing landing
+  /                         marketing landing (CTAs → dashboard builder / vault / coach)
+  /affiliate/               affiliate program landing
+  /affiliate/register/      affiliate partner signup
+  /help/                    Help Center (browse topics + search)
+  /help/<category>/         topic / category
+  /help/<category>/<slug>/  article (+ feedback POST)
   /contact/                 contact form
+  /about/                   about us
   /privacy/                 privacy policy
   /terms/                   terms of service
   /refund/                  refund policy
+  /disclaimer/              disclaimer
   /newsletter/              newsletter subscribe (POST)
   /checkout/                purchase (optional account)
   /login/ /signup/ /forgot/
@@ -70,15 +81,21 @@ AFTER LOGIN (merchants)
   /dashboard/builder/start/ start build job
   /dashboard/builder/building/<id>/   build progress
   /dashboard/builder/success/<id>/    build success
-  /dashboard/product-hunter/  Winning Product Vault browse + Import
+  /dashboard/product-hunter/  Product Vault browse + Import (?picks=1 = AI Picks)
   /dashboard/imports/         My Imports edit / remove / Push
   /dashboard/stores/          My Stores
   /dashboard/stores/<id>/     store detail
+  /dashboard/coach/           BrandBox Coach chat (+ Help shortcuts)
+  /dashboard/coach/api/…      coach session / send / request-coach / close
   /dashboard/schedule/        live clock + call booking calendar
   /dashboard/training/        on-demand lessons
   /dashboard/settings/        account + prefs
   /dashboard/settings/profile/  edit profile (same fields as onboarding)
   /dashboard/upgrade/         upgrade / plans
+
+COACH STAFF (CoachProfile.is_coach + staff)
+  /dashboard/coach-desk/      live coach inbox / claim / reply / reassign
+  /dashboard/coach-desk/api/… desk state + session actions
 
 STATUS / ERRORS
   404 / 500 custom pages (handler404 / handler500 — BBX-500-… refs)
@@ -91,11 +108,20 @@ STAFF / SUPERUSER (development)
   /onboarding/?step=1…4     preview any step anytime
   /dashboard/builder/building/<id>/   open any build job (not only own)
   /dashboard/imports/       preview shop allowed for staff QA
-  /admin/                   full CRUD on all models (profiles, shops, jobs, vault, …)
+  /admin/                   full CRUD (profiles, shops, jobs, vault, Help, Coach, …)
 ```
 
-> **Product Hunter** reads Django SQL (`CatalogProduct`). **My Imports** are shop drafts
-> (`ShopImport`). **Push to Shopify** calls the Node app (Admin token stays in Node).
+> **Product Hunter / Vault** reads Django SQL (`CatalogProduct`). **My Imports** are shop
+> drafts (`ShopImport`). **Push to Shopify** calls the Node app (Admin token stays in Node).
+>
+> **Help Center** is public (`apps/help`). Seed with `python manage.py seed_help` or
+> `loaddata backups/help_knowledge_base.json`. **Coach** (`apps/coach`) is AI-first chat;
+> live coach transfer is plan-gated (`UserPlan.is_pro`). Enable coaches in Admin
+> (`CoachProfile`).
+>
+> **Homepage CTAs** (Build / Explore vault / Start with coach / chat Send) go to
+> `/dashboard/builder/`, `/dashboard/product-hunter/`, and `/dashboard/coach/` — login
+> (and plan checks) apply on those routes as usual.
 >
 > **Errors:** never show raw exceptions to users. 500 pages show a `BBX-500-…`
 > reference logged with the real traceback for support.
@@ -110,11 +136,18 @@ Merchant journey URLs — use this as the product flow checklist.
 
 | URL | Step | Status (happy path) | Error / blocked |
 |-----|------|---------------------|-----------------|
-| `/` | Marketing | Landing loads | — |
+| `/` | Marketing | Landing loads; CTAs → builder / vault / coach | — |
+| `/affiliate/` | Affiliate | Program landing + commission copy | — |
+| `/affiliate/register/` | Affiliate signup | Partner registration | Validation |
+| `/help/` | Help Center | Topics + search | Empty KB until seeded |
+| `/help/<category>/` | Help topic | Article list | 404 if unpublished |
+| `/help/<category>/<slug>/` | Help article | Article + coach CTA | 404 if unpublished |
 | `/contact/` | Contact | Message sent + flash | Validation |
+| `/about/` | Legal | About us | Unavailable copy |
 | `/privacy/` | Legal | Privacy policy | Unavailable copy |
 | `/terms/` | Legal | Terms of service | Unavailable copy |
 | `/refund/` | Legal | Refund policy | Unavailable copy |
+| `/disclaimer/` | Legal | Disclaimer | Unavailable copy |
 | `/newsletter/` | Marketing | Subscribe (POST) | Invalid email |
 | `/checkout/` | Purchase | Checkout form | Validation / payment |
 | `/signup/` | Auth | Account created → session | Validation / email taken |
@@ -127,7 +160,7 @@ Merchant journey URLs — use this as the product flow checklist.
 | `/onboarding/?step=2` | Onboarding step 2 | Business / niche / revenue | Cannot skip past saved `onboarding_step` (merchants) |
 | `/onboarding/?step=3` | Onboarding step 3 | Goals / experience / success | Same |
 | `/onboarding/?step=4` | Onboarding step 4 | Resources → `onboarding_completed=True` → `/dashboard/` | Challenges required; then enter dashboard |
-| `/dashboard/` | Overview | Stats + coach | Redirect `/onboarding/` if not completed (non-staff) |
+| `/dashboard/` | Overview | Stats + coach entry | Redirect `/onboarding/` if not completed (non-staff) |
 | `/dashboard/connect/` | Connect | Pending `ShopConnection` | Invalid domain / owned by other user |
 | `/dashboard/create-store/` | Create store | Guide to open Shopify | — |
 | `/dashboard/install/` | OAuth handoff | Redirect to Node | Missing shop / Node URL |
@@ -139,18 +172,25 @@ Merchant journey URLs — use this as the product flow checklist.
 | `/dashboard/builder/building/<id>/retry/` | Build retry | Restarts failed job | Not failed / forbidden |
 | `/dashboard/builder/success/<id>/` | Build done | Store ready links | — |
 | `/dashboard/builder/status/` | Builder API | JSON status | Login required |
-| `/onboarding/` | Merchant setup | Profile + shop connect | Incomplete profile |
-| `/dashboard/product-hunter/` | Vault browse | Product cards | Empty vault / filters |
+| `/dashboard/product-hunter/` | Vault browse | Product cards (`?picks=1` AI Picks) | Empty vault / filters |
+| `/dashboard/product-finder/` | Legacy | Redirects to Product Hunter | — |
+| `/dashboard/winning-products/` | Legacy | Redirects to Product Hunter | — |
 | `/dashboard/imports/` | My Imports | Drafts + push | No shop / Node publish error |
 | `/dashboard/stores/` | My Stores | Rows + retry / open | Disconnect confirm |
 | `/dashboard/stores/<id>/` | Store detail | Single store | Not found / forbidden |
 | `/dashboard/stores/<id>/disconnect/` | Disconnect | Shop removed | Confirm / forbidden |
+| `/dashboard/coach/` | Coach chat | AI chat + Help shortcuts (`?q=` prefill/send) | Login; live transfer needs Pro |
+| `/dashboard/coach/api/session/` | Coach API | Poll messages | Login |
+| `/dashboard/coach/api/send/` | Coach API | Send merchant message | Login |
+| `/dashboard/coach/api/request-coach/` | Coach API | Request live coach | Pro plan / availability |
+| `/dashboard/coach/api/close/` | Coach API | Close session | Login |
+| `/dashboard/coach-desk/` | Coach desk | Staff inbox | Coach profile required |
 | `/dashboard/schedule/` | Schedule | Live clock + book call | Slot taken / no open slots |
 | `/dashboard/schedule/book/` | Book call | Slot reserved | Validation / taken |
 | `/dashboard/training/` | Training | Lessons list | — |
 | `/dashboard/settings/` | Settings | Account + prefs | — |
 | `/dashboard/settings/profile/` | Edit profile | Same `MerchantProfile` fields | Validation / email taken |
-| `/dashboard/upgrade/` | Upgrade | Plans / CTA | — |
+| `/dashboard/upgrade/` | Upgrade | Plans / CTA | Billing not wired yet |
 | `/api/address-suggest/?q=` | Address autocomplete | JSON suggestions | Login required |
 | `/api/address-details/` | Place details | JSON address parts | Login required |
 | `/api/geo/countries/?q=` | Country searchable dropdown | Worldwide country list | Login required |
@@ -174,16 +214,25 @@ BrandBoxWeb/
 ├── .env.example / .env.local          # secrets gitignored
 ├── config/
 │   ├── settings.py                    # apps, DB, CATALOG_*, SHOPIFY_APP_URL
-│   ├── urls.py                        # mounts apps + /admin/
+│   ├── urls.py                        # mounts apps + /admin/ + /help/
+│   ├── product.py                     # OFFER_PERCENT, AFFILIATE_PERCENT, coach copy
 │   ├── shopify.py                     # normalize shop + OAuth URL → Node
-│   ├── brandbox_client.py               # all Node internal HTTP (secret header)
+│   ├── brandbox_client.py             # all Node internal HTTP (secret header)
 │   ├── middleware.py / context_processors.py
 │   ├── celery.py                      # reserved for long builds
 │   └── wsgi.py / asgi.py
 ├── apps/
-│   ├── home/                          # landing /
+│   ├── home/                          # landing /, affiliate, legal, contact
 │   ├── accounts/                      # login, signup, logout, forgot
-│   ├── dashboard/                     # Overview, Connect, Finder, Imports, Stores
+│   ├── help/                          # public Help Center (/help/)
+│   │   ├── models.py                  # HelpCategory, HelpArticle, …
+│   │   ├── seed_data.py / seed_help   # KB content
+│   │   └── views.py / urls.py
+│   ├── coach/                         # merchant chat API + coach desk
+│   │   ├── models.py                  # CoachProfile, ChatSession, ChatMessage
+│   │   ├── services.py / views.py
+│   │   └── urls.py                    # /dashboard/coach/api/* + coach-desk/
+│   ├── dashboard/                     # Overview, Connect, Vault, Imports, Stores, Coach page
 │   │   ├── models.py                  # ShopConnection, UserPlan, ActivityEvent
 │   │   ├── catalog.py                 # search_vault() → CatalogProduct
 │   │   ├── overview.py                # Overview stats + Node product count
@@ -207,14 +256,16 @@ BrandBoxWeb/
 │   │   └── management/commands/scrape_products.py
 │   └── checkout/                      # public checkout UI
 ├── templates/
-│   ├── accounts/  home/  checkout/
-│   ├── dashboard/                     # overview, connect, finder, imports…
+│   ├── accounts/  home/  checkout/  help/
+│   ├── dashboard/                     # overview, connect, coach, finder, imports…
 │   ├── builder/                       # building, success, failed
 │   └── admin/catalog/scraperun/       # Start Hunting UI
 ├── static/
-│   ├── css/                           # page CSS (base + page files)
-│   ├── js/
-│   └── images/
+│   ├── css/                           # page CSS (home, affiliate, help, dashboard, …)
+│   ├── js/                            # hero carousel, home scroll, product-finder, …
+│   └── images/                        # niches, vault samples, logos
+├── backups/                           # help_knowledge_base.json fixture
+├── docs/                              # DEPLOY.md, …
 └── secrets/                           # google-sheets-sa.json (gitignored)
 ```
 
@@ -262,8 +313,9 @@ flowchart TD
 
   Hub --> Overview[Overview]
   Hub --> Builder[AI Store Builder]
-  Hub --> Finder[Product Hunter]
+  Hub --> Finder[Product Vault / Hunter]
   Hub --> Imports[My Imports]
+  Hub --> Coach[BrandBox Coach]
 ```
 
 #### Store status meanings
@@ -328,14 +380,15 @@ flowchart TD
 | Done / fail | success or failed UI | job completed / failed |
 | Retry | new/linked `BuildJob` | `POST /api/build/retry` |
 
-#### Overview / Finder / Push
+#### Overview / Finder / Push / Coach
 
 ```mermaid
 flowchart TD
   Hub{Connected shop} --> OV[Overview]
   Hub --> BD[Builder — see chart above]
-  Hub --> PF[Product Hunter]
+  Hub --> PF[Product Vault]
   Hub --> MI[My Imports]
+  Hub --> CH[BrandBox Coach]
 
   OV --> OV1[(Read jobs + connection)]
   OV --> OV2[Node: product count]
@@ -347,6 +400,27 @@ flowchart TD
   MI --> MI1{Edit / Remove / Push}
   MI1 -->|Push| MI2[Node: create + publish]
   MI2 --> MI3[(ShopImport in_store)]
+
+  CH --> CH1[AI reply from Help KB]
+  CH --> CH2{Request live coach?}
+  CH2 -->|Pro + available| CH3[Coach desk claim]
+  CH2 -->|Free / offline| CH1
+```
+
+#### Help Center + Affiliate (public)
+
+```mermaid
+flowchart TD
+  Home[/] --> Aff[/affiliate/]
+  Home --> Help[/help/]
+  Home --> CTA[Homepage CTAs]
+  CTA --> Builder[/dashboard/builder/]
+  CTA --> Vault[/dashboard/product-hunter/]
+  CTA --> Coach[/dashboard/coach/]
+  Help --> Topic[/help/category/]
+  Topic --> Article[/help/category/slug/]
+  Article --> AskCoach[Ask BrandBox Coach]
+  AskCoach --> Coach
 ```
 
 #### Product Hunter → vault (staff)
@@ -370,6 +444,8 @@ flowchart LR
     CatalogProduct
     ShopImport
     BuildJob
+    HelpArticle
+    ChatSession
   end
 
   subgraph BrandBoxNode[Node app]
@@ -405,6 +481,9 @@ Who owns what:
 | Winning products catalog | Django (+ Sheet dual-write) | `CatalogProduct` |
 | My Imports drafts | Django | `ShopImport` |
 | Build job / niche UI records | Django | `BuildJob`, `NichePack` |
+| Help Center articles | Django | `HelpCategory`, `HelpArticle` |
+| Coach chat | Django | `CoachProfile`, `ChatSession`, `ChatMessage` |
+| Offer / affiliate display % | Django | `config/product.py` (not DB) |
 | Shopify OAuth + Admin token | **Node only** | Prisma `Session` |
 | Create / publish products to store | **Node only** | Shopify Admin API |
 | Theme build engine | **Node** | Prisma build + Admin API |
@@ -492,7 +571,28 @@ If Node/tunnel is down → show “product count unavailable”, never invent `0
 
 ---
 
-### 5) Product Hunter → Winning Product Vault (admin / CLI)
+### 5) Help Center + BrandBox Coach
+
+```text
+Public Help
+  /help/  → search + browse HelpCategory / HelpArticle
+  Seed: manage.py seed_help  OR  loaddata backups/help_knowledge_base.json
+
+Merchant Coach
+  /dashboard/coach/
+    → get_or_create open ChatSession
+    → AI replies from Help KB (apps/help)
+    → ?q= from homepage chat prefill + auto-send
+    → request live coach if UserPlan.is_pro
+
+Coach desk (staff + CoachProfile.is_coach)
+  /dashboard/coach-desk/
+    → claim / reply / reassign / close sessions
+```
+
+---
+
+### 6) Product Hunter → Winning Product Vault (admin / CLI)
 
 Staff fills the catalog (not the merchant UI):
 
@@ -515,7 +615,7 @@ Other modes:
 
 ---
 
-### 6) Product Hunter → Import draft
+### 7) Product Hunter → Import draft
 
 ```text
 1. /dashboard/product-hunter/
@@ -530,7 +630,7 @@ Node: not called for browse. Connect a real shop to Import (preview can browse o
 
 ---
 
-### 7) My Imports → edit → Push to Shopify
+### 8) My Imports → edit → Push to Shopify
 
 ```text
 List  /dashboard/imports/
@@ -555,7 +655,7 @@ Push  POST … action=publish
 
 ---
 
-### 8) Node API map (Django → BrandBox)
+### 9) Node API map (Django → BrandBox)
 
 All via `config/brandbox_client.py` + header `X-BrandBox-Internal-Secret`.  
 Base URL = `SHOPIFY_APP_URL` (update when Cloudflare tunnel changes).
@@ -573,7 +673,7 @@ Base URL = `SHOPIFY_APP_URL` (update when Cloudflare tunnel changes).
 
 ---
 
-### 9) Success & error summary
+### 10) Success & error summary
 
 | Step | Success | Failure |
 |------|---------|---------|
@@ -585,9 +685,12 @@ Base URL = `SHOPIFY_APP_URL` (update when Cloudflare tunnel changes).
 | Finder browse | Vault cards | Empty / connect banner for Import |
 | Import | `ShopImport` created | Not in vault / no shop |
 | Push | `in_store` + Shopify product | Toast: Node/tunnel/publish error |
+| Coach chat | AI reply / live coach | Login; live transfer needs Pro |
+| Help article | Published article | 404 if unpublished / missing seed |
+| Affiliate register | Partner lead saved | Validation |
 | Schedule book | `ScheduledCall` + next-call card | Slot taken / already booked |
 | Server error | `BBX-500-…` page | Traceback only in logs |
-| Superadmin | `/admin/` edit any profile / shop / job | Must be `is_superuser` / staff |
+| Superadmin | `/admin/` edit any profile / shop / job / Help / Coach | Must be `is_superuser` / staff |
 
 ## Local setup
 
@@ -604,11 +707,21 @@ python -m venv .venv
 pip install -r requirements.txt
 cp .env.example .env.local
 python manage.py migrate
-python manage.py createsuperuser   # for /admin/
+python manage.py seed_help            # Help Center topics + articles
+# or: python manage.py loaddata backups/help_knowledge_base.json
+python manage.py createsuperuser   # for /admin/ (+ enable CoachProfile for desk)
 python manage.py runserver
 ```
 
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+Useful public pages after seed:
+
+- Help: [http://127.0.0.1:8000/help/](http://127.0.0.1:8000/help/)
+- Affiliate: [http://127.0.0.1:8000/affiliate/](http://127.0.0.1:8000/affiliate/)
+- Coach (login): [http://127.0.0.1:8000/dashboard/coach/](http://127.0.0.1:8000/dashboard/coach/)
+
+Change offer / affiliate % later in `config/product.py` (`OFFER_PERCENT`, `AFFILIATE_PERCENT`).
 
 Set in `.env.local`:
 
@@ -647,6 +760,8 @@ python manage.py scrape_products --purge-dead     # drop 404 vault rows
 ## Next steps
 
 1. Real password-reset email + Google / Apple / Facebook OAuth
-2. Celery worker for long Product Hunter / builds
-3. Shared Postgres with BrandBox in staging/prod
-4. Surface Node publish warnings (stock/scopes) clearly in My Imports toasts
+2. Wire billing / upgrade / one-time Pro pricing (after client finalizes numbers)
+3. Celery worker for long Product Hunter / builds
+4. Shared Postgres with BrandBox in staging/prod
+5. Surface Node publish warnings (stock/scopes) clearly in My Imports toasts
+6. Affiliate payouts / tracking beyond lead registration
