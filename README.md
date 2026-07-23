@@ -411,14 +411,14 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-  Home[/] --> Aff[/affiliate/]
-  Home --> Help[/help/]
+  Home["Home /"] --> Aff["/affiliate/"]
+  Home --> Help["/help/"]
   Home --> CTA[Homepage CTAs]
-  CTA --> Builder[/dashboard/builder/]
-  CTA --> Vault[/dashboard/product-hunter/]
-  CTA --> Coach[/dashboard/coach/]
-  Help --> Topic[/help/category/]
-  Topic --> Article[/help/category/slug/]
+  CTA --> Builder["/dashboard/builder/"]
+  CTA --> Vault["/dashboard/product-hunter/"]
+  CTA --> Coach["/dashboard/coach/"]
+  Help --> Topic["/help/category/"]
+  Topic --> Article["/help/category/slug/"]
   Article --> AskCoach[Ask BrandBox Coach]
   AskCoach --> Coach
 ```
