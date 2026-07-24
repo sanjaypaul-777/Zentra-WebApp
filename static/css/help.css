@@ -14,7 +14,7 @@
   --help-text: var(--ink);
   --help-muted: #475569;
   --help-surface: var(--white);
-  --help-hairline: rgba(15, 23, 42, 0.1);
+  --help-hairline: color-mix(in srgb, var(--magenta) 28%, transparent);
   --help-midnight: var(--midnight);
   --help-magenta: var(--magenta);
 
@@ -451,7 +451,7 @@
   margin: 0 0 20px;
   padding: 10px 14px;
   border-radius: 10px;
-  background: color-mix(in srgb, color-mix(in srgb, var(--green) 45%, var(--canvas)) 22%, #fff);
+  background: color-mix(in srgb, var(--help-magenta) 12%, var(--white));
   color: var(--help-text);
   font-size: 14px;
   line-height: 1.45;

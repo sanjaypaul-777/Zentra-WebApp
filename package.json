@@ -1,0 +1,11 @@
+{
+  "name": "brandbox-web",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./static/css/src/home-tw.input.css -o ./static/css/home-tw.css --minify"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "tailwindcss": "^3.4.17"
+  }
+}

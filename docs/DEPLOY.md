@@ -52,6 +52,8 @@ When `DEBUG=False`, Django enables SSL cookies / HSTS / redirect automatically (
 
 ```bash
 pip install -r requirements.txt
+# Optional: rebuild homepage Tailwind CSS if you changed utility classes on home
+# npm ci && npm run build:css
 python manage.py migrate
 python manage.py collectstatic --noinput
 python manage.py loaddata backups/help_knowledge_base.json
@@ -59,7 +61,11 @@ python manage.py loaddata backups/help_knowledge_base.json
 python manage.py createsuperuser
 ```
 
-Sync `media/` if you have Help uploads. Enable **Coach** on staff users in Admin. Serve `staticfiles/` + `media/` via your host/nginx (or equivalent).
+Sync `media/` if you have Help uploads. Enable **Coach** on staff users in Admin.
+
+**Static files:** With `DEBUG=False`, WhiteNoise serves `staticfiles/` (compressed + hashed). You do **not** need nginx to serve `/static/` unless you prefer it. Still serve `media/` from disk/object storage (uploads).
+
+**Speed tip (optional CDN):** Put Cloudflare (or similar) in front of the app and enable caching + image polish/WebP. No app code change required — keeps layout/colors identical while shrinking image bytes on the wire.
 
 ## 4. After deploy — confirm design, then link Node
 

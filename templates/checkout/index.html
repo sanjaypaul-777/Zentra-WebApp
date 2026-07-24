@@ -4,7 +4,7 @@
 
 {% block title %}Checkout · BrandBox{% endblock %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/checkout.css' %}" />
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}?v=brand-10" />
 <link rel="stylesheet" href="{% static 'css/password-toggle.css' %}" />
 {% endblock %}
 
@@ -17,16 +17,24 @@
       </a>
       <div class="trust-badges" aria-label="Ratings">
         <div class="trust-badge">
+          <span class="trust-badge__mark trust-badge__mark--trustpilot" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" focusable="false">
+              <path fill="#00b67a" d="M45.023,18.995H28.991L24.039,3.737l-4.968,15.259L3.039,18.98l12.984,9.44l-4.968,15.243 l12.984-9.424l12.968,9.424L32.055,28.42L45.023,18.995z"/>
+              <path fill="#005128" d="M33.169,31.871l-1.114-3.451l-8.016,5.819L33.169,31.871z"/>
+            </svg>
+          </span>
           <strong>Trustpilot</strong>
           <span class="stars" aria-hidden="true">★★★★★</span>
           <span>4.7</span>
         </div>
         <div class="trust-badge">
-          <strong>App Store</strong>
-          <span class="stars" aria-hidden="true">★★★★★</span>
-          <span>5.0</span>
-        </div>
-        <div class="trust-badge">
+          <span class="trust-badge__mark trust-badge__mark--shopify" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" focusable="false">
+              <path fill="#7cb342" d="M37.216,11.78c-0.023-0.211-0.211-0.305-0.351-0.305s-3.21-0.234-3.21-0.234s-2.132-2.132-2.39-2.343	c-0.234-0.234-0.68-0.164-0.867-0.117c-0.023,0-0.469,0.141-1.195,0.375c-0.726-2.086-1.968-3.984-4.194-3.984h-0.211	C24.187,4.375,23.391,4,22.735,4c-5.155,0-7.639,6.444-8.412,9.725c-2.015,0.633-3.445,1.054-3.609,1.125	c-1.125,0.351-1.148,0.375-1.289,1.429c-0.117,0.797-3.046,23.456-3.046,23.456L29.179,44l12.373-2.671	C41.575,41.282,37.24,11.991,37.216,11.78z M27.937,9.483c-0.562,0.164-1.242,0.375-1.921,0.609V9.671	c0-1.265-0.164-2.296-0.469-3.117C26.718,6.695,27.445,7.984,27.937,9.483L27.937,9.483z M24.117,6.812	c0.305,0.797,0.516,1.922,0.516,3.468v0.234c-1.265,0.398-2.601,0.797-3.984,1.242C21.422,8.804,22.899,7.351,24.117,6.812	L24.117,6.812z M22.617,5.359c0.234,0,0.469,0.094,0.656,0.234c-1.664,0.773-3.421,2.718-4.148,6.655	c-1.101,0.351-2.156,0.656-3.163,0.984C16.806,10.233,18.915,5.359,22.617,5.359z"/>
+              <path fill="#558b2f" d="M36.865,11.428c-0.141,0-3.21-0.234-3.21-0.234s-2.132-2.132-2.39-2.343	C31.17,8.757,31.053,8.71,30.96,8.71L29.249,44l12.373-2.671c0,0-4.335-29.338-4.359-29.549	C37.169,11.569,37.005,11.475,36.865,11.428z"/>
+              <path fill="#fff" d="M24.792,18.593l-1.475,4.449c0,0-1.337-0.715-2.927-0.715c-2.374,0-2.489,1.498-2.489,1.867	c0,2.028,5.301,2.812,5.301,7.583c0,3.757-2.374,6.177-5.578,6.177c-3.872,0-5.808-2.397-5.808-2.397l1.037-3.411	c0,0,2.028,1.752,3.734,1.752c1.129,0,1.59-0.876,1.59-1.521c0-2.651-4.333-2.766-4.333-7.145c0-3.665,2.628-7.214,7.952-7.214	C23.777,17.994,24.792,18.593,24.792,18.593z"/>
+            </svg>
+          </span>
           <strong>Shopify</strong>
           <span class="stars" aria-hidden="true">★★★★★</span>
           <span>5.0</span>
@@ -144,39 +152,41 @@
 
           <div class="summary-visual" aria-hidden="true">
             <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDj9GjIIaHENpFoI7fceEUl2-UiB0Z4Ce6Tg2IhwF8lziwkbZt9iDa726jgPUlnwddfAkUMxC2bO2EMa6F8Mb3LW93Our4P53xLxHSssi_RyKlrWPVzgBqOf_wV-QH6F8fS8fUZ-xS59bvPkXeQW3NZgC9GuwEjSHwBXrws-5-1BJ1fpAsWWZNes9Dr5yKU7m6eaNSXLczIkga1Qe8d7fDdDu2tY4jDNZzHz5au2r6roXKVBiI1dBWpRIFC-2UpimnkuFiiU3t2Wu9z"
+              src="{% static 'images/checkout-summary.jpg' %}?v=3"
               alt=""
               width="640"
-              height="400"
+              height="360"
+              loading="lazy"
+              decoding="async"
             />
           </div>
 
-          <p class="summary-product-name">BrandBox Plus</p>
+          <p class="summary-product-name">BrandBox AI</p>
 
           <ul class="summary-features">
             <li>
-              <span class="feature-icon feature-icon--emerald material-symbols-outlined" aria-hidden="true">redeem</span>
-              $100 Order Credits
+              <span class="feature-icon material-symbols-outlined" aria-hidden="true">storefront</span>
+              AI Store Builder
             </li>
             <li>
-              <span class="feature-icon feature-icon--purple material-symbols-outlined" aria-hidden="true">calendar_month</span>
-              Free 5-day live webinar series
+              <span class="feature-icon material-symbols-outlined" aria-hidden="true">manage_search</span>
+              Product Hunter
             </li>
             <li>
-              <span class="feature-icon feature-icon--blue material-symbols-outlined" aria-hidden="true">storefront</span>
-              AI-built store + niche product packs
+              <span class="feature-icon material-symbols-outlined" aria-hidden="true">recommend</span>
+              AI-chosen products
             </li>
             <li>
-              <span class="feature-icon feature-icon--pink material-symbols-outlined" aria-hidden="true">auto_awesome</span>
-              AI Agent access
+              <span class="feature-icon material-symbols-outlined" aria-hidden="true">view_carousel</span>
+              Explore 10 premium themes
             </li>
             <li>
-              <span class="feature-icon feature-icon--emerald material-symbols-outlined" aria-hidden="true">videocam</span>
-              525 AI UGC video &amp; image credits
+              <span class="feature-icon material-symbols-outlined" aria-hidden="true">support_agent</span>
+              Chat with Coach
             </li>
             <li>
-              <span class="feature-icon feature-icon--purple material-symbols-outlined" aria-hidden="true">trending_up</span>
-              Winning niches &amp; trending products
+              <span class="feature-icon material-symbols-outlined" aria-hidden="true">event_available</span>
+              Schedule a meeting with Coach
             </li>
           </ul>
 
@@ -199,17 +209,6 @@
               <span class="material-symbols-outlined" aria-hidden="true">verified_user</span>
               Downgrade or cancel anytime
             </p>
-
-            <div class="summary-mini-trust" aria-hidden="true">
-              <div class="trust-badge">
-                <strong>Trustpilot</strong>
-                <span class="stars">★★★★★</span>
-              </div>
-              <div class="trust-badge">
-                <strong>App Store</strong>
-                <span class="stars">★★★★★</span>
-              </div>
-            </div>
           </div>
         </aside>
       </div>
@@ -222,7 +221,7 @@
     </p>
   </div>
 </div>
-{% if not done %}
+{% if not stub_submitted %}
 <script>
 (function () {
   var form = document.getElementById("checkout-form");
@@ -234,7 +233,7 @@
   function sync() {
     var ok = agree.checked;
     btn.disabled = !ok;
-    btn.setAttribute("aria-disabled", ok ?"false" :"true");
+    btn.setAttribute("aria-disabled", ok ? "false" : "true");
     if (hint) hint.hidden = ok;
   }
 

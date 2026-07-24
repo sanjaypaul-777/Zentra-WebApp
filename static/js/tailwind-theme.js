@@ -1,7 +1,7 @@
 /**
- * Tailwind theme — maps Stitch utility names to CSS variables in base.css.
- * Spacing / radius / letter-spacing use px only (no rem/em).
- * Load this script AFTER the Tailwind CDN script (Play CDN config pattern).
+ * Tailwind theme reference (Play CDN pattern).
+ * Homepage now loads compiled static/css/home-tw.css — keep this file in sync
+ * with tailwind.config.js when editing theme tokens. Not loaded on the homepage.
  */
 window.tailwind = window.tailwind || {};
 tailwind.config = {

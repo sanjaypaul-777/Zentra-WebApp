@@ -733,9 +733,10 @@
   background: var(--black);
   color: var(--off-white);
   margin-top: 0;
-  padding-top: var(--section-gap);
+  /* Fallbacks when footer is used outside .brandbox-home (e.g. Help) */
+  padding-top: var(--section-gap, 120px);
   padding-bottom: 48px;
-  padding-inline: var(--home-inset-x);
+  padding-inline: var(--home-inset-x, 0);
 }
 
 .brandbox-footer .text-on-surface {
@@ -831,13 +832,13 @@
 }
 
 .brandbox-footer__social-link--instagram:hover {
-  background: var(--home-midnight);
+  background: var(--midnight);
   color: #e4405f;
 }
 
 .brandbox-footer__social-link--email:hover {
-  background: var(--home-midnight);
-  color: var(--home-magenta);
+  background: var(--midnight);
+  color: var(--magenta);
 }
 
 .brandbox-footer__nav {
@@ -901,8 +902,12 @@
   position: relative;
 }
 
-/* Dark footer email — higher specificity vs Tailwind forms (no !important) */
-.brandbox-home .brandbox-footer input.brandbox-footer__email[type="email"] {
+/*
+ * Dark footer email — scoped to .brandbox-footer (not .brandbox-home) so Help
+ * and other shared-footer pages match home/affiliate. Specificity also beats
+ * Tailwind forms `[type=email]` when that plugin is on the page.
+ */
+.brandbox-footer input.brandbox-footer__email[type="email"] {
   flex: 1 1 auto;
   min-width: 0;
   width: 100%;
@@ -924,26 +929,26 @@
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-.brandbox-home .brandbox-footer input.brandbox-footer__email[type="email"]::placeholder {
+.brandbox-footer input.brandbox-footer__email[type="email"]::placeholder {
   color: rgba(182, 182, 182, 0.9);
   opacity: 1;
 }
 
-.brandbox-home .brandbox-footer input.brandbox-footer__email[type="email"]:hover {
+.brandbox-footer input.brandbox-footer__email[type="email"]:hover {
   border-color: rgba(254, 254, 254, 0.28);
 }
 
-.brandbox-home .brandbox-footer input.brandbox-footer__email[type="email"]:focus,
-.brandbox-home .brandbox-footer input.brandbox-footer__email[type="email"]:focus-visible {
+.brandbox-footer input.brandbox-footer__email[type="email"]:focus,
+.brandbox-footer input.brandbox-footer__email[type="email"]:focus-visible {
   border-color: rgba(254, 254, 254, 0.55);
   background-color: #161616;
   outline: none;
   box-shadow: none;
 }
 
-.brandbox-home .brandbox-footer input.brandbox-footer__email[type="email"]:-webkit-autofill,
-.brandbox-home .brandbox-footer input.brandbox-footer__email[type="email"]:-webkit-autofill:hover,
-.brandbox-home .brandbox-footer input.brandbox-footer__email[type="email"]:-webkit-autofill:focus {
+.brandbox-footer input.brandbox-footer__email[type="email"]:-webkit-autofill,
+.brandbox-footer input.brandbox-footer__email[type="email"]:-webkit-autofill:hover,
+.brandbox-footer input.brandbox-footer__email[type="email"]:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--off-white);
   caret-color: var(--off-white);
   box-shadow: 0 0 0 1000px var(--black) inset;
@@ -1838,10 +1843,9 @@
   color: var(--products-muted);
 }
 
-/* —— Checkout offer promo (section 4) ——
-   Height: section-gap top + 522px grid + section-gap bottom.
-   Gap after section 3 = this padding-top.
-   Gap before section 5 = compare’s padding-top. */
+/* —— Checkout offer promo ——
+   Top gap = shared section padding-top.
+   Bottom pad = section-gap so black bg breathes (120 / 80 / 60). */
 .brandbox-offer {
   --offer-bg: var(--black);
   --offer-card: var(--black);
@@ -1852,8 +1856,7 @@
   --on-surface-variant: var(--offer-muted);
   background: var(--offer-bg);
   color: var(--offer-text);
-  /* gap before compare comes from compare padding-top — do not double it here */
-  padding-bottom: 0;
+  padding-bottom: var(--section-gap);
   box-sizing: border-box;
 }
 

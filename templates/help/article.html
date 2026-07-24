@@ -42,7 +42,7 @@
 
       {% if article.hero_image %}
       <figure class="help-article__hero">
-        <img src="{{ article.hero_image.url }}" alt="{{ article.title }} — BrandBox Help guide" />
+        <img src="{{ article.hero_image.url }}" alt="{{ article.title }} — BrandBox Help guide" loading="lazy" decoding="async" />
       </figure>
       {% endif %}
 
@@ -64,7 +64,7 @@
       <div class="help-shots">
         {% for att in article.attachments.all %}
         <figure class="help-shot">
-          <img src="{{ att.image.url }}" alt="{{ att.caption|default:article.title }} — BrandBox Help screenshot" />
+          <img src="{{ att.image.url }}" alt="{{ att.caption|default:article.title }} — BrandBox Help screenshot" loading="lazy" decoding="async" />
           {% if att.caption %}<figcaption>{{ att.caption }}</figcaption>{% endif %}
         </figure>
         {% endfor %}
